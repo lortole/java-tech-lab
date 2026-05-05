@@ -1,4 +1,4 @@
-package dev.lowx.netflixjava2026.testslices;
+package dev.lortole.netflixjava2026.testslices;
 
 import org.springframework.stereotype.Service;
 

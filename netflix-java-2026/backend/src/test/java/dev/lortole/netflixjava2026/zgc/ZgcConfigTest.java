@@ -1,4 +1,4 @@
-package dev.lowx.netflixjava2026.zgc;
+package dev.lortole.netflixjava2026.zgc;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

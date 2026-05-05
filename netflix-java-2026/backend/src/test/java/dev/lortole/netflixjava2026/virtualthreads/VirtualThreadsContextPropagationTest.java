@@ -1,4 +1,4 @@
-package dev.lowx.netflixjava2026.virtualthreads;
+package dev.lortole.netflixjava2026.virtualthreads;
 
 import io.micrometer.context.ContextRegistry;
 import io.micrometer.context.ContextSnapshot;

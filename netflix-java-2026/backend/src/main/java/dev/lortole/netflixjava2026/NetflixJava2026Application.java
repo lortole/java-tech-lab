@@ -1,4 +1,4 @@
-package dev.lowx.netflixjava2026;
+package dev.lortole.netflixjava2026;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
