@@ -1,16 +1,219 @@
-# React + Vite
+# ☕ java-tech-lab
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> TPs pratiques issus de mes articles tech — code qui accompagne mes publications sur LinkedIn et Viva Engage.
 
-Currently, two official plugins are available:
+[![Java](https://img.shields.io/badge/Java-21-orange?style=flat-square&logo=openjdk)](https://openjdk.org/projects/jdk/21/)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3-6db33f?style=flat-square&logo=spring)](https://spring.io/projects/spring-boot)
+[![React](https://img.shields.io/badge/React-Vite-61dafb?style=flat-square&logo=react)](https://vitejs.dev/)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 💡 Philosophie
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+J'ai regardé des conférences, lu des articles, pris des notes. Ce repo c'est l'étape d'après : **valider par le code**.
 
-## Expanding the ESLint configuration
+Chaque module correspond à un article publié. Chaque TP a un dashboard interactif pour comprendre sans avoir à lancer le backend — utile pour partager avec des collègues non-Java.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 📦 Modules
+
+### [netflix-java-2026](./netflix-java-2026/)
+
+> *Comment Netflix utilise Java en 2026 — ce qu'on peut en apprendre pour nos missions*
+
+**Source :** [How Netflix Uses Java — 2026 Edition](https://www.youtube.com/watch?v=ucJTPda_zx0) — Paul, Java Platform Team @ Netflix
+
+**3 TPs :**
+
+| TP | Sujet | Ce qu'on apprend |
+|---|---|---|
+| `testslices/` | `@WebMvcTest` vs `@SpringBootTest` | Réduire le temps de build de 80% sans toucher au code métier |
+| `virtualthreads/` | Bug ThreadLocal JDK 21 + fix `micrometer-context-propagation` | Pourquoi Netflix a annulé son déploiement Virtual Threads |
+| `zgc/` | Generational ZGC vs G1GC | Éliminer les retry storms, pas juste accélérer le GC |
+
+**Dashboard interactif :** [🚀 Voir en ligne](https://java-tech-lab.vercel.app)
+
+```bash
+cd netflix-java-2026/backend
+mvn test
+# 6 tests, 0 failures
+
+cd ../frontend
+npm install && npm run dev
+# → http://localhost:5174
+```
+
+---
+
+## 🗂️ Structure
+
+```
+java-tech-lab/
+├── netflix-java-2026/
+│   ├── backend/          ← Maven Spring Boot 3 / Java 21
+│   │   ├── src/
+│   │   └── pom.xml
+│   ├── frontend/         ← React Vite + Recharts + Prism
+│   │   ├── src/
+│   │   │   ├── tabs/
+│   │   │   │   ├── TestSlicesTab.jsx
+│   │   │   │   ├── VirtualThreadsTab.jsx
+│   │   │   │   └── ZgcTab.jsx
+│   │   │   ├── App.jsx
+│   │   │   └── useTheme.js
+│   │   └── package.json
+│   ├── diagrams/         ← PNG générés depuis les blocs Mermaid
+│   ├── README.md         ← Article complet + diagrammes intégrés
+│   └── article_source.md
+└── README.md             ← ce fichier
+```
+
+---
+
+## 🚀 Prérequis
+
+```bash
+# Backend
+java --version   # Java 21+
+mvn --version    # Maven 3.9+
+
+# Frontend
+node --version   # Node 18+
+npm --version    # npm 9+
+```
+
+---
+
+## 🗺️ Roadmap
+
+Les prochains modules suivront mes prochains articles :
+
+- [ ] `acid-vs-saga/` — ACID vs SAGA : transactions distribuées avec Kafka
+- [ ] `zone-identifier-ntfs/` — Zone.Identifier NTFS sous WSL
+- [ ] `spring-ai/` — GenAI en Java avec Spring AI
+
+---
+
+## 👤 Auteur
+
+**Loïc ORTOLÉ** — Consultant Java Senior @ Klanik
+
+- 🔗 [LinkedIn](https://www.linkedin.com/in/lortole/)
+- 💼 6 ans Spring Boot (Volkswagen, GRDF, GRTGaz) · Quarkus/Kafka (Amadeus)
+
+---
+
+## 📄 Licence
+
+MIT — libre de réutiliser, adapter, partager avec attribution.# ☕ java-tech-lab
+
+> TPs pratiques issus de mes articles tech — code qui accompagne mes publications sur LinkedIn et Viva Engage.
+
+[![Java](https://img.shields.io/badge/Java-21-orange?style=flat-square&logo=openjdk)](https://openjdk.org/projects/jdk/21/)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3-6db33f?style=flat-square&logo=spring)](https://spring.io/projects/spring-boot)
+[![React](https://img.shields.io/badge/React-Vite-61dafb?style=flat-square&logo=react)](https://vitejs.dev/)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
+
+---
+
+## 💡 Philosophie
+
+J'ai regardé des conférences, lu des articles, pris des notes. Ce repo c'est l'étape d'après : **valider par le code**.
+
+Chaque module correspond à un article publié. Chaque TP a un dashboard interactif pour comprendre sans avoir à lancer le backend — utile pour partager avec des collègues non-Java.
+
+---
+
+## 📦 Modules
+
+### [netflix-java-2026](./netflix-java-2026/)
+
+> *Comment Netflix utilise Java en 2026 — ce qu'on peut en apprendre pour nos missions*
+
+**Source :** [How Netflix Uses Java — 2026 Edition](https://www.youtube.com/watch?v=ucJTPda_zx0) — Paul, Java Platform Team @ Netflix
+
+**3 TPs :**
+
+| TP | Sujet | Ce qu'on apprend |
+|---|---|---|
+| `testslices/` | `@WebMvcTest` vs `@SpringBootTest` | Réduire le temps de build de 80% sans toucher au code métier |
+| `virtualthreads/` | Bug ThreadLocal JDK 21 + fix `micrometer-context-propagation` | Pourquoi Netflix a annulé son déploiement Virtual Threads |
+| `zgc/` | Generational ZGC vs G1GC | Éliminer les retry storms, pas juste accélérer le GC |
+
+**Dashboard interactif :** [🚀 Voir en ligne](https://java-tech-lab.vercel.app)
+
+```bash
+cd netflix-java-2026/backend
+mvn test
+# 6 tests, 0 failures
+
+cd ../frontend
+npm install && npm run dev
+# → http://localhost:5174
+```
+
+---
+
+## 🗂️ Structure
+
+```
+java-tech-lab/
+├── netflix-java-2026/
+│   ├── backend/          ← Maven Spring Boot 3 / Java 21
+│   │   ├── src/
+│   │   └── pom.xml
+│   ├── frontend/         ← React Vite + Recharts + Prism
+│   │   ├── src/
+│   │   │   ├── tabs/
+│   │   │   │   ├── TestSlicesTab.jsx
+│   │   │   │   ├── VirtualThreadsTab.jsx
+│   │   │   │   └── ZgcTab.jsx
+│   │   │   ├── App.jsx
+│   │   │   └── useTheme.js
+│   │   └── package.json
+│   ├── diagrams/         ← PNG générés depuis les blocs Mermaid
+│   ├── README.md         ← Article complet + diagrammes intégrés
+│   └── article_source.md
+└── README.md             ← ce fichier
+```
+
+---
+
+## 🚀 Prérequis
+
+```bash
+# Backend
+java --version   # Java 21+
+mvn --version    # Maven 3.9+
+
+# Frontend
+node --version   # Node 18+
+npm --version    # npm 9+
+```
+
+---
+
+## 🗺️ Roadmap
+
+Les prochains modules suivront mes prochains articles :
+
+- [ ] `acid-vs-saga/` — ACID vs SAGA : transactions distribuées avec Kafka
+- [ ] `zone-identifier-ntfs/` — Zone.Identifier NTFS sous WSL
+- [ ] `spring-ai/` — GenAI en Java avec Spring AI
+
+---
+
+## 👤 Auteur
+
+**Loïc ORTOLÉ** — Consultant Java Senior @ Klanik
+
+- 🔗 [LinkedIn](https://www.linkedin.com/in/lortole/)
+- 💼 6 ans Spring Boot (Volkswagen, GRDF, GRTGaz) · Quarkus/Kafka (Amadeus)
+
+---
+
+## 📄 Licence
+
+MIT — libre de réutiliser, adapter, partager avec attribution.
