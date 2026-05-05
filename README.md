@@ -1,90 +1,128 @@
-# ☕ java-tech-lab
+# 🧪 java-tech-lab
 
-> TPs pratiques issus de mes articles tech — code qui accompagne mes publications sur LinkedIn et Viva Engage.
+> **Lab de veille technologique Java 21+ en 2026**  
+> Expérimentations concrètes autour des features modernes de la JVM, Spring Boot 3 et de l'écosystème Java cloud-native.
 
-[![Java](https://img.shields.io/badge/Java-21-orange?style=flat-square&logo=openjdk)](https://openjdk.org/projects/jdk/21/)
-[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3-6db33f?style=flat-square&logo=spring)](https://spring.io/projects/spring-boot)
-[![React](https://img.shields.io/badge/React-Vite-61dafb?style=flat-square&logo=react)](https://vitejs.dev/)
-[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
-
----
-
-## 💡 Philosophie
-
-J'ai regardé des conférences, lu des articles, pris des notes. Ce repo c'est l'étape d'après : **valider par le code**.
-
-Chaque module correspond à un article publié. Chaque TP a un dashboard interactif pour comprendre sans avoir à lancer le backend — utile pour partager avec des collègues non-Java.
+[![Java](https://img.shields.io/badge/Java-21+-ED8B00?style=flat&logo=openjdk&logoColor=white)](https://openjdk.org/projects/jdk/21/)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3-6DB33F?style=flat&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat&logo=react&logoColor=black)](https://react.dev/)
+[![Vercel](https://img.shields.io/badge/Demo-Vercel-000000?style=flat&logo=vercel&logoColor=white)](https://lortole-dev-lab.vercel.app/)
+[![GitHub](https://img.shields.io/badge/GitHub-HighX97-181717?style=flat&logo=github&logoColor=white)](https://github.com/HighX97/java-tech-lab)
+[![GitLab](https://img.shields.io/badge/GitLab-mirror-FC6D26?style=flat&logo=gitlab&logoColor=white)](https://gitlab.com)
 
 ---
 
-## 📦 Modules
+## 🎯 Objectif
 
-### [netflix-java-2026](./netflix-java-2026/)
+Ce lab est un espace d'**expérimentation et de veille active** autour des features Java 21+ en conditions réelles.  
+Chaque module répond à une question concrète : *"Est-ce que ça tient en prod ?"*
 
-> *Comment Netflix utilise Java en 2026 — ce qu'on peut en apprendre pour nos missions*
-
-**Source :** [How Netflix Uses Java — 2026 Edition](https://www.youtube.com/watch?v=ucJTPda_zx0) — Paul, Java Platform Team @ Netflix
-
-| TP | Sujet | Ce qu'on apprend |
-|---|---|---|
-| `testslices/` | `@WebMvcTest` vs `@SpringBootTest` | Réduire le temps de build de 80% sans toucher au code métier |
-| `virtualthreads/` | Bug ThreadLocal JDK 21 + fix `micrometer-context-propagation` | Pourquoi Netflix a annulé son déploiement Virtual Threads |
-| `zgc/` | Generational ZGC vs G1GC | Éliminer les retry storms, pas juste accélérer le GC |
-
-**🚀 Dashboard interactif :** [lortole-dev-lab.vercel.app](https://lortole-dev-lab.vercel.app)
-
-```bash
-cd netflix-java-2026/backend
-mvn test
-# 6 tests, 0 failures
-
-cd ../frontend
-npm install && npm run dev
-# → http://localhost:5174
-```
+Pas de tutoriels copiés-collés — du code qui tourne, des tests qui prouvent, des benchmarks qui mesurent.
 
 ---
 
-## 🗂️ Structure
+## 📁 Structure
 
 ```
 java-tech-lab/
-├── netflix-java-2026/
-│   ├── backend/     ← Maven Spring Boot 3 / Java 21
-│   ├── frontend/    ← React Vite + Recharts + Prism
-│   ├── diagrams/    ← PNG générés depuis les blocs Mermaid
-│   └── README.md    ← Article complet + diagrammes intégrés
-└── README.md
+└── netflix-java-2026/          # Premier projet — inspiré des patterns Netflix
+    ├── backend/                # Spring Boot 3.3 + Java 21
+    │   └── src/
+    │       ├── testslices/     # @WebMvcTest, @DataJpaTest — tests rapides et ciblés
+    │       ├── virtualthreads/ # Project Loom — Virtual Threads en I/O-bound
+    │       └── zgc/            # ZGC — GC à faible latence pour les workloads critiques
+    ├── frontend/               # React 18 + Vite — démo interactive
+    └── diagrams/               # Schémas d'architecture (PNG)
 ```
 
 ---
 
-## 🚀 Prérequis
+## 🚀 Projets
+
+### [`netflix-java-2026`](./netflix-java-2026/)
+
+Trois sujets Java 21+ explorés sous l'angle **production-ready** :
+
+| Module | Sujet | Ce qu'on prouve |
+|--------|-------|-----------------|
+| `testslices` | Spring Boot Test Slices | Tests rapides et isolés avec `@WebMvcTest` — sans charger tout le contexte Spring |
+| `virtualthreads` | Project Loom — Virtual Threads | Context propagation, scalabilité I/O-bound, comparaison avec les platform threads |
+| `zgc` | ZGC — Z Garbage Collector | Configuration, comportement sous charge, scénarios retry-storm |
+
+🌐 **Démo live :** [lortole-dev-lab.vercel.app](https://lortole-dev-lab.vercel.app/)
+
+---
+
+## 🛠️ Stack technique
+
+| Couche | Techno | Version |
+|--------|--------|---------|
+| Runtime | OpenJDK | 21+ |
+| Framework | Spring Boot | 3.3.x |
+| Build | Maven | 3.9+ |
+| Frontend | React + Vite | 18 / 5.x |
+| Deploy | Vercel | — |
+| Versioning | GitHub + GitLab | mirror |
+
+---
+
+## ▶️ Lancer le projet
+
+### Backend
 
 ```bash
-java --version   # Java 21+
-mvn --version    # Maven 3.9+
-node --version   # Node 18+
+cd netflix-java-2026/backend
+./mvnw spring-boot:run
+```
+
+### Tests
+
+```bash
+./mvnw test
+```
+
+### Frontend
+
+```bash
+cd netflix-java-2026/frontend
+npm install
+npm run dev
 ```
 
 ---
 
-## 🗺️ Roadmap
+## 📊 Diagrams
 
-- [ ] `acid-vs-saga/` — ACID vs SAGA : transactions distribuées avec Kafka
-- [ ] `spring-ai/` — GenAI en Java avec Spring AI
+Les schémas d'architecture sont disponibles dans [`netflix-java-2026/diagrams/`](./netflix-java-2026/diagrams/) :
+
+| Fichier | Sujet |
+|---------|-------|
+| `01_jvm_workloads.png` | Workloads JVM — Platform Threads vs Virtual Threads |
+| `02_graphql_dgs_architecture.png` | Architecture GraphQL DGS (Netflix) |
+| `03_zgc_retry_storm.png` | ZGC sous retry storm |
+| `04_virtual_threads_timeline.png` | Timeline Virtual Threads vs Reactive |
+| `05_springboot_migration_llm.png` | Migration Spring Boot assistée par LLM |
+| `06_genai_startup_optimizer.png` | Startup optimizer GenAI |
+
+---
+
+## 📝 Articles associés
+
+Les expérimentations de ce lab alimentent des publications techniques :
+
+- 🔗 [ACID vs SAGA — Viva Engage Klanik](https://engage.microsoft.com) *(27 avr. 2026)*
+- 🔜 Virtual Threads & Project Loom en prod — *à venir*
+- 🔜 ZGC vs G1GC — benchmark sous charge — *à venir*
 
 ---
 
 ## 👤 Auteur
 
-**Loïc ORTOLÉ** — Consultant Java Senior @ Klanik
+**Loïc ORTOLÉ** — Développeur Java/Angular Senior @ Klanik Montpellier  
+Stack cible : Java 21+, Spring Boot 3, Quarkus, Angular 18, Kafka, Architecture Hexagonale
 
-- 🔗 [LinkedIn](https://www.linkedin.com/in/lortole/)
-- 💼 6 ans Spring Boot · Quarkus/Kafka (Amadeus)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Loïc_ORTOLÉ-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://linkedin.com/in/)
 
 ---
 
-## 📄 Licence
-
-MIT — libre de réutiliser, adapter, partager avec attribution.
+*Lab en évolution continue — nouveaux modules à venir.*

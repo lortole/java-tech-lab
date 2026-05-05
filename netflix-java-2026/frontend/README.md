@@ -1,219 +1,84 @@
-# ☕ java-tech-lab
+# 🖥️ netflix-java-2026 — Frontend
 
-> TPs pratiques issus de mes articles tech — code qui accompagne mes publications sur LinkedIn et Viva Engage.
+> Interface de démonstration interactive pour les trois modules Java 21+ du lab.
 
-[![Java](https://img.shields.io/badge/Java-21-orange?style=flat-square&logo=openjdk)](https://openjdk.org/projects/jdk/21/)
-[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3-6db33f?style=flat-square&logo=spring)](https://spring.io/projects/spring-boot)
-[![React](https://img.shields.io/badge/React-Vite-61dafb?style=flat-square&logo=react)](https://vitejs.dev/)
-[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat&logo=react&logoColor=black)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Vercel](https://img.shields.io/badge/Deployed-Vercel-000000?style=flat&logo=vercel&logoColor=white)](https://lortole-dev-lab.vercel.app/)
 
----
-
-## 💡 Philosophie
-
-J'ai regardé des conférences, lu des articles, pris des notes. Ce repo c'est l'étape d'après : **valider par le code**.
-
-Chaque module correspond à un article publié. Chaque TP a un dashboard interactif pour comprendre sans avoir à lancer le backend — utile pour partager avec des collègues non-Java.
+🌐 **Live :** [lortole-dev-lab.vercel.app](https://lortole-dev-lab.vercel.app/)
 
 ---
 
-## 📦 Modules
+## 🎯 Rôle du frontend
 
-### [netflix-java-2026](./netflix-java-2026/)
+Ce frontend n'est pas une application métier — c'est une **vitrine interactive** qui documente et illustre chacun des trois modules du lab :
 
-> *Comment Netflix utilise Java en 2026 — ce qu'on peut en apprendre pour nos missions*
+| Tab | Module backend | Ce qu'on visualise |
+|-----|---------------|-------------------|
+| Test Slices | `testslices/` | Architecture du test slice, flux de requête mocké |
+| Virtual Threads | `virtualthreads/` | Timeline d'exécution, context propagation |
+| ZGC | `zgc/` | Comportement GC sous charge, comparaison pauses |
 
-**Source :** [How Netflix Uses Java — 2026 Edition](https://www.youtube.com/watch?v=ucJTPda_zx0) — Paul, Java Platform Team @ Netflix
+---
 
-**3 TPs :**
+## 🛠️ Stack
 
-| TP | Sujet | Ce qu'on apprend |
-|---|---|---|
-| `testslices/` | `@WebMvcTest` vs `@SpringBootTest` | Réduire le temps de build de 80% sans toucher au code métier |
-| `virtualthreads/` | Bug ThreadLocal JDK 21 + fix `micrometer-context-propagation` | Pourquoi Netflix a annulé son déploiement Virtual Threads |
-| `zgc/` | Generational ZGC vs G1GC | Éliminer les retry storms, pas juste accélérer le GC |
+- **React 18** — UI composants
+- **Vite 5** — bundler ultra-rapide
+- **CSS custom** — thème sombre, responsive
 
-**Dashboard interactif :** [🚀 Voir en ligne](https://java-tech-lab.vercel.app)
+---
+
+## ▶️ Lancer en local
 
 ```bash
-cd netflix-java-2026/backend
-mvn test
-# 6 tests, 0 failures
-
-cd ../frontend
-npm install && npm run dev
-# → http://localhost:5174
+npm install
+npm run dev
+# → http://localhost:5173
 ```
 
----
-
-## 🗂️ Structure
-
-```
-java-tech-lab/
-├── netflix-java-2026/
-│   ├── backend/          ← Maven Spring Boot 3 / Java 21
-│   │   ├── src/
-│   │   └── pom.xml
-│   ├── frontend/         ← React Vite + Recharts + Prism
-│   │   ├── src/
-│   │   │   ├── tabs/
-│   │   │   │   ├── TestSlicesTab.jsx
-│   │   │   │   ├── VirtualThreadsTab.jsx
-│   │   │   │   └── ZgcTab.jsx
-│   │   │   ├── App.jsx
-│   │   │   └── useTheme.js
-│   │   └── package.json
-│   ├── diagrams/         ← PNG générés depuis les blocs Mermaid
-│   ├── README.md         ← Article complet + diagrammes intégrés
-│   └── article_source.md
-└── README.md             ← ce fichier
-```
-
----
-
-## 🚀 Prérequis
+### Build production
 
 ```bash
-# Backend
-java --version   # Java 21+
-mvn --version    # Maven 3.9+
-
-# Frontend
-node --version   # Node 18+
-npm --version    # npm 9+
+npm run build
+npm run preview
 ```
 
 ---
 
-## 🗺️ Roadmap
+## 🚀 Déploiement
 
-Les prochains modules suivront mes prochains articles :
+Le frontend est déployé automatiquement sur **Vercel** à chaque push sur `main`.
 
-- [ ] `acid-vs-saga/` — ACID vs SAGA : transactions distribuées avec Kafka
-- [ ] `zone-identifier-ntfs/` — Zone.Identifier NTFS sous WSL
-- [ ] `spring-ai/` — GenAI en Java avec Spring AI
-
----
-
-## 👤 Auteur
-
-**Loïc ORTOLÉ** — Consultant Java Senior @ Klanik
-
-- 🔗 [LinkedIn](https://www.linkedin.com/in/lortole/)
-- 💼 6 ans Spring Boot (Volkswagen, GRDF, GRTGaz) · Quarkus/Kafka (Amadeus)
-
----
-
-## 📄 Licence
-
-MIT — libre de réutiliser, adapter, partager avec attribution.# ☕ java-tech-lab
-
-> TPs pratiques issus de mes articles tech — code qui accompagne mes publications sur LinkedIn et Viva Engage.
-
-[![Java](https://img.shields.io/badge/Java-21-orange?style=flat-square&logo=openjdk)](https://openjdk.org/projects/jdk/21/)
-[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3-6db33f?style=flat-square&logo=spring)](https://spring.io/projects/spring-boot)
-[![React](https://img.shields.io/badge/React-Vite-61dafb?style=flat-square&logo=react)](https://vitejs.dev/)
-[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
-
----
-
-## 💡 Philosophie
-
-J'ai regardé des conférences, lu des articles, pris des notes. Ce repo c'est l'étape d'après : **valider par le code**.
-
-Chaque module correspond à un article publié. Chaque TP a un dashboard interactif pour comprendre sans avoir à lancer le backend — utile pour partager avec des collègues non-Java.
-
----
-
-## 📦 Modules
-
-### [netflix-java-2026](./netflix-java-2026/)
-
-> *Comment Netflix utilise Java en 2026 — ce qu'on peut en apprendre pour nos missions*
-
-**Source :** [How Netflix Uses Java — 2026 Edition](https://www.youtube.com/watch?v=ucJTPda_zx0) — Paul, Java Platform Team @ Netflix
-
-**3 TPs :**
-
-| TP | Sujet | Ce qu'on apprend |
-|---|---|---|
-| `testslices/` | `@WebMvcTest` vs `@SpringBootTest` | Réduire le temps de build de 80% sans toucher au code métier |
-| `virtualthreads/` | Bug ThreadLocal JDK 21 + fix `micrometer-context-propagation` | Pourquoi Netflix a annulé son déploiement Virtual Threads |
-| `zgc/` | Generational ZGC vs G1GC | Éliminer les retry storms, pas juste accélérer le GC |
-
-**Dashboard interactif :** [🚀 Voir en ligne](https://java-tech-lab.vercel.app)
-
-```bash
-cd netflix-java-2026/backend
-mvn test
-# 6 tests, 0 failures
-
-cd ../frontend
-npm install && npm run dev
-# → http://localhost:5174
+```
+Branch: main → lortole-dev-lab.vercel.app
 ```
 
 ---
 
-## 🗂️ Structure
+## 📁 Structure
 
 ```
-java-tech-lab/
-├── netflix-java-2026/
-│   ├── backend/          ← Maven Spring Boot 3 / Java 21
-│   │   ├── src/
-│   │   └── pom.xml
-│   ├── frontend/         ← React Vite + Recharts + Prism
-│   │   ├── src/
-│   │   │   ├── tabs/
-│   │   │   │   ├── TestSlicesTab.jsx
-│   │   │   │   ├── VirtualThreadsTab.jsx
-│   │   │   │   └── ZgcTab.jsx
-│   │   │   ├── App.jsx
-│   │   │   └── useTheme.js
-│   │   └── package.json
-│   ├── diagrams/         ← PNG générés depuis les blocs Mermaid
-│   ├── README.md         ← Article complet + diagrammes intégrés
-│   └── article_source.md
-└── README.md             ← ce fichier
-```
-
----
-
-## 🚀 Prérequis
-
-```bash
-# Backend
-java --version   # Java 21+
-mvn --version    # Maven 3.9+
-
-# Frontend
-node --version   # Node 18+
-npm --version    # npm 9+
+frontend/
+├── public/
+│   ├── favicon.svg
+│   └── icons.svg
+├── src/
+│   ├── assets/          # Images statiques
+│   ├── tabs/
+│   │   ├── TestSlicesTab.jsx       # Onglet Test Slices
+│   │   ├── VirtualThreadsTab.jsx   # Onglet Virtual Threads
+│   │   └── ZgcTab.jsx              # Onglet ZGC
+│   ├── App.jsx          # Composant racine + routing tabs
+│   ├── App.css          # Styles globaux
+│   ├── useTheme.js      # Hook thème clair/sombre
+│   └── main.jsx         # Point d'entrée
+├── index.html
+├── vite.config.js
+└── package.json
 ```
 
 ---
 
-## 🗺️ Roadmap
-
-Les prochains modules suivront mes prochains articles :
-
-- [ ] `acid-vs-saga/` — ACID vs SAGA : transactions distribuées avec Kafka
-- [ ] `zone-identifier-ntfs/` — Zone.Identifier NTFS sous WSL
-- [ ] `spring-ai/` — GenAI en Java avec Spring AI
-
----
-
-## 👤 Auteur
-
-**Loïc ORTOLÉ** — Consultant Java Senior @ Klanik
-
-- 🔗 [LinkedIn](https://www.linkedin.com/in/lortole/)
-- 💼 6 ans Spring Boot (Volkswagen, GRDF, GRTGaz) · Quarkus/Kafka (Amadeus)
-
----
-
-## 📄 Licence
-
-MIT — libre de réutiliser, adapter, partager avec attribution.
+*Partie du projet [`netflix-java-2026`](../README.md)*
