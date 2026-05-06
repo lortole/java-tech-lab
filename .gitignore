@@ -1,0 +1,28 @@
+# Java / Maven
+target/
+*.class
+*.jar
+*.war
+
+# Angular
+virtual-threads-lab/frontend/.angular/
+virtual-threads-lab/frontend/dist/
+virtual-threads-lab/frontend/node_modules/
+
+# React / Vite
+netflix-java-2026/frontend/dist/
+netflix-java-2026/frontend/node_modules/
+
+# Windows / WSL artifacts
+*.Zone.Identifier
+files.zip:Zone.Identifier
+
+# Fichiers temporaires racine
+virtual-threads-lab/tree
+virtual-threads-lab/unzip
+virtual-threads-lab/files.zip:Zone.Identifier
+
+# IDE
+.idea/
+*.iml
+.vscode/
