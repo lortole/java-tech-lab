@@ -1,0 +1,107 @@
+// ── Dans _layout.scss — plus de respiration ──────────────────────
+
+.app {
+  max-width: 860px;       // légèrement plus étroit = plus de marge
+  margin: 0 auto;
+  padding: 0 2rem;        // 2rem au lieu de 1rem = marges latérales visibles
+}
+
+.header {
+  padding: 2rem 0 1.5rem;
+  border-bottom: 1px solid var(--border-soft);
+
+  // Ligne colorée en haut pour distinguer le header
+  &::before {
+    content: '';
+    display: block;
+    height: 3px;
+    background: var(--blue);
+    margin: -2rem -2rem 1.5rem -2rem;  // borde tout le haut
+    opacity: 0.7;
+  }
+
+  .header-inner { display: flex; align-items: center; gap: 1rem; }
+  .logo         { font-size: 2rem; }
+  .header-text  { flex: 1; }
+  h1            { font-size: 1.5rem; font-weight: 600; color: var(--text); }
+  .subtitle     { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem; letter-spacing: 0.5px; }
+}
+
+.tabs {
+  display: flex;
+  gap: 0.25rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-soft);
+
+  button {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.5rem 1.25rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.15s;
+
+    &:hover  { background: var(--bg-card); color: var(--text); }
+    &.active { background: var(--bg-card); border-color: var(--blue); color: var(--blue); font-weight: 500; }
+  }
+}
+
+.content { padding: 2rem 0; min-height: 60vh; }
+
+.footer {
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--border-soft);
+  text-align: center;
+  a { color: var(--text-dim); text-decoration: none; font-size: 0.8rem;
+    &:hover { color: var(--text); }
+  }
+}
+
+.tab-content { display: flex; flex-direction: column; gap: 1.5rem; }
+
+// ── Theme Switcher — style Netflix Java Lab ───────────────────────────────────
+// Remplace l'ancien bloc .theme-pill dans _layout.scss
+// Deux éléments : bouton icône toggle + pill "auto/manuel"
+
+.theme-switcher {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.15rem 0.3rem;
+}
+
+// Bouton ☀️ / 🌙
+.theme-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.2rem 0.25rem;
+  border-radius: 4px;
+  line-height: 1;
+  transition: background 180ms ease;
+
+  &:hover { background: var(--border); }
+}
+
+// Pill "⏱ auto" / "⏱ manuel"
+.auto-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.65rem;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  color: var(--text-muted);
+  padding: 0.2rem 0.35rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  transition: all 180ms ease;
+
+  &:hover  { background: var(--border); }
+  &.active { color: var(--blue); }     // auto actif → bleu
+}

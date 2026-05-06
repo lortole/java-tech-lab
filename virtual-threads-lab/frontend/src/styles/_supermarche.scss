@@ -1,0 +1,48 @@
+// styles/_supermarche.scss
+
+.supermarche-caisses { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+
+.caisse {
+  display: flex; align-items: center; gap: 6px; padding: 6px 8px;
+  border-radius: 8px; border: 1.5px solid; transition: background .25s, border-color .25s; min-height: 50px;
+  &.free    { background: rgba(29,158,117,0.06);  border-color: rgba(29,158,117,0.3); }
+  &.blocked { background: rgba(226,75,74,0.08);   border-color: #E24B4A; }
+  &.serving { background: rgba(55,138,221,0.08);  border-color: #378ADD; }
+  &.setup   { background: rgba(186,117,23,0.08);  border-color: #BA7517; }
+  &.frozen  { background: rgba(226,75,74,0.15);   border-color: #E24B4A; animation: caisse-freeze 0.7s ease-in-out infinite; }
+  .c-icon  { font-size: 20px; flex-shrink: 0; width: 26px; text-align: center; }
+  .c-body  { flex: 1; min-width: 0; }
+  .c-name  { font-size: 10px; font-weight: 700; color: var(--text); }
+  .c-stat  { font-size: 9px; margin-top: 1px; }
+  &.free    .c-stat { color: #085041; }
+  &.blocked .c-stat { color: #791F1F; }
+  &.serving .c-stat { color: #0C447C; }
+  &.setup   .c-stat { color: #633806; }
+  &.frozen  .c-stat { color: #791F1F; }
+  .c-queue   { display: flex; gap: 2px; flex-wrap: wrap; margin-top: 3px; align-items: center; }
+  .c-client  { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 38px; }
+  .c-cli-icon  { font-size: 16px; line-height: 1; }
+  .c-cli-label { font-size: 7px; font-weight: 600; text-align: center; margin-top: 1px; }
+}
+
+@keyframes caisse-freeze { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+.qp {
+  font-size: 11px; width: 18px; height: 18px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(136,135,128,0.1); border: 1px solid rgba(136,135,128,0.2);
+  &.qp-more { font-size: 8px; font-weight: 700; color: var(--text-muted); }
+}
+
+.progress-wrap { margin-top: 3px; }
+.progress-bg   { height: 4px; background: rgba(128,128,128,0.15); border-radius: 2px; overflow: hidden; width: 36px; }
+.progress-bar  { height: 100%; border-radius: 2px; transition: width 0.18s linear;
+  &.card { background: #BA7517; } &.scan { background: #378ADD; } }
+
+.status-box {
+  border-radius: 8px; padding: 7px 10px; text-align: center;
+  border: 1px solid; font-size: 11px; font-weight: 600; transition: all .3s; margin-bottom: 6px;
+  &.ok     { background: rgba(29,158,117,0.06);  border-color: rgba(29,158,117,0.25); color: #085041; }
+  &.warn   { background: rgba(186,117,23,0.08);  border-color: rgba(186,117,23,0.3);  color: #633806; }
+  &.freeze { background: rgba(226,75,74,0.12);   border-color: #E24B4A; color: #791F1F; animation: caisse-freeze 0.7s ease-in-out infinite; }
+}

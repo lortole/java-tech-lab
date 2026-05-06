@@ -1,0 +1,4 @@
+[ZoneTransfer]
+ZoneId=3
+ReferrerUrl=https://claude.ai/chat/fda7ef1e-087f-4419-87dd-d11bf5e5edca
+HostUrl=https://claude.ai/api/organizations/a64b51c4-d5c8-4f30-8e11-f840e7c74c08/conversations/fda7ef1e-087f-4419-87dd-d11bf5e5edca/wiggle/download-files?paths=%2Fmnt%2Fuser-data%2Foutputs%2Fvirtual-threads-lab-frontend%2FBenchController.java&paths=%2Fmnt%2Fuser-data%2Foutputs%2Fvirtual-threads-lab-frontend%2Fsetup-frontend.sh&paths=%2Fmnt%2Fuser-data%2Foutputs%2Fvirtual-threads-lab-frontend%2Fbench.service.ts&paths=%2Fmnt%2Fuser-data%2Foutputs%2Fvirtual-threads-lab-frontend%2Fapp.component.ts&paths=%2Fmnt%2Fuser-data%2Foutputs%2Fvirtual-threads-lab-frontend%2Fbench.component.ts&paths=%2Fmnt%2Fuser-data%2Foutputs%2Fvirtual-threads-lab-frontend%2Fpinning.component.ts&paths=%2Fmnt%2Fuser-data%2Foutputs%2Fvirtual-threads-lab-frontend%2Fcontext.component.ts&paths=%2Fmnt%2Fuser-data%2Foutputs%2Fvirtual-threads-lab-frontend%2Fapp.component.scss

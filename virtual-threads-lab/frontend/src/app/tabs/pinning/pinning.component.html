@@ -1,0 +1,291 @@
+<div class="tab-content">
+
+  <!-- ── Explication ────────────────────────────────────────────── -->
+  <div class="explain-card">
+    <h2>Le Pinning — le piège à ne pas rater en entretien</h2>
+    <p>
+      Le <strong>pinning</strong> arrive quand un Virtual Thread reste cloué à son
+      carrier pendant un blocage. Le carrier ne peut plus servir d'autres VTs.
+    </p>
+    <p>
+      Cause : <code>synchronized</code> en Java 21–23.
+      Solution : <code>ReentrantLock</code>.
+      Résolu nativement en <strong>Java 24 (JEP 491)</strong>.
+    </p>
+  </div>
+
+  <!-- ── Intro narrative ────────────────────────────────────────── -->
+  <div class="narrative-card">
+    <div class="narrative-scene">🛒 Au supermarché</div>
+    <p class="narrative-text">
+      Il y a <strong>{{ nCaisses }} caisses ouvertes</strong> et
+      <strong>{{ nClients }} clients</strong> à servir.
+      Chaque client arrive à la caisse — et là, il réalise qu'il doit trouver
+      sa carte bleue au fond de son sac. Ça prend du temps.
+    </p>
+    <p class="narrative-text">
+      La question, c'est : <strong>que fait le caissier pendant ce temps ?</strong>
+    </p>
+    <div class="narrative-split">
+      <div class="narrative-option bad">
+        <span class="narrative-option-title">😤 synchronized</span>
+        <span class="narrative-option-desc">
+          Le caissier reste planté. Il attend. Il bloque la caisse entière.
+          Quand tous les caissiers attendent en même temps → <strong>le supermarché freeze</strong>.
+        </span>
+      </div>
+      <div class="narrative-option good">
+        <span class="narrative-option-title">😊 ReentrantLock</span>
+        <span class="narrative-option-desc">
+          Le caissier dit "prenez votre temps" et se libère.
+          Il revient dès que la carte est prête. Les autres clients avancent. <strong>Throughput maintenu.</strong>
+        </span>
+      </div>
+    </div>
+    <p class="narrative-conclusion">
+      En Java : le "client qui cherche sa carte" = l'I/O (appel BDD, requête HTTP).
+      Le "caissier" = le carrier OS. Lance la simulation 👇
+    </p>
+  </div>
+
+  <!-- ── Simulation ─────────────────────────────────────────────── -->
+  <div class="analogy-card">
+    <div class="analogy-title">Simulation — Le supermarché</div>
+
+    <div class="sim-controls">
+      <button (click)="toggleSim()" class="btn-anim">
+        {{ running ? '⏸ Pause' : '▶ Démarrer' }}
+      </button>
+      <button (click)="resetSim()" class="btn-anim">↺ Reset</button>
+
+      <div class="sim-slider">
+        <span>🏪 Caisses</span>
+        <input type="range" min="1" max="5" [(ngModel)]="nCaisses" (change)="onConfigChange()"/>
+        <span class="sim-val">{{ nCaisses }}</span>
+      </div>
+      <div class="sim-slider">
+        <span>🧑 Clients</span>
+        <input type="range" min="5" max="500" step="5" [(ngModel)]="nClients" (change)="onConfigChange()"/>
+        <span class="sim-val">{{ nClients }}</span>
+      </div>
+      <div class="sim-slider">
+        <span>⚡ Vitesse</span>
+        <input type="range" min="1" max="10" [(ngModel)]="speed" (change)="onSpeedChange()"/>
+        <span class="sim-val">{{ speed }}x</span>
+      </div>
+    </div>
+
+    <div class="sim-scene">
+
+      <!-- Platform / synchronized -->
+      <div class="sim-side">
+        <div class="sim-title">synchronized 🔒</div>
+        <div class="sim-subtitle">Caissier bloqué — attend la carte bleue</div>
+
+        <div class="supermarche-caisses">
+          <div *ngFor="let c of pCaisses; trackBy: trackById"
+            [class]="caisseClass(c, true)">
+            <div class="c-icon">{{ caissierIcon(c.state, allBlocked) }}</div>
+            <div class="c-body">
+              <div class="c-name">Caisse {{ c.id + 1 }}</div>
+              <div class="c-stat">{{ caisseStatus(c, true) }}</div>
+              <div class="c-queue">
+                <div *ngFor="let id of visibleQueue(c.queue, pClients); trackBy: trackByIndex"
+                  class="qp">{{ clientIcon(pClients[id]?.state) }}</div>
+                <div *ngIf="moreInQueue(c.queue, pClients) > 0" class="qp qp-more">
+                  +{{ moreInQueue(c.queue, pClients) }}
+                </div>
+              </div>
+            </div>
+            <div class="c-client" *ngIf="c.clientId >= 0 && pClients[c.clientId]">
+              <span class="c-cli-icon">{{ clientIcon(pClients[c.clientId].state) }}</span>
+              <span class="c-cli-label" [style.color]="clientColor(pClients[c.clientId].state)">
+                {{ clientLabel(pClients[c.clientId].state) }}
+              </span>
+              <div class="progress-wrap">
+                <div class="progress-bg">
+                  <div class="progress-bar"
+                    [class.card]="pClients[c.clientId].state === 'at-caisse' || pClients[c.clientId].state === 'searching'"
+                    [class.scan]="pClients[c.clientId].state === 'being-served'"
+                    [style.width.%]="clientProgress(pClients[c.clientId])">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div [class]="pStatusClass" id="p-status">{{ pStatusText }}</div>
+
+        <div class="sim-stats">
+          <div class="sim-stat ss">✓ {{ pDone }}</div>
+          <div class="sim-stat sb">🔒 {{ pBlocked }}</div>
+          <div class="sim-stat sw">⏳ {{ pWaiting }}</div>
+        </div>
+        <div class="sim-tp-wrap">
+          <div class="sim-tp-lbl">Clients servis</div>
+          <div class="sim-tp-bg"><div class="sim-tp-bar p" [style.width.%]="pTpPct"></div></div>
+        </div>
+      </div>
+
+      <div class="sim-sep"></div>
+
+      <!-- Virtual / ReentrantLock -->
+      <div class="sim-side">
+        <div class="sim-title">ReentrantLock 🟢</div>
+        <div class="sim-subtitle">Caissier libre pendant la recherche de carte</div>
+
+        <div class="supermarche-caisses">
+          <div *ngFor="let c of vCaisses; trackBy: trackById"
+            [class]="caisseClass(c, false)">
+            <div class="c-icon">{{ caissierIcon(c.state, false) }}</div>
+            <div class="c-body">
+              <div class="c-name">Caisse {{ c.id + 1 }}</div>
+              <div class="c-stat">{{ caisseStatus(c, false) }}</div>
+              <div class="c-queue">
+                <div *ngFor="let id of visibleQueue(c.queue, vClients); trackBy: trackByIndex"
+                  class="qp">{{ clientIcon(vClients[id]?.state) }}</div>
+                <div *ngIf="moreInQueue(c.queue, vClients) > 0" class="qp qp-more">
+                  +{{ moreInQueue(c.queue, vClients) }}
+                </div>
+              </div>
+            </div>
+            <div class="c-client" *ngIf="c.clientId >= 0 && vClients[c.clientId]">
+              <span class="c-cli-icon">{{ clientIcon(vClients[c.clientId].state) }}</span>
+              <span class="c-cli-label" [style.color]="clientColor(vClients[c.clientId].state)">
+                {{ clientLabel(vClients[c.clientId].state) }}
+              </span>
+              <div class="progress-wrap">
+                <div class="progress-bg">
+                  <div class="progress-bar"
+                    [class.card]="vClients[c.clientId].state === 'searching'"
+                    [class.scan]="vClients[c.clientId].state === 'being-served'"
+                    [style.width.%]="clientProgress(vClients[c.clientId])">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="status-box ok">{{ vStatusText }}</div>
+
+        <div class="sim-stats">
+          <div class="sim-stat ss">✓ {{ vDone }}</div>
+          <div class="sim-stat ss">🟢 {{ vFree }} libres</div>
+          <div class="sim-stat sw">⏳ {{ vWaiting }}</div>
+        </div>
+        <div class="sim-tp-wrap">
+          <div class="sim-tp-lbl">Clients servis</div>
+          <div class="sim-tp-bg"><div class="sim-tp-bar v" [style.width.%]="vTpPct"></div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="sim-legend">
+      <div class="sim-legend-item"><span>🧑</span> Attend</div>
+      <div class="sim-legend-item"><span>😅</span> À la caisse</div>
+      <div class="sim-legend-item"><span>🔍</span> Cherche carte</div>
+      <div class="sim-legend-item"><span>🔔</span> Carte prête</div>
+      <div class="sim-legend-item"><span>😌</span> En cours</div>
+      <div class="sim-legend-item"><span>✅</span> Parti</div>
+    </div>
+  </div>
+
+  <!-- ── Explication résultats ───────────────────────────────────── -->
+  <div class="results-explain">
+    <div class="result-explain-grid">
+      <div class="result-box blue">
+        <div class="result-box-label">Sans lock</div>
+        <div class="result-box-value">~30ms</div>
+        <div class="result-box-desc">200 VTs en parallèle — aucune attente</div>
+      </div>
+      <div class="result-box red">
+        <div class="result-box-label">synchronized</div>
+        <div class="result-box-value">~6000ms</div>
+        <div class="result-box-desc">Séquentiel + carrier bloqué → freeze sous charge</div>
+      </div>
+      <div class="result-box green">
+        <div class="result-box-label">ReentrantLock</div>
+        <div class="result-box-value">~6000ms</div>
+        <div class="result-box-desc">Séquentiel aussi — mais carrier libéré</div>
+      </div>
+    </div>
+    <div class="result-explain-conclusion">
+      <p>
+        <strong>Pourquoi les temps sont identiques ?</strong>
+        Un seul lock partagé = une seule tâche à la fois = séquentiel dans les deux cas.
+      </p>
+      <p>
+        <strong>La vraie différence se voit sous charge.</strong>
+        <code>synchronized</code> sature les carriers OS → l'appli freeze.
+        <code>ReentrantLock</code> libère les carriers → les autres VTs continuent.
+      </p>
+    </div>
+  </div>
+
+  <!-- ── Bench réel ──────────────────────────────────────────────── -->
+  <div class="controls">
+    <button (click)="runBench()" [disabled]="loading">
+      {{ loading ? 'En cours (~20s)...' : '▶ Lancer la démo réelle' }}
+    </button>
+    <span class="warning" *ngIf="!loading && !result">⚠️ ~20s (200 tâches séquentielles)</span>
+  </div>
+
+  <div class="error" *ngIf="error">{{ error }}</div>
+
+  <div class="results" *ngIf="result && !loading">
+    <div class="java-badge" [class.fixed]="result.pinningFixed">
+      Java {{ result.javaVersion }} {{ result.pinningFixed ? '✅ JEP 491 actif' : '⚠️ Pinning actif' }}
+    </div>
+    <div class="note">{{ result.note }}</div>
+    <div class="bars">
+      <div class="bar-row">
+        <span class="bar-label">Sans lock (200 VTs)</span>
+        <div class="bar-track">
+          <div class="bar no-lock"
+            [style.width.%]="Math.max((result.noLockMs / result.synchronizedMs) * 100, 3)">
+            {{ result.noLockMs }}ms
+          </div>
+        </div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">synchronized</span>
+        <div class="bar-track">
+          <div class="bar sync" [style.width.%]="100">{{ result.synchronizedMs }}ms</div>
+        </div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">ReentrantLock</span>
+        <div class="bar-track">
+          <div class="bar reentrant"
+            [style.width.%]="(result.reentrantMs / result.synchronizedMs) * 100">
+            {{ result.reentrantMs }}ms
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Code compare ────────────────────────────────────────────── -->
+  <div class="code-compare">
+    <div class="code-bad">
+      <div class="code-header">❌ Pinning (Java 21–23)</div>
+      <pre><code>synchronized (lock) &#123;
+    appelBDD(); // carrier bloqué
+    // les autres VTs attendent
+&#125;</code></pre>
+    </div>
+    <div class="code-good">
+      <div class="code-header">✅ Pas de pinning</div>
+      <pre><code>lock.lock();
+try &#123;
+    appelBDD(); // carrier libre
+&#125; finally &#123;
+    lock.unlock();
+&#125;</code></pre>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,35 @@
+<div class="app">
+
+  <header class="header">
+    <div class="header-inner">
+      <span class="logo">⚡</span>
+      <div class="header-text">
+        <h1>Virtual Threads Lab</h1>
+        <p class="subtitle">Java 21 — Bench · Pinning · Context Propagation</p>
+      </div>
+      <app-theme-toggle />
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button
+      *ngFor="let tab of tabs"
+      [class.active]="activeTab === tab.id"
+      (click)="activeTab = tab.id">
+      {{ tab.icon }} {{ tab.label }}
+    </button>
+  </nav>
+
+  <main class="content">
+    <app-bench-tab   *ngIf="activeTab === 'bench'"   />
+    <app-pinning-tab *ngIf="activeTab === 'pinning'" />
+    <app-context-tab *ngIf="activeTab === 'context'" />
+  </main>
+
+  <footer class="footer">
+    <a href="https://github.com/lortole/java-tech-lab" target="_blank">
+      github.com/lortole/java-tech-lab
+    </a>
+  </footer>
+
+</div>

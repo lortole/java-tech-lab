@@ -1,0 +1,241 @@
+<div class="tab-content">
+
+  <!-- ── Explication ────────────────────────────────────────────── -->
+  <div class="explain-card">
+    <h2>Platform Threads vs Virtual Threads</h2>
+    <p>
+      Sur un workload <strong>I/O-bound</strong>, chaque tâche simule un appel BDD (sleep).
+      Les Platform Threads attendent bloqués. Les Virtual Threads libèrent leur carrier —
+      des milliers de tâches tournent quasi-simultanément.
+    </p>
+  </div>
+
+  <!-- ── Analogie statique banque ──────────────────────────────── -->
+  <div class="analogy-card">
+    <div class="analogy-title">Analogie — La banque</div>
+    <svg width="100%" viewBox="0 0 640 260">
+      <text class="svg-label-title" x="155" y="22" text-anchor="middle">Platform Threads</text>
+      <text class="svg-label-sub"   x="155" y="38" text-anchor="middle">3 guichets, 9 clients attendent</text>
+      <rect x="30"  y="50" width="80" height="34" rx="6" class="svg-box amber"/>
+      <text class="svg-label" x="70"  y="71" text-anchor="middle">Guichet 1</text>
+      <rect x="115" y="50" width="80" height="34" rx="6" class="svg-box amber"/>
+      <text class="svg-label" x="155" y="71" text-anchor="middle">Guichet 2</text>
+      <rect x="200" y="50" width="80" height="34" rx="6" class="svg-box amber"/>
+      <text class="svg-label" x="240" y="71" text-anchor="middle">Guichet 3</text>
+      <circle cx="50"  cy="115" r="9" class="svg-dot gray"/>
+      <circle cx="75"  cy="115" r="9" class="svg-dot gray"/>
+      <circle cx="100" cy="115" r="9" class="svg-dot gray"/>
+      <circle cx="140" cy="115" r="9" class="svg-dot gray"/>
+      <circle cx="165" cy="115" r="9" class="svg-dot gray"/>
+      <circle cx="190" cy="115" r="9" class="svg-dot gray"/>
+      <circle cx="230" cy="115" r="9" class="svg-dot gray"/>
+      <circle cx="255" cy="115" r="9" class="svg-dot gray"/>
+      <circle cx="280" cy="115" r="9" class="svg-dot gray"/>
+      <text class="svg-label-sub" x="155" y="145" text-anchor="middle">9 clients bloqués</text>
+      <rect x="30"  y="158" width="250" height="28" rx="6" class="svg-box red"/>
+      <text class="svg-label" x="155" y="176" text-anchor="middle">~200ms (4 batches)</text>
+      <line x1="320" y1="10" x2="320" y2="240" stroke-dasharray="4 3" class="svg-sep"/>
+      <text class="svg-label-title" x="480" y="22" text-anchor="middle">Virtual Threads</text>
+      <text class="svg-label-sub"   x="480" y="38" text-anchor="middle">12 agents légers, tous actifs</text>
+      <rect x="340" y="50"  width="58" height="30" rx="5" class="svg-box green"/>
+      <text class="svg-label" x="369" y="69" text-anchor="middle">VT 1</text>
+      <rect x="404" y="50"  width="58" height="30" rx="5" class="svg-box green"/>
+      <text class="svg-label" x="433" y="69" text-anchor="middle">VT 2</text>
+      <rect x="468" y="50"  width="58" height="30" rx="5" class="svg-box green"/>
+      <text class="svg-label" x="497" y="69" text-anchor="middle">VT 3</text>
+      <rect x="532" y="50"  width="58" height="30" rx="5" class="svg-box green"/>
+      <text class="svg-label" x="561" y="69" text-anchor="middle">VT 4</text>
+      <rect x="340" y="88"  width="58" height="30" rx="5" class="svg-box green"/>
+      <text class="svg-label" x="369" y="107" text-anchor="middle">VT 5</text>
+      <rect x="404" y="88"  width="58" height="30" rx="5" class="svg-box green"/>
+      <text class="svg-label" x="433" y="107" text-anchor="middle">VT 6</text>
+      <rect x="468" y="88"  width="58" height="30" rx="5" class="svg-box green"/>
+      <text class="svg-label" x="497" y="107" text-anchor="middle">VT 7</text>
+      <rect x="532" y="88"  width="58" height="30" rx="5" class="svg-box green"/>
+      <text class="svg-label" x="561" y="107" text-anchor="middle">VT 8</text>
+      <rect x="340" y="126" width="58" height="30" rx="5" class="svg-box green"/>
+      <text class="svg-label" x="369" y="145" text-anchor="middle">VT 9</text>
+      <rect x="404" y="126" width="58" height="30" rx="5" class="svg-box green"/>
+      <text class="svg-label" x="433" y="145" text-anchor="middle">VT 10</text>
+      <rect x="468" y="126" width="58" height="30" rx="5" class="svg-box green"/>
+      <text class="svg-label" x="497" y="145" text-anchor="middle">VT 11</text>
+      <rect x="532" y="126" width="58" height="30" rx="5" class="svg-box green"/>
+      <text class="svg-label" x="561" y="145" text-anchor="middle">VT 12</text>
+      <rect x="340" y="165" width="250" height="28" rx="6" class="svg-box green"/>
+      <text class="svg-label" x="465" y="183" text-anchor="middle">~55ms (1 batch)</text>
+    </svg>
+  </div>
+
+  <!-- ── Simulation restaurant ──────────────────────────────────── -->
+  <div class="analogy-card">
+    <div class="analogy-title">Simulation — Le restaurant</div>
+
+    <div class="sim-controls">
+      <button (click)="toggleSim()" class="btn-anim">
+        {{ running ? '⏸ Pause' : '▶ Démarrer' }}
+      </button>
+      <button (click)="resetSim()" class="btn-anim">↺ Reset</button>
+      <div class="sim-slider">
+        <span>🍽️ Tables</span>
+        <input type="range" min="4" max="25" [(ngModel)]="nTables" (change)="onConfigChange()"/>
+        <span class="sim-val">{{ nTables }}</span>
+      </div>
+      <div class="sim-slider">
+        <span>🧑‍🍳 Serveurs</span>
+        <input type="range" min="1" max="8" [(ngModel)]="nWaiters" (change)="onConfigChange()"/>
+        <span class="sim-val">{{ nWaiters }}</span>
+      </div>
+      <div class="sim-slider">
+        <span>⚡ Vitesse</span>
+        <input type="range" min="1" max="8" [(ngModel)]="speed" (change)="onSpeedChange()"/>
+        <span class="sim-val">{{ speed }}x</span>
+      </div>
+    </div>
+
+    <div class="sim-scene">
+
+      <!-- Platform -->
+      <div class="sim-side">
+        <div class="sim-title">😐 Platform Threads</div>
+        <div class="sim-subtitle">Serveur bloqué pendant que le client réfléchit</div>
+        <div class="sim-tables" [style.grid-template-columns]="tableCols">
+          <div *ngFor="let t of pTables; let i = index"
+            class="sim-table"
+            [class.idle]="t.state==='idle'"
+            [class.waiting]="t.state==='waiting'"
+            [class.thinking]="t.state==='thinking' || t.state==='serving'"
+            [class.served]="t.state==='served'">
+            <span class="sim-table-icon">{{ tableIcon('p', t.state) }}</span>
+            <span class="sim-table-lbl">{{ tableLabel('p', t.state, i) }}</span>
+          </div>
+        </div>
+        <div class="sim-waiters">
+          <div *ngFor="let w of pWaiters"
+            class="sim-waiter"
+            [class.wfree]="w.state==='free'"
+            [class.wblocked]="w.state==='blocked'"
+            [class.wserving]="w.state==='serving'">
+            <span class="sim-waiter-emoji">😐</span>
+            <span class="sim-waiter-status">{{ pWaiterStatus(w.state) }}</span>
+          </div>
+        </div>
+        <div class="sim-stats">
+          <div class="sim-stat ss">✓ {{ pServed }}</div>
+          <div class="sim-stat sw">⏳ {{ pWaiting }}</div>
+          <div class="sim-stat sb">🔒 {{ pBlocked }}</div>
+        </div>
+        <div class="sim-tp-wrap">
+          <div class="sim-tp-lbl">Tables servies</div>
+          <div class="sim-tp-bg"><div class="sim-tp-bar p" [style.width.%]="pTpPct"></div></div>
+        </div>
+        <div class="sim-log" [class.warn]="pBlocked > 0">{{ pLog }}</div>
+      </div>
+
+      <div class="sim-sep"></div>
+
+      <!-- Virtual -->
+      <div class="sim-side">
+        <div class="sim-title">🥷 Virtual Threads</div>
+        <div class="sim-subtitle">Carrier libéré dès que le client réfléchit</div>
+        <div class="sim-tables" [style.grid-template-columns]="tableCols">
+          <div *ngFor="let t of vTables; let i = index"
+            class="sim-table"
+            [class.idle]="t.state==='idle'"
+            [class.waiting]="t.state==='waiting' || t.state==='ready'"
+            [class.vthinking]="t.state==='vthinking' || t.state==='taking'"
+            [class.served]="t.state==='served' || t.state==='finalizing'">
+            <span class="sim-table-icon">{{ tableIcon('v', t.state) }}</span>
+            <span class="sim-table-lbl">{{ tableLabel('v', t.state, i) }}</span>
+          </div>
+        </div>
+        <div class="sim-waiters">
+          <div *ngFor="let w of vWaiters"
+            class="sim-waiter"
+            [class.wfree]="w.state==='free'"
+            [class.wtaking]="w.state==='taking'"
+            [class.wserving]="w.state==='serving' || w.state==='busy'">
+            <span class="sim-waiter-emoji">🥷</span>
+            <span class="sim-waiter-status">{{ vWaiterStatus(w.state) }}</span>
+          </div>
+        </div>
+        <div class="sim-stats">
+          <div class="sim-stat ss">✓ {{ vServed }}</div>
+          <div class="sim-stat sw">⏳ {{ vWaiting }}</div>
+          <div class="sim-stat sb" style="background:rgba(29,158,117,.1);border-color:rgba(29,158,117,.3);color:#085041">
+            🟢 {{ vFree }} libres
+          </div>
+        </div>
+        <div class="sim-tp-wrap">
+          <div class="sim-tp-lbl">Tables servies</div>
+          <div class="sim-tp-bg"><div class="sim-tp-bar v" [style.width.%]="vTpPct"></div></div>
+        </div>
+        <div class="sim-log">{{ vLog }}</div>
+      </div>
+    </div>
+
+    <div class="sim-legend">
+      <div class="sim-legend-item"><div class="sim-dot" style="background:#ccc"></div> Vide</div>
+      <div class="sim-legend-item"><div class="sim-dot" style="background:#BA7517"></div> Client attend</div>
+      <div class="sim-legend-item"><div class="sim-dot" style="background:#E24B4A"></div> Carrier bloqué 🔒</div>
+      <div class="sim-legend-item"><div class="sim-dot" style="background:#FAC775"></div> Client pense (carrier libre)</div>
+      <div class="sim-legend-item"><div class="sim-dot" style="background:#1D9E75"></div> Servi ✓</div>
+    </div>
+  </div>
+
+  <!-- ── Contrôles bench ────────────────────────────────────────── -->
+  <div class="controls">
+    <label>Nombre de tâches</label>
+    <input type="range" min="100" max="2000" step="100" [(ngModel)]="taskCount" />
+    <span class="value">{{ taskCount }}</span>
+    <button (click)="run()" [disabled]="loading">
+      {{ loading ? 'En cours...' : '▶ Lancer le bench' }}
+    </button>
+  </div>
+
+  <div class="error" *ngIf="error">{{ error }}</div>
+
+  <!-- ── Résultats ──────────────────────────────────────────────── -->
+  <div class="results" *ngIf="result && !loading">
+    <div class="speedup-badge">
+      <span class="speedup-value">{{ result.speedup }}x</span>
+      <span class="speedup-label">plus rapide</span>
+    </div>
+    <div class="bars">
+      <div class="bar-row">
+        <span class="bar-label">{{ result.platformLabel }}</span>
+        <div class="bar-track">
+          <div class="bar platform" [style.width.%]="100">{{ result.platformMs }}ms</div>
+        </div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">{{ result.virtualLabel }}</span>
+        <div class="bar-track">
+          <div class="bar virtual" [style.width.%]="(result.virtualMs / result.platformMs) * 100">
+            {{ result.virtualMs }}ms
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="insight">
+      💡 {{ result.taskCount }} tâches de 50ms —
+      Platform Threads passent par batches.
+      Virtual Threads démarrent toutes quasi-simultanément.
+    </div>
+  </div>
+
+  <div class="loading-state" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Bench en cours — {{ taskCount }} tâches I/O simulées...</p>
+  </div>
+
+  <!-- ── Code ───────────────────────────────────────────────────── -->
+  <div class="code-block">
+    <pre><code>// Virtual Threads — un VT par tâche, sans limite pratique
+try (var executor = Executors.newVirtualThreadPerTaskExecutor()) &#123;
+    for (int i = 0; i &lt; {{ taskCount }}; i++) &#123;
+        executor.submit(() -&gt; Thread.sleep(50));
+    &#125;
+&#125;</code></pre>
+  </div>
+
+</div>

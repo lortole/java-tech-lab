@@ -1,0 +1,448 @@
+import {
+  Component,
+  signal,
+  computed,
+  ElementRef,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy,
+  effect,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+export interface Scenario {
+  id: number;
+  label: string;
+  icon: string;
+  status: 'bad' | 'warn' | 'ok';
+  subtitle: string;
+  code: string[];        // lignes de code pré-formatées (HTML autorisé)
+  verdict: string;
+  verdictStatus: 'bad' | 'warn' | 'ok';
+}
+
+@Component({
+  selector: 'app-context-tab',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './context.component.html',
+})
+export class ContextTabComponent implements AfterViewInit, OnDestroy {
+
+  @ViewChild('vizCanvas') canvasRef!: ElementRef<HTMLCanvasElement>;
+
+  // ── État stepper ────────────────────────────────────────────────
+  activeIdx = signal(0);
+  isFirst   = computed(() => this.activeIdx() === 0);
+  isLast    = computed(() => this.activeIdx() === this.scenarios.length - 1);
+  current   = computed(() => this.scenarios[this.activeIdx()]);
+
+  // ── Données des 4 scénarios ─────────────────────────────────────
+  scenarios: Scenario[] = [
+    {
+      id: 0,
+      label: 'ThreadLocal seul',
+      icon: '❌',
+      status: 'bad',
+      subtitle: 'MDC seul',
+      code: [
+        `MDC.put(<span class="hi">"traceId"</span>, <span class="hi">"abc-123"</span>);`,
+        ``,
+        `<span class="dim">try (var exec = Executors.newVirtualThreadPerTaskExecutor()) {</span>`,
+        `  exec.submit(() -> {`,
+        `    MDC.get(<span class="hi">"traceId"</span>); <span class="err">// null — PERDU !</span>`,
+        `  });`,
+        `<span class="dim">}</span>`,
+      ],
+      verdict: 'traceId perdu au fork — ThreadLocal est isolé par thread',
+      verdictStatus: 'bad',
+    },
+    {
+      id: 1,
+      label: 'MDC copie manuelle',
+      icon: '⚠️',
+      status: 'warn',
+      subtitle: 'getCopyOfContextMap()',
+      code: [
+        `var captured = MDC.getCopyOfContextMap();`,
+        ``,
+        `exec.submit(() -> {`,
+        `  MDC.setContextMap(<span class="warn">captured</span>);`,
+        `  MDC.get(<span class="hi">"traceId"</span>); <span class="hi">// "abc-123" ✅</span>`,
+        `  MDC.clear(); <span class="warn">// ⚠️ oublier = fuite mémoire</span>`,
+        `});`,
+      ],
+      verdict: 'Fonctionne — mais copie manuelle à répéter partout, risque d\'oubli du MDC.clear()',
+      verdictStatus: 'warn',
+    },
+    {
+      id: 2,
+      label: 'ScopedValue',
+      icon: '✅',
+      status: 'ok',
+      subtitle: 'Java 21 — JEP 446',
+      code: [
+        `<span class="dim">static final</span> ScopedValue&lt;String&gt; TRACE_ID`,
+        `    = ScopedValue.newInstance();`,
+        ``,
+        `ScopedValue.where(TRACE_ID, <span class="hi">"abc-123"</span>).run(() -> {`,
+        `  <span class="dim">try (var scope = new StructuredTaskScope&lt;&gt;()) {</span>`,
+        `    scope.fork(() -> {`,
+        `      TRACE_ID.get(); <span class="hi">// "abc-123" ✅ automatique</span>`,
+        `      <span class="dim">return null;</span>`,
+        `    });`,
+        `    <span class="dim">scope.join();</span>`,
+        `  <span class="dim">}</span>`,
+        `});`,
+      ],
+      verdict: 'Propagation automatique — immuable, zéro risque de mutation entre threads',
+      verdictStatus: 'ok',
+    },
+    {
+      id: 3,
+      label: 'Spring Boot 3.2+',
+      icon: '✅',
+      status: 'ok',
+      subtitle: 'micrometer-context-propagation',
+      code: [
+        `<span class="dim"># application.properties</span>`,
+        `spring.threads.virtual.enabled=<span class="hi">true</span>`,
+        ``,
+        `<span class="dim"># pom.xml</span>`,
+        `<span class="warn">io.micrometer:micrometer-context-propagation</span>`,
+        ``,
+        `<span class="dim">// MDC propagé automatiquement dans tous les VTs Spring.</span>`,
+        `<span class="hi">// Aucun changement de code nécessaire. ✅</span>`,
+      ],
+      verdict: 'Solution transparente pour tout projet Spring Boot 3.2+ existant',
+      verdictStatus: 'ok',
+    },
+  ];
+
+  // ── Tableau récap ────────────────────────────────────────────────
+  tableRows = [
+    { label: 'ThreadLocal seul',     prop: '❌ Perdu',      verbose: '—',       java: 'Tous',            cls: 'bad-row'  },
+    { label: 'MDC copie manuelle',   prop: '✅ OK',          verbose: 'Élevée',  java: 'Tous',            cls: 'warn-row' },
+    { label: 'ScopedValue',          prop: '✅ Auto',        verbose: 'Faible',  java: '21+',             cls: 'good-row' },
+    { label: 'micrometer-ctx-prop',  prop: '✅ Transparent', verbose: 'Zéro',   java: 'Spring Boot 3.2+', cls: 'good-row' },
+  ];
+
+  // ── Animation Canvas ─────────────────────────────────────────────
+  private rafId: number | null = null;
+  private t = 0;
+
+  constructor() {
+    // Relance l'animation à chaque changement de scénario
+    effect(() => {
+      const idx = this.activeIdx();
+      void idx; // consommation du signal pour déclencher l'effect
+      this.t = 0;
+      this.stopAnim();
+      // Léger délai pour laisser le DOM se stabiliser
+      setTimeout(() => this.startAnim(), 60);
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.startAnim();
+  }
+
+  ngOnDestroy(): void {
+    this.stopAnim();
+  }
+
+  // ── Navigation ───────────────────────────────────────────────────
+  prev(): void {
+    if (!this.isFirst()) this.activeIdx.update(i => i - 1);
+  }
+
+  next(): void {
+    if (!this.isLast()) this.activeIdx.update(i => i + 1);
+  }
+
+  goTo(i: number): void {
+    this.activeIdx.set(i);
+  }
+
+  // ── Canvas animation ─────────────────────────────────────────────
+  private stopAnim(): void {
+    if (this.rafId !== null) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
+  }
+
+  private startAnim(): void {
+    const canvas = this.canvasRef?.nativeElement;
+    if (!canvas) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width  = rect.width  * dpr;
+    canvas.height = rect.height * dpr;
+    const ctx = canvas.getContext('2d')!;
+    ctx.scale(dpr, dpr);
+    const W = rect.width;
+    const H = rect.height;
+
+    const draw = () => {
+      ctx.clearRect(0, 0, W, H);
+      this.t += 0.012;
+      switch (this.activeIdx()) {
+        case 0: this.drawScene0(ctx, W, H, this.t); break;
+        case 1: this.drawScene1(ctx, W, H, this.t); break;
+        case 2: this.drawScene2(ctx, W, H, this.t); break;
+        case 3: this.drawScene3(ctx, W, H, this.t); break;
+      }
+      this.rafId = requestAnimationFrame(draw);
+    };
+    this.rafId = requestAnimationFrame(draw);
+  }
+
+  // ── Helpers dessin ───────────────────────────────────────────────
+  private thread(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, color: string, label: string, alpha = 1): void {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    (ctx as any).roundRect(x, y, w, h, 5);
+    ctx.fill();
+    ctx.globalAlpha = alpha * 0.7;
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '10px monospace';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(label, x + 10, y + h / 2);
+    ctx.restore();
+  }
+
+  private particle(ctx: CanvasRenderingContext2D, x: number, y: number, r: number, color: string, label: string, alpha = 1): void {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+    if (label) {
+      ctx.font = 'bold 9px monospace';
+      ctx.fillStyle = '#fff';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(label, x, y);
+    }
+    ctx.restore();
+  }
+
+  private arrow(ctx: CanvasRenderingContext2D, x1: number, y1: number, x2: number, y2: number, color: string, alpha = 0.6): void {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    const ang = Math.atan2(y2 - y1, x2 - x1);
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - 8 * Math.cos(ang - 0.4), y2 - 8 * Math.sin(ang - 0.4));
+    ctx.lineTo(x2 - 8 * Math.cos(ang + 0.4), y2 - 8 * Math.sin(ang + 0.4));
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  private label(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color: string, align: CanvasTextAlign = 'left', alpha = 0.8): void {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.font = '10px monospace';
+    ctx.fillStyle = color;
+    ctx.textAlign = align;
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, x, y);
+    ctx.restore();
+  }
+
+  // ── Scène 0 : ThreadLocal perdu ─────────────────────────────────
+  private drawScene0(ctx: CanvasRenderingContext2D, W: number, H: number, t: number): void {
+    const py = H * 0.22, vy = H * 0.64, tw = W * 0.52, th = 26;
+
+    this.thread(ctx, 20, py, tw, th, '#4a2020', 'Parent Thread', 0.9);
+    this.thread(ctx, 60, vy, tw * 0.68, th, '#1a2840', 'Virtual Thread', 0.85);
+
+    // traceId sur parent
+    this.particle(ctx, 145, py + th / 2, 14, '#BA7517', 'tid', 1);
+
+    // fork arrow
+    this.arrow(ctx, 80, py + th, 100, vy, '#6b6b80', 0.5);
+    this.label(ctx, 'fork()', 55, (py + th + vy) / 2, '#6b6b80');
+
+    // null pulsant sur VT
+    const nullAlpha = 0.4 + 0.4 * Math.abs(Math.sin(t * 2));
+    ctx.save();
+    ctx.globalAlpha = nullAlpha;
+    ctx.beginPath();
+    ctx.arc(165, vy + th / 2, 13, 0, Math.PI * 2);
+    ctx.strokeStyle = '#E24B4A';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([3, 3]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.font = 'bold 9px monospace';
+    ctx.fillStyle = '#E24B4A';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('null', 165, vy + th / 2);
+    ctx.restore();
+
+    this.label(ctx, 'ThreadLocal non copié →', W - 16, vy + th / 2, '#E24B4A', 'right', 0.75);
+  }
+
+  // ── Scène 1 : copie manuelle ─────────────────────────────────────
+  private drawScene1(ctx: CanvasRenderingContext2D, W: number, H: number, t: number): void {
+    const py = H * 0.18, vy = H * 0.60, tw = W * 0.48, th = 26;
+
+    this.thread(ctx, 20, py, tw, th, '#4a2020', 'Parent Thread', 0.9);
+    this.thread(ctx, 60, vy, tw * 0.72, th, '#1a2840', 'Virtual Thread', 0.85);
+
+    // traceId parent
+    this.particle(ctx, 125, py + th / 2, 14, '#BA7517', 'tid', 1);
+
+    // Boîte "captured copy" animée
+    const capX = 175 + Math.sin(t * 1.5) * 3;
+    const capY = py + th + 10;
+    ctx.save();
+    ctx.globalAlpha = 0.82;
+    ctx.fillStyle = '#2a1a08';
+    ctx.strokeStyle = '#BA7517';
+    ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    (ctx as any).roundRect(capX, capY, 100, 22, 4);
+    ctx.fill();
+    ctx.stroke();
+    ctx.font = '9px monospace';
+    ctx.fillStyle = '#F59e0b';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('captured copy', capX + 50, capY + 11);
+    ctx.restore();
+
+    this.arrow(ctx, capX + 50, capY + 22, 162, vy, '#BA7517', 0.6);
+
+    // traceId sur VT (ok, pulsant)
+    this.particle(ctx, 162, vy + th / 2, 14, '#1D9E75', 'tid', 0.85 + 0.12 * Math.sin(t * 3));
+
+    this.arrow(ctx, 60, py + th, 80, vy, '#6b6b80', 0.35);
+
+    const warnAlpha = 0.5 + 0.4 * Math.abs(Math.sin(t * 1.8));
+    this.label(ctx, '⚠ MDC.clear() requis', W - 16, vy + th / 2, '#BA7517', 'right', warnAlpha);
+  }
+
+  // ── Scène 2 : ScopedValue ────────────────────────────────────────
+  private drawScene2(ctx: CanvasRenderingContext2D, W: number, H: number, t: number): void {
+    const py = H * 0.16, vy = H * 0.58, tw = W * 0.48, th = 26;
+
+    // Scope rect en fond
+    ctx.save();
+    ctx.globalAlpha = 0.1;
+    ctx.fillStyle = '#1D9E75';
+    ctx.beginPath();
+    (ctx as any).roundRect(12, py - 12, W - 24, H * 0.56, 10);
+    ctx.fill();
+    ctx.restore();
+    ctx.save();
+    ctx.globalAlpha = 0.3;
+    ctx.strokeStyle = '#1D9E75';
+    ctx.lineWidth = 0.8;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath();
+    (ctx as any).roundRect(12, py - 12, W - 24, H * 0.56, 10);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.font = '9px monospace';
+    ctx.fillStyle = '#1D9E75';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillText('ScopedValue.where(TRACE_ID, "abc-123").run { ... }', 22, py - 9);
+    ctx.restore();
+
+    this.thread(ctx, 28, py + 4, tw, th, '#0f4a30', 'Parent Thread', 0.9);
+
+    // 3 VTs avec ScopedValue propagé
+    const vtW = Math.min(140, (W - 80) / 3 - 10);
+    for (let i = 0; i < 3; i++) {
+      const vx = 28 + i * (vtW + 12);
+      this.thread(ctx, vx, vy, vtW, th, '#0a2a18', `VT ${i + 1}`, 0.85);
+      const phase = t * 2 + i * 0.9;
+      this.particle(ctx, vx + vtW / 2, vy + th / 2, 12, '#1D9E75', 'tid', 0.8 + 0.15 * Math.sin(phase));
+      this.arrow(ctx, 28 + tw / 2, py + 4 + th, vx + vtW / 2, vy, '#1D9E75', 0.35);
+    }
+
+    this.label(ctx, '← propagé automatiquement', W - 16, vy + th + 16, '#1D9E75', 'right', 0.85);
+  }
+
+  // ── Scène 3 : Spring Boot ────────────────────────────────────────
+  private drawScene3(ctx: CanvasRenderingContext2D, W: number, H: number, t: number): void {
+    const reqX = 16, reqY = H * 0.22, reqW = 110, reqH = 28;
+    const sprX = 158, sprY = H * 0.18, sprW = 145, sprH = 38;
+    const vtY  = H * 0.65;
+
+    // HTTP request box
+    ctx.save();
+    ctx.globalAlpha = 0.85;
+    ctx.fillStyle = '#0d1a3a';
+    ctx.strokeStyle = '#4695eb';
+    ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    (ctx as any).roundRect(reqX, reqY, reqW, reqH, 5);
+    ctx.fill();
+    ctx.stroke();
+    ctx.font = '10px monospace';
+    ctx.fillStyle = '#4695eb';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('HTTP Request', reqX + reqW / 2, reqY + reqH / 2);
+    ctx.restore();
+
+    // Spring box
+    ctx.save();
+    ctx.globalAlpha = 0.88;
+    ctx.fillStyle = '#0a2010';
+    ctx.strokeStyle = '#6db33f';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    (ctx as any).roundRect(sprX, sprY, sprW, sprH, 6);
+    ctx.fill();
+    ctx.stroke();
+    ctx.font = 'bold 10px monospace';
+    ctx.fillStyle = '#6db33f';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('Spring Boot 3.2+', sprX + sprW / 2, sprY + 14);
+    ctx.font = '9px monospace';
+    ctx.fillStyle = '#6db33f';
+    ctx.globalAlpha = 0.55;
+    ctx.fillText('ContextExecutorService', sprX + sprW / 2, sprY + 29);
+    ctx.restore();
+
+    this.arrow(ctx, reqX + reqW, reqY + reqH / 2, sprX, sprY + sprH / 2, '#4695eb', 0.5);
+
+    // Particule traceId qui voyage request → spring
+    const prog = (Math.sin(t * 2) + 1) / 2;
+    const px   = reqX + reqW + (sprX - reqX - reqW) * prog;
+    const py2  = reqY + reqH / 2 + (sprY + sprH / 2 - reqY - reqH / 2) * prog;
+    this.particle(ctx, px, py2, 10, '#BA7517', 'tid', 0.9);
+
+    // 3 VTs Spring avec MDC auto
+    const vtW = Math.min(148, (W - 60) / 3 - 10);
+    for (let i = 0; i < 3; i++) {
+      const vx = 20 + i * (vtW + 12);
+      this.thread(ctx, vx, vtY, vtW, 26, '#0a2010', `VT ${i + 1}`, 0.82);
+      const phase = t * 2 + i * 1.1;
+      this.particle(ctx, vx + vtW / 2, vtY + 13, 12, '#1D9E75', 'tid', 0.85 + 0.12 * Math.sin(phase));
+      this.arrow(ctx, sprX + sprW / 2, sprY + sprH, vx + vtW / 2, vtY, '#1D9E75', 0.3);
+    }
+  }
+}

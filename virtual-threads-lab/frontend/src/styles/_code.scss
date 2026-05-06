@@ -1,0 +1,23 @@
+// styles/_code.scss
+
+.code-block pre {
+  background: var(--bg-code); border: 1px solid var(--border-soft);
+  border-radius: 8px; padding: 1rem 1.25rem; overflow-x: auto;
+  font-size: 0.82rem; line-height: 1.6; color: var(--text-code);
+}
+
+.code-compare {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  @media (max-width: 640px) { grid-template-columns: 1fr; }
+
+  pre {
+    background: var(--bg-code); border: 1px solid var(--border-soft);
+    border-radius: 0 0 8px 8px; padding: 1rem 1.25rem; overflow-x: auto;
+    font-size: 0.82rem; line-height: 1.6; color: var(--text-code); margin: 0;
+  }
+  .code-header {
+    padding: 0.4rem 1rem; font-size: 0.8rem; font-weight: 600; border-radius: 6px 6px 0 0;
+  }
+  .code-bad  .code-header { background: rgba(220,53,53,0.12);  color: #f08080; }
+  .code-good .code-header { background: rgba(109,179,63,0.12); color: #90c060; }
+}

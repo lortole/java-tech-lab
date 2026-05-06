@@ -1,0 +1,59 @@
+// styles/_tokens.scss
+// Variables CSS par thème — dark (défaut), light, auto système
+
+:root {
+  --bg:          #0f0f1a;
+  --bg-card:     rgba(255,255,255,0.04);
+  --bg-code:     #1a1a2e;
+  --bg-code-2:   #13131f;
+  --border:      rgba(255,255,255,0.08);
+  --border-soft: rgba(255,255,255,0.06);
+  --text:        #e8e8f0;
+  --text-muted:  rgba(255,255,255,0.5);
+  --text-dim:    rgba(255,255,255,0.4);
+  --text-code:   #c0cfe8;
+  --blue:        #4695eb;
+  --green:       #6db33f;
+  --amber:       #ba7517;
+  --red:         #dd0031;
+}
+
+// ── Dans _tokens.scss — changer le fond light ────────────────────
+// Remplacer #EEF4FF par un gris très léger plus neutre
+// Les cartes restent blanches → contraste net
+
+[data-theme="light"] {
+  --bg:          #F2F4F7;   // gris neutre léger — pas bleuté
+  --bg-card:     #FFFFFF;
+  --bg-code:     #E8ECF2;
+  --bg-code-2:   #DDE2EA;
+  --border:      rgba(0,0,0,0.1);
+  --border-soft: rgba(0,0,0,0.06);
+  --text:        #0A0A0A;
+  --text-muted:  #2A2A2A;
+  --text-dim:    #555555;
+  --text-code:   #1A2A4A;
+  --blue:        #1a6fd4;
+  --green:       #2d6e10;
+  --amber:       #7a4500;
+  --red:         #a80020;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --bg:          #F2F4F7;
+    --bg-card:     #FFFFFF;
+    --bg-code:     #E8ECF2;
+    --bg-code-2:   #DDE2EA;
+    --border:      rgba(0,0,0,0.1);
+    --border-soft: rgba(0,0,0,0.06);
+    --text:        #0A0A0A;
+    --text-muted:  #2A2A2A;
+    --text-dim:    #555555;
+    --text-code:   #1A2A4A;
+    --blue:        #1a6fd4;
+    --green:       #2d6e10;
+    --amber:       #7a4500;
+    --red:         #a80020;
+  }
+}

@@ -1,0 +1,33 @@
+// styles/_animations.scss
+
+@keyframes wait-sigh    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(3px)} }
+@keyframes queue-bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+@keyframes think-blink  { 0%,100%{opacity:0.2} 50%{opacity:1} }
+@keyframes freeze-pulse { 0%,100%{opacity:1} 35%,65%{opacity:0.2} }
+@keyframes vt-move {
+  0%   { transform:translateX(0px);    opacity:1; }
+  25%  { transform:translateX(70px);   opacity:1; }
+  45%  { transform:translateX(70px);   opacity:1; }
+  65%  { transform:translateX(140px);  opacity:0.5; }
+  100% { transform:translateX(0px);    opacity:1; }
+}
+@keyframes vt-move-2 {
+  0%   { transform:translateX(0px);   opacity:1; }
+  20%  { transform:translateX(70px);  opacity:1; }
+  40%  { transform:translateX(140px); opacity:0.5; }
+  60%  { transform:translateX(70px);  opacity:1; }
+  80%  { transform:translateX(140px); opacity:0.5; }
+  100% { transform:translateX(0px);   opacity:1; }
+}
+
+.classic-blocker { animation: wait-sigh    1.8s ease-in-out infinite; }
+.queue-person    { animation: queue-bounce 1.2s ease-in-out infinite; }
+.think-dot       { animation: think-blink  1s   ease-in-out infinite; }
+.app-freeze      { animation: freeze-pulse 4s   ease-in-out infinite; }
+.free-person     { animation: vt-move      4s   ease-in-out infinite; }
+.free-person-2   { animation: vt-move-2    4s 1.2s ease-in-out infinite; }
+
+svg.paused * { animation-play-state: paused !important; }
+
+.anim-controls { display: flex; align-items: center; gap: 10px; margin-bottom: 0.75rem; }
+.anim-note { font-size: 11px; color: var(--text-dim); }

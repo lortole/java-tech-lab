@@ -1,0 +1,116 @@
+<div class="tab-content">
+
+  <div class="explain-card">
+    <h2>Context Propagation</h2>
+    <p>
+      Quand un Virtual Thread enfant est cr&#233;&#233;, le MDC
+      (<code>ThreadLocal</code>) du thread parent
+      <strong>n&#39;est pas propag&#233;</strong>.
+      Votre trace ID dispara&#238;t silencieusement dans les logs.
+    </p>
+  </div>
+
+  <div class="jvm-info">
+    <span>Java 21</span>
+    <span>12 CPUs</span>
+    <span>Virtual Threads enabled</span>
+    <span>Spring Boot 3.3.0</span>
+  </div>
+
+  <div class="ctx-stepper">
+
+    <nav class="ctx-nav" role="tablist" aria-label="Scenarios de propagation">
+      @for (s of scenarios; track s.id; let i = $index) {
+        <button
+          class="ctx-pill"
+          [class.active]="activeIdx() === i"
+          [class.status-bad]="s.status === 'bad'"
+          [class.status-warn]="s.status === 'warn'"
+          [class.status-ok]="s.status === 'ok'"
+          role="tab"
+          [attr.aria-selected]="activeIdx() === i"
+          (click)="goTo(i)">
+          <span class="pill-icon">{{ s.icon }}</span>
+          <span class="pill-text">{{ s.label }}</span>
+        </button>
+      }
+    </nav>
+
+    <div class="ctx-canvas-wrap">
+      <canvas #vizCanvas class="ctx-canvas"></canvas>
+      <div class="canvas-legend">
+        <span class="legend-dot" style="background:#E24B4A"></span>Parent thread
+        <span class="legend-dot ml" style="background:#378ADD"></span>Virtual Thread
+        <span class="legend-dot ml" style="background:#BA7517"></span>traceId
+        <span
+          class="legend-dot ml"
+          [style.background]="activeIdx() === 0 ? '#E24B4A' : activeIdx() >= 2 ? '#1D9E75' : '#BA7517'"
+          [style.opacity]="activeIdx() === 0 ? '0.5' : '1'">
+        </span>
+        <span [class.txt-err]="activeIdx() === 0" [class.txt-ok]="activeIdx() >= 2">
+          {{ activeIdx() === 0 ? 'null' : activeIdx() === 1 ? 'captured' : 'propage' }}
+        </span>
+      </div>
+    </div>
+
+    <div class="ctx-panel" role="tabpanel">
+      <pre class="ctx-code"><code>@for (line of current().code; track $index; let last = $last) {<span [innerHTML]="line + (last ? '' : '\n')"></span>}</code></pre>
+      <div
+        class="ctx-verdict"
+        [class.verdict-bad]="current().verdictStatus === 'bad'"
+        [class.verdict-warn]="current().verdictStatus === 'warn'"
+        [class.verdict-ok]="current().verdictStatus === 'ok'">
+        <span class="verdict-icon">
+          {{ current().verdictStatus === 'bad' ? '&#10060;' : current().verdictStatus === 'warn' ? '&#9888;&#65039;' : '&#9989;' }}
+        </span>
+        {{ current().verdict }}
+      </div>
+    </div>
+
+    <div class="ctx-nav-row">
+      <button class="ctx-nav-btn" [disabled]="isFirst()" (click)="prev()">
+        &#8592; Pr&#233;c&#233;dent
+      </button>
+      <div class="ctx-dots" aria-hidden="true">
+        @for (s of scenarios; track s.id; let i = $index) {
+          <span
+            class="ctx-dot"
+            [class.active]="activeIdx() === i"
+            [class.dot-bad]="s.status === 'bad'"
+            [class.dot-warn]="s.status === 'warn'"
+            [class.dot-ok]="s.status === 'ok'"
+            (click)="goTo(i)">
+          </span>
+        }
+      </div>
+      <button class="ctx-nav-btn" [disabled]="isLast()" (click)="next()">
+        Suivant &#8594;
+      </button>
+    </div>
+
+  </div>
+
+  <div class="summary-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Approche</th>
+          <th>Propagation</th>
+          <th>Verbosit&#233;</th>
+          <th>Java</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of tableRows; track row.label) {
+          <tr [class]="row.cls">
+            <td>{{ row.label }}</td>
+            <td>{{ row.prop }}</td>
+            <td>{{ row.verbose }}</td>
+            <td>{{ row.java }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+</div>
