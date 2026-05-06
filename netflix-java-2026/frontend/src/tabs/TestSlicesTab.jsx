@@ -1,23 +1,24 @@
 import { useState, useRef } from "react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts"
+import CanvasTestSlices from "../CanvasTestSlices"
 
 const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min
 
 const STEPS_SPRING = [
   "Chargement ApplicationContext...",
-  "Démarrage DataSource (H2)...",
+  "Demarrage DataSource (H2)...",
   "Initialisation JPA / Hibernate...",
   "Chargement Spring Security...",
-  "Démarrage DispatcherServlet...",
+  "Demarrage DispatcherServlet...",
   "Chargement tous les @Beans...",
-  "Contexte prêt — lancement du test",
+  "Contexte pret — lancement du test",
 ]
 
 const STEPS_WEBMVC = [
   "Chargement slice Web uniquement...",
-  "MockMvc initialisé...",
+  "MockMvc initialise...",
   "Spring Security (slice)...",
-  "Slice prêt — lancement du test",
+  "Slice pret — lancement du test",
 ]
 
 function AnalogyCard({ icon, title, desc, color }) {
@@ -32,14 +33,13 @@ function AnalogyCard({ icon, title, desc, color }) {
   )
 }
 
-// Lance un benchmark et stream les logs via callback
 async function runBenchmark(type, onLog, onProgress, onDone) {
   const isSpring = type === "spring"
   const steps    = isSpring ? STEPS_SPRING : STEPS_WEBMVC
   const duration = isSpring ? rand(4200, 8500) : rand(380, 650)
   const stepDelay = Math.floor(duration / steps.length)
 
-  onLog(`--- ${isSpring ? "@SpringBootTest" : "@WebMvcTest"} démarré ---`, "muted")
+  onLog(`--- ${isSpring ? "@SpringBootTest" : "@WebMvcTest"} demarre ---`, "muted")
 
   for (let i = 0; i < steps.length; i++) {
     await new Promise(r => setTimeout(r, stepDelay))
@@ -47,7 +47,7 @@ async function runBenchmark(type, onLog, onProgress, onDone) {
     onProgress(Math.round(((i + 1) / steps.length) * 100))
   }
 
-  onLog(`✓ Tests run: 2, Failures: 0 — ${duration}ms`, "ok")
+  onLog(`✔ Tests run: 2, Failures: 0 — ${duration}ms`, "ok")
   onDone(duration)
 }
 
@@ -83,17 +83,12 @@ export default function TestSlicesTab() {
     setSpringProg(0);  setWebmvcProg(0)
     setSpringDone(false); setWebmvcDone(false)
 
-    // Lance les deux en parallèle
     const pSpring = runBenchmark(
-      "spring",
-      addSpringLog,
-      setSpringProg,
+      "spring", addSpringLog, setSpringProg,
       (ms) => { setResults(prev => ({ ...prev, spring: ms })); setSpringDone(true) }
     )
     const pWebmvc = runBenchmark(
-      "webmvc",
-      addWebmvcLog,
-      setWebmvcProg,
+      "webmvc", addWebmvcLog, setWebmvcProg,
       (ms) => { setResults(prev => ({ ...prev, webmvc: ms })); setWebmvcDone(true) }
     )
 
@@ -120,31 +115,44 @@ export default function TestSlicesTab() {
     <div className="fade-in">
       <div className="tab-header">
         <h2>⚡ <span className="highlight">Test Slices</span></h2>
-        <p>Pourquoi tes tests sont lents — et comment les accélérer sans changer une ligne de code métier.</p>
+        <p>Pourquoi tes tests sont lents — et comment les accelerer sans changer une ligne de code metier.</p>
       </div>
 
-      {/* Intro analogie */}
       <div className="card" style={{ marginBottom: "1.25rem" }}>
-        <div className="card-title">🧠 Le problème en une image</div>
-        <p style={{ fontSize: "0.875rem", color: "var(--muted)", marginBottom: "1rem" }}>
+        <div className="card-title">🎪 Le probleme en une image</div>
+        <p style={{ fontSize: "0.875rem", color: "var(--muted)", marginBottom: "0.75rem" }}>
           Imagine que pour tester si <strong>une seule porte</strong> de ta maison ferme bien,
-          tu doives construire toute la maison à chaque fois — cuisine, cave, garage, jardin.
-          C'est ce que fait <code>@SpringBootTest</code> : il démarre tout Spring pour tester un seul Controller.
+          tu doives construire toute la maison a chaque fois — cuisine, cave, garage, jardin.
+          C'est ce que fait <code>@SpringBootTest</code>.
         </p>
+
+        <div style={{ background: "var(--code-bg)", border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: "0.5rem", marginBottom: "0.75rem" }}>
+          <CanvasTestSlices running={running} springProg={springProg} webmvcDone={webmvcDone} />
+        </div>
+
         <div className="two-col">
-          <AnalogyCard icon="🏗️" title="@SpringBootTest — construire toute la maison" desc="Démarre la base de données, JPA, Spring Security, tous les beans... pour tester un seul endpoint. Prend 4 à 8 secondes." color="var(--danger)" />
-          <AnalogyCard icon="🚪" title="@WebMvcTest — tester juste la porte" desc="Charge uniquement la couche Web. Le reste est mocké. Même couverture, 10× plus rapide. Prend moins de 500ms." color="var(--accent)" />
+          <AnalogyCard
+            icon="🏠"
+            title="@SpringBootTest — construire toute la maison"
+            desc="Demarre la base de donnees, JPA, Spring Security, tous les beans... pour tester un seul endpoint. Prend 4 a 8 secondes."
+            color="var(--danger)"
+          />
+          <AnalogyCard
+            icon="🚪"
+            title="@WebMvcTest — tester juste la porte"
+            desc="Charge uniquement la couche Web. Le reste est mocke. Meme couverture, 10x plus rapide. Prend moins de 500ms."
+            color="var(--accent)"
+          />
         </div>
       </div>
 
-      {/* À qui ça parle */}
       <div className="card" style={{ marginBottom: "1.25rem", borderColor: "rgba(109,179,63,0.3)" }}>
-        <div className="card-title">🎯 À qui ça parle ?</div>
+        <div className="card-title">🎓 A qui ca parle ?</div>
         <div className="three-col">
           {[
-            { icon: "🧑‍💻", who: "Dev Java / Spring", impact: "Tes builds CI passent de 10min à 3min" },
-            { icon: "👷",   who: "Tech Lead",          impact: "Tu proposes ça en revue de code dès demain" },
-            { icon: "🚀",   who: "Contexte Netflix",   impact: "Industrialisé sur 4 000 microservices" },
+            { icon: "👨‍💻", who: "Dev Java / Spring", impact: "Tes builds CI passent de 10min a 3min" },
+            { icon: "👷",   who: "Tech Lead",          impact: "Tu proposes ca en revue de code des demain" },
+            { icon: "🚀",   who: "Contexte Netflix",   impact: "Industrialise sur 4 000 microservices" },
           ].map((item, i) => (
             <div key={i} style={{ textAlign: "center", padding: "0.75rem" }}>
               <div style={{ fontSize: "1.75rem", marginBottom: "0.4rem" }}>{item.icon}</div>
@@ -155,50 +163,46 @@ export default function TestSlicesTab() {
         </div>
       </div>
 
-      {/* Explication technique */}
       <div className="two-col" style={{ marginBottom: "1.25rem" }}>
         <div className="card">
           <div className="card-title" style={{ color: "var(--danger)" }}>@SpringBootTest</div>
           <p style={{ fontSize: "0.85rem", color: "var(--muted)", marginBottom: "0.75rem" }}>
-            Charge le contexte Spring <strong>complet</strong>. Nécessaire pour les tests d'intégration end-to-end, surdimensionné pour tester un seul Controller.
+            Charge le contexte Spring <strong>complet</strong>. Necessaire pour les tests d'integration end-to-end, surdimensionne pour tester un seul Controller.
           </p>
           <pre style={{ background: "var(--code-bg)", border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: "1rem", fontSize: "0.78rem", lineHeight: 1.7, overflowX: "auto", margin: 0, textAlign: "left", fontFamily: "var(--font-mono)", color: "var(--text)" }}>{`@SpringBootTest
 class TrackControllerTest {
   @Autowired MockMvc mockMvc;
   // Charge TOUT le contexte Spring
   // DataSource, JPA, Security...
-  // ⏱ ~5 000ms au démarrage
+  // ~5 000ms au demarrage
 }`}</pre>
         </div>
         <div className="card">
           <div className="card-title" style={{ color: "var(--accent)" }}>@WebMvcTest — Test Slice</div>
           <p style={{ fontSize: "0.85rem", color: "var(--muted)", marginBottom: "0.75rem" }}>
-            Charge <strong>uniquement</strong> la couche Web. Le Service est mocké. Résultat : démarrage 10× plus rapide, test plus ciblé.
+            Charge <strong>uniquement</strong> la couche Web. Le Service est mocke. Resultat : demarrage 10x plus rapide, test plus cible.
           </p>
           <pre style={{ background: "var(--code-bg)", border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: "1rem", fontSize: "0.78rem", lineHeight: 1.7, overflowX: "auto", margin: 0, textAlign: "left", fontFamily: "var(--font-mono)", color: "var(--text)" }}>{`@WebMvcTest(TrackController.class)
 class TrackControllerTest {
   @Autowired MockMvc mockMvc;
   @MockBean TrackService service;
-  // Slice Web uniquement ⚡
-  // ⏱ ~400ms au démarrage
+  // Slice Web uniquement
+  // ~400ms au demarrage
 }`}</pre>
         </div>
       </div>
 
-      {/* Benchmark parallèle */}
       <div className="card">
-        <div className="card-title">Benchmark — les deux en parallèle</div>
+        <div className="card-title">Benchmark — les deux en parallele</div>
 
         <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginBottom: "1.25rem" }}>
           <button className="btn btn-primary" onClick={runBoth} disabled={running}>
             {running ? <span className="pulse">⏳</span> : "▶▶"} Lancer les deux
           </button>
-          <button className="btn btn-secondary" onClick={reset} disabled={running}>↺ Reset</button>
+          <button className="btn btn-secondary" onClick={reset} disabled={running}>↻ Reset</button>
         </div>
 
-        {/* Deux colonnes de logs côte à côte */}
         <div className="two-col">
-          {/* SpringBootTest */}
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.4rem" }}>
               <div style={{ fontSize: "0.72rem", fontFamily: "var(--font-mono)", color: "var(--danger)", fontWeight: 700 }}>@SpringBootTest</div>
@@ -219,7 +223,6 @@ class TrackControllerTest {
             </div>
           </div>
 
-          {/* WebMvcTest */}
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.4rem" }}>
               <div style={{ fontSize: "0.72rem", fontFamily: "var(--font-mono)", color: "var(--accent)", fontWeight: 700 }}>@WebMvcTest</div>
@@ -241,17 +244,15 @@ class TrackControllerTest {
           </div>
         </div>
 
-        {/* Résultat en live dès que WebMvc termine */}
         {webmvcDone && results.webmvc && (
           <div className="fade-in" style={{ marginTop: "1rem", padding: "0.75rem 1rem", background: "rgba(109,179,63,.08)", border: "1px solid rgba(109,179,63,.3)", borderRadius: "var(--radius)", fontFamily: "var(--font-mono)", fontSize: "0.82rem" }}>
-            <span style={{ color: "var(--accent)" }}>✓ @WebMvcTest terminé en {results.webmvc}ms</span>
+            <span style={{ color: "var(--accent)" }}>✔ @WebMvcTest termine en {results.webmvc}ms</span>
             {!springDone && <span style={{ color: "var(--muted)" }}> — @SpringBootTest encore en cours...</span>}
             {springDone && gain && <span style={{ color: "var(--accent3)" }}> — gain : <strong>-{gain}%</strong></span>}
           </div>
         )}
       </div>
 
-      {/* Résultats finaux */}
       {results.spring && results.webmvc && (
         <div className="fade-in">
           <div className="stat-grid">
@@ -278,7 +279,7 @@ class TrackControllerTest {
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                 <XAxis dataKey="name" tick={{ fill: "var(--muted)", fontSize: 11, fontFamily: "JetBrains Mono" }} />
                 <YAxis tick={{ fill: "var(--muted)", fontSize: 11, fontFamily: "JetBrains Mono" }} unit="ms" />
-                <Tooltip contentStyle={{ background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: 8 }} labelStyle={{ color: "var(--text)", fontFamily: "JetBrains Mono" }} formatter={(v) => [`${v}ms`, "Durée"]} />
+                <Tooltip contentStyle={{ background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: 8 }} labelStyle={{ color: "var(--text)", fontFamily: "JetBrains Mono" }} formatter={(v) => [`${v}ms`, "Duree"]} />
                 <Bar dataKey="ms" radius={[4, 4, 0, 0]}>
                   {chartData.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
                 </Bar>
@@ -289,12 +290,12 @@ class TrackControllerTest {
       )}
 
       <div className="card" style={{ borderColor: "rgba(109,179,63,0.3)" }}>
-        <div className="card-title">💡 Ce que ça change en mission</div>
+        <div className="card-title">💡 Ce que ca change en mission</div>
         <p style={{ fontSize: "0.85rem", color: "var(--muted)" }}>
-          Sur un projet avec 50 tests Controller, passer de <code>@SpringBootTest</code> à <code>@WebMvcTest</code>
-          économise <strong style={{ color: "var(--accent)" }}>2 à 5 minutes par build</strong>.
-          Sur une CI qui tourne 20× par jour : 40 à 100 minutes économisées.
-          Netflix l'a industrialisé sur 4 000 microservices — rien n'empêche de le proposer dès la prochaine mission.
+          Sur un projet avec 50 tests Controller, passer de <code>@SpringBootTest</code> a <code>@WebMvcTest</code>{" "}
+          economise <strong style={{ color: "var(--accent)" }}>2 a 5 minutes par build</strong>.
+          Sur une CI qui tourne 20x par jour : 40 a 100 minutes economisees.
+          Netflix l'a industrialise sur 4 000 microservices.
         </p>
       </div>
     </div>
