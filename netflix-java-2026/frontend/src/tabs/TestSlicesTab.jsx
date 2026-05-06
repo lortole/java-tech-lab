@@ -123,7 +123,7 @@ export default function TestSlicesTab() {
         <p style={{ fontSize: "0.875rem", color: "var(--muted)", marginBottom: "0.75rem" }}>
           Imagine que pour tester si <strong>une seule porte</strong> de ta maison ferme bien,
           tu doives construire toute la maison a chaque fois — cuisine, cave, garage, jardin.
-          C'est ce que fait <code>@SpringBootTest</code>.
+          C'est ce que fait <code style={{ background: "rgba(239,68,68,0.15)", color: "#ff6b6b", padding: "0.1rem 0.4rem", borderRadius: 3 }}>@SpringBootTest</code>.
         </p>
 
         <div style={{ background: "var(--code-bg)", border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: "0.5rem", marginBottom: "0.75rem" }}>
@@ -292,7 +292,7 @@ class TrackControllerTest {
       <div className="card" style={{ borderColor: "rgba(109,179,63,0.3)" }}>
         <div className="card-title">💡 Ce que ca change en mission</div>
         <p style={{ fontSize: "0.85rem", color: "var(--muted)" }}>
-          Sur un projet avec 50 tests Controller, passer de <code>@SpringBootTest</code> a <code>@WebMvcTest</code>{" "}
+          Sur un projet avec 50 tests Controller, passer de <code style={{ background: "rgba(239,68,68,0.12)", color: "var(--danger)", padding: "0.1rem 0.35rem", borderRadius: 3 }}>@SpringBootTest</code> a <code style={{ background: "rgba(109,179,63,0.12)", color: "var(--accent)", padding: "0.1rem 0.35rem", borderRadius: 3 }}>@WebMvcTest</code>{" "}
           economise <strong style={{ color: "var(--accent)" }}>2 a 5 minutes par build</strong>.
           Sur une CI qui tourne 20x par jour : 40 a 100 minutes economisees.
           Netflix l'a industrialise sur 4 000 microservices.

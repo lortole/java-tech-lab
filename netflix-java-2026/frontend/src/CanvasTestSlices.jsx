@@ -1,18 +1,17 @@
 import { useEffect, useRef } from "react"
 
-// Animation : maison se construisant brique par brique (SpringBootTest)
-//             vs porte qui s'ouvre instantanement (WebMvcTest)
-export default function CanvasTestSlices({ running, springProg, webmvcDone }) {
-  const ref = useRef(null)
+export default function CanvasTestSlices() {
+  const ref     = useRef(null)
   const animRef = useRef(null)
-  const tRef = useRef(0)
+  const tRef    = useRef(0)
 
   useEffect(() => {
     const canvas = ref.current
     if (!canvas) return
-    const dpr = window.devicePixelRatio || 1
+
+    const dpr  = window.devicePixelRatio || 1
     const rect = canvas.getBoundingClientRect()
-    canvas.width = rect.width * dpr
+    canvas.width  = rect.width  * dpr
     canvas.height = rect.height * dpr
     const ctx = canvas.getContext("2d")
     ctx.scale(dpr, dpr)
@@ -21,208 +20,237 @@ export default function CanvasTestSlices({ running, springProg, webmvcDone }) {
 
     const draw = () => {
       ctx.clearRect(0, 0, W, H)
-      tRef.current += 0.018
+      ctx.fillStyle = isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)"
+      ctx.fillRect(0, 0, W, H)
+      tRef.current += 0.008
 
-      const t = tRef.current
-      const half = W / 2
+      // Detection theme a chaque frame — pas de closure stale
+      const isDark = document.documentElement.getAttribute("data-theme") !== "light"
+      const th     = isDark ? DARK : LIGHT
 
-      // ── Cote gauche : SpringBootTest ── construction maison ──────────
-      drawHouseBuilding(ctx, 20, 20, half - 40, H - 40, springProg / 100, t)
+      const phase = (tRef.current % 12) / 12
+      const leftP = Math.min(1, phase / 0.8)
+      const right = phase > 0.18
+      const mobile = W < 480
 
-      // Separateur
-      ctx.save()
-      ctx.strokeStyle = "rgba(255,255,255,0.08)"
-      ctx.lineWidth = 1
-      ctx.setLineDash([4, 4])
-      ctx.beginPath()
-      ctx.moveTo(half, 10)
-      ctx.lineTo(half, H - 10)
-      ctx.stroke()
-      ctx.setLineDash([])
-      ctx.restore()
-
-      // ── Cote droit : WebMvcTest ── porte qui s'ouvre ─────────────────
-      drawDoor(ctx, half + 20, 20, half - 40, H - 40, webmvcDone, t)
+      if (mobile) {
+        drawSpring(ctx, 0, 0,       W, H/2 - 4, leftP, tRef.current, th, true)
+        // separateur horizontal
+        ctx.save()
+        ctx.strokeStyle = th.sep; ctx.lineWidth = 1; ctx.setLineDash([4,4])
+        ctx.beginPath(); ctx.moveTo(8, H/2); ctx.lineTo(W-8, H/2); ctx.stroke()
+        ctx.setLineDash([]); ctx.restore()
+        drawWeb   (ctx, 0, H/2 + 4, W, H/2 - 4, right,  tRef.current, th, true)
+      } else {
+        drawSpring(ctx, 0,     0, W/2, H, leftP, tRef.current, th, false)
+        // separateur vertical
+        ctx.save()
+        ctx.strokeStyle = th.sep; ctx.lineWidth = 1; ctx.setLineDash([4,4])
+        ctx.beginPath(); ctx.moveTo(W/2, 8); ctx.lineTo(W/2, H-8); ctx.stroke()
+        ctx.setLineDash([]); ctx.restore()
+        drawWeb   (ctx, W/2+1, 0, W/2, H, right,  tRef.current, th, false)
+      }
 
       animRef.current = requestAnimationFrame(draw)
     }
 
-    draw()
+    animRef.current = requestAnimationFrame(draw)
     return () => cancelAnimationFrame(animRef.current)
-  }, [running, springProg, webmvcDone])
+  }, [])
 
-  return (
-    <canvas
-      ref={ref}
-      style={{ display: "block", width: "100%", height: 180, borderRadius: 8 }}
-    />
-  )
+  return <canvas ref={ref} style={{ display:"block", width:"100%", height: 220, borderRadius:8 }} />
 }
 
-function drawHouseBuilding(ctx, x, y, w, h, progress, t) {
-  const cx = x + w / 2
-  const label = "@SpringBootTest"
-  const layers = [
-    { name: "DataSource", color: "#4695eb" },
-    { name: "JPA/Hibernate", color: "#6db33f" },
-    { name: "Spring Security", color: "#f59e0b" },
-    { name: "DispatcherServlet", color: "#e05252" },
-    { name: "All @Beans", color: "#a78bfa" },
-    { name: "Context ready", color: "#6db33f" },
-  ]
-  const totalLayers = layers.length
-  const brickH = (h * 0.55) / totalLayers
-  const brickY = y + h * 0.35
-  const brickW = w * 0.72
-  const brickX = cx - brickW / 2
+const DARK = {
+  sep:       "rgba(180,180,180,0.25)",
+  emptyFill: "rgba(255,255,255,0.08)",
+  emptyStr:  "rgba(255,255,255,0.28)",
+  labelDim:  "rgba(255,255,255,0.35)",
+  barBg:     "rgba(255,255,255,0.1)",
+  mockedStr: "rgba(255,255,255,0.12)",
+  mockedX:   "rgba(255,100,100,0.5)",
+  mockedTxt: "rgba(255,255,255,0.3)",
+  mockedLbl: "rgba(255,120,120,0.6)",
+  springRed: "#ff6b6b",
+  springSub: "rgba(255,107,107,0.7)",
+  springBar: "#ff6b6b",
+  springT:   "rgba(255,107,107,0.65)",
+  greenMain: "#4ade80",
+  greenSub:  "rgba(74,222,128,0.7)",
+  greenT:    "rgba(74,222,128,0.45)",
+  webFill:   "rgba(74,222,128,0.18)",
+  webStr:    "#4ade80",
+  webTxtOn:  "#4ade80",
+  webTxtOff: "rgba(255,255,255,0.2)",
+  webSub:    "rgba(74,222,128,0.7)",
+  webSubOff: "rgba(255,255,255,0.15)",
+  webEmpty:  "rgba(255,255,255,0.05)",
+  webStrOff: "rgba(255,255,255,0.15)",
+}
 
-  // Label
+const LIGHT = {
+  sep:       "rgba(0,0,0,0.18)",
+  emptyFill: "rgba(0,0,0,0.06)",
+  emptyStr:  "rgba(0,0,0,0.28)",
+  labelDim:  "rgba(0,0,0,0.45)",
+  barBg:     "rgba(0,0,0,0.1)",
+  mockedStr: "rgba(0,0,0,0.18)",
+  mockedX:   "rgba(180,0,0,0.5)",
+  mockedTxt: "rgba(0,0,0,0.45)",
+  mockedLbl: "rgba(160,0,0,0.65)",
+  springRed: "#c0392b",
+  springSub: "rgba(192,57,43,0.75)",
+  springBar: "#c0392b",
+  springT:   "rgba(192,57,43,0.7)",
+  greenMain: "#15803d",
+  greenSub:  "rgba(21,128,61,0.75)",
+  greenT:    "rgba(21,128,61,0.55)",
+  webFill:   "rgba(21,128,61,0.12)",
+  webStr:    "#15803d",
+  webTxtOn:  "#15803d",
+  webTxtOff: "rgba(0,0,0,0.25)",
+  webSub:    "rgba(21,128,61,0.75)",
+  webSubOff: "rgba(0,0,0,0.2)",
+  webEmpty:  "rgba(0,0,0,0.04)",
+  webStrOff: "rgba(0,0,0,0.18)",
+}
+
+const MODULES = [
+  { name:"DataSource",  dark:"#60a5fa", light:"#1d4ed8" },
+  { name:"JPA",         dark:"#34d399", light:"#065f46" },
+  { name:"Security",    dark:"#fbbf24", light:"#92400e" },
+  { name:"Dispatcher",  dark:"#f87171", light:"#991b1b" },
+  { name:"@Beans x120", dark:"#c084fc", light:"#5b21b6" },
+  { name:"Ready \u2713",dark:"#4ade80", light:"#15803d" },
+]
+
+function drawSpring(ctx, x, y, w, h, progress, t, th, mobile) {
+  const cx  = x + w/2
+  const N   = MODULES.length
+  const isDark = th === DARK
+  const PAD = mobile ? 8 : 10
+  const GAP = mobile ? 3 : 5
+  const bW  = (w - PAD*2 - GAP*(N-1)) / N
+  const bH  = mobile ? 30 : 46
+  const bY  = y + (mobile ? h*0.38 : h*0.34)
+
   ctx.save()
-  ctx.font = "bold 11px monospace"
-  ctx.fillStyle = "#ef4444"
   ctx.textAlign = "center"
-  ctx.fillText(label, cx, y + 14)
+  ctx.font = "bold 11px 'JetBrains Mono',monospace"
+  ctx.fillStyle = th.springRed
+  ctx.fillText("@SpringBootTest", cx, y + 14)
+  ctx.font = "9px monospace"
+  ctx.fillStyle = th.springSub
+  ctx.fillText("charge tout \u2014 4 \u00e0 8 secondes", cx, y + 26)
   ctx.restore()
 
-  // Toit (apparait quand progress >= 0.9)
-  if (progress >= 0.9) {
-    const roofAlpha = Math.min(1, (progress - 0.9) / 0.1)
-    ctx.save()
-    ctx.globalAlpha = roofAlpha
-    ctx.fillStyle = "#92400e"
-    ctx.beginPath()
-    ctx.moveTo(brickX - 8, brickY)
-    ctx.lineTo(cx, brickY - 28)
-    ctx.lineTo(brickX + brickW + 8, brickY)
-    ctx.closePath()
-    ctx.fill()
-    ctx.restore()
-  }
+  MODULES.forEach((mod, i) => {
+    const bx   = x + PAD + i*(bW+GAP)
+    const fill = Math.max(0, Math.min(1, progress*N - i))
+    const col  = isDark ? mod.dark : mod.light
+    const glow = fill > 0 && fill < 1
 
-  // Briques
-  layers.forEach((layer, i) => {
-    const layerProgress = Math.max(0, Math.min(1, (progress * totalLayers) - i))
-    if (layerProgress <= 0) return
-    const by = brickY + (totalLayers - 1 - i) * brickH
     ctx.save()
-    ctx.globalAlpha = layerProgress
-    ctx.fillStyle = layer.color + "33"
-    ctx.strokeStyle = layer.color
-    ctx.lineWidth = 0.8
-    ctx.beginPath()
-    ctx.roundRect(brickX, by, brickW * Math.min(1, layerProgress * 2), brickH - 2, 3)
-    ctx.fill()
-    ctx.stroke()
-    if (layerProgress > 0.5) {
-      ctx.font = "9px monospace"
-      ctx.fillStyle = layer.color
-      ctx.globalAlpha = Math.min(1, (layerProgress - 0.5) * 2)
-      ctx.fillText(layer.name, brickX + 6, by + brickH / 2 + 3)
+    ctx.fillStyle   = th.emptyFill
+    ctx.strokeStyle = th.emptyStr
+    ctx.lineWidth   = 1
+    ctx.beginPath(); ctx.roundRect(bx, bY, bW, bH, 3); ctx.fill(); ctx.stroke()
+
+    if (fill > 0) {
+      ctx.globalAlpha = fill * (glow ? 0.55 + 0.4*Math.abs(Math.sin(t*5+i)) : 1)
+      ctx.fillStyle   = col + (isDark ? "55" : "28")
+      ctx.strokeStyle = col
+      ctx.lineWidth   = 2
+      ctx.beginPath(); ctx.roundRect(bx, bY, bW, bH, 3); ctx.fill(); ctx.stroke()
     }
+    ctx.restore()
+
+    ctx.save()
+    ctx.font      = "7px monospace"
+    ctx.fillStyle = fill > 0.3 ? col : th.labelDim
+    ctx.textAlign = "center"
+    ctx.fillText(mod.name.replace(" x120",""), bx+bW/2, bY+bH+11)
     ctx.restore()
   })
 
-  // Temps simule
-  const simMs = Math.round(progress * 6500)
+  const barW = w - PAD*2, barY = bY + bH + 22
   ctx.save()
-  ctx.font = "bold 11px monospace"
-  ctx.fillStyle = progress >= 1 ? "#ef4444" : "rgba(239,68,68,0.5)"
-  ctx.textAlign = "center"
-  ctx.fillText(progress >= 1 ? `~${(simMs / 1000).toFixed(1)}s` : `${simMs}ms...`, cx, y + h - 8)
+  ctx.fillStyle = th.barBg
+  ctx.beginPath(); ctx.roundRect(x+PAD, barY, barW, 3, 2); ctx.fill()
+  ctx.fillStyle = th.springBar; ctx.globalAlpha = 0.85
+  ctx.beginPath(); ctx.roundRect(x+PAD, barY, barW*progress, 3, 2); ctx.fill()
   ctx.restore()
 
-  // Spinner si en cours
-  if (progress > 0 && progress < 1) {
-    ctx.save()
-    ctx.strokeStyle = "#ef4444"
-    ctx.lineWidth = 2
-    ctx.globalAlpha = 0.7
-    ctx.beginPath()
-    ctx.arc(cx + brickW / 2 + 18, brickY + (totalLayers * brickH) / 2, 7, 0, Math.PI * 1.5 + (t * 3) % (Math.PI * 2))
-    ctx.stroke()
-    ctx.restore()
-  }
+  const ms = Math.round(progress*6000)
+  ctx.save()
+  ctx.font      = "bold 10px monospace"
+  ctx.fillStyle = progress >= 1 ? th.springRed : th.springT
+  ctx.textAlign = "center"
+  ctx.fillText(progress >= 1 ? "~6s \u2014 contexte pr\u00eat" : `${ms}ms... ${Math.round(progress*N)}/6`, cx, y+h-6)
+  ctx.restore()
 }
 
-function drawDoor(ctx, x, y, w, h, done, t) {
-  const cx = x + w / 2
-  const label = "@WebMvcTest"
-  const doorW = w * 0.45
-  const doorH = h * 0.58
-  const doorX = cx - doorW / 2
-  const doorY = y + h * 0.28
+function drawWeb(ctx, x, y, w, h, done, t, th, mobile) {
+  const cx  = x + w/2
+  const PAD = 14
+  const bH  = mobile ? 34 : 46
+  const bY  = y + (mobile ? h*0.34 : h*0.34)
+  const bX  = x + PAD, bW = w - PAD*2
 
-  // Label
   ctx.save()
-  ctx.font = "bold 11px monospace"
-  ctx.fillStyle = "#6db33f"
   ctx.textAlign = "center"
-  ctx.fillText(label, cx, y + 14)
-  ctx.restore()
-
-  // Mur simple
-  ctx.save()
-  ctx.fillStyle = "rgba(255,255,255,0.04)"
-  ctx.strokeStyle = "rgba(255,255,255,0.1)"
-  ctx.lineWidth = 0.5
-  ctx.beginPath()
-  ctx.roundRect(x + w * 0.05, doorY - 8, w * 0.9, doorH + 16, 4)
-  ctx.fill()
-  ctx.stroke()
-  ctx.restore()
-
-  // Porte
-  const openAngle = done ? Math.min(Math.PI * 0.5, (t - (tRef.current - 0.5)) * 4) : 0
-  const openRatio = done ? Math.min(1, openAngle / (Math.PI * 0.5)) : 0
-
-  ctx.save()
-  // Cadre
-  ctx.strokeStyle = "#92400e"
-  ctx.lineWidth = 2
-  ctx.beginPath()
-  ctx.rect(doorX, doorY, doorW, doorH)
-  ctx.stroke()
-
-  // Panneau de porte (s'ouvre vers la droite en perspective)
-  const visibleW = doorW * (1 - openRatio * 0.85)
-  ctx.fillStyle = done ? "rgba(109,179,63,0.25)" : "rgba(139,92,46,0.4)"
-  ctx.strokeStyle = done ? "#6db33f" : "#92400e"
-  ctx.lineWidth = 1.5
-  ctx.beginPath()
-  ctx.rect(doorX, doorY, visibleW, doorH)
-  ctx.fill()
-  ctx.stroke()
-
-  // Poignee
-  if (visibleW > 20) {
-    ctx.beginPath()
-    ctx.arc(doorX + visibleW - 12, doorY + doorH / 2, 4, 0, Math.PI * 2)
-    ctx.fillStyle = "#f59e0b"
-    ctx.fill()
-  }
-
-  // Check ou fleche
-  if (done) {
-    ctx.font = "bold 18px monospace"
-    ctx.fillStyle = "#6db33f"
-    ctx.textAlign = "center"
-    ctx.fillText("✓", doorX + doorW / 2 + doorW * openRatio * 0.4, doorY + doorH / 2 + 6)
-  }
-  ctx.restore()
-
-  // Temps
-  ctx.save()
-  ctx.font = "bold 11px monospace"
-  ctx.fillStyle = done ? "#6db33f" : "rgba(109,179,63,0.4)"
-  ctx.textAlign = "center"
-  ctx.fillText(done ? "~400ms" : "En attente...", cx, y + h - 8)
-  ctx.restore()
-
-  // Mock label
-  ctx.save()
+  ctx.font = "bold 11px 'JetBrains Mono',monospace"
+  ctx.fillStyle = th.greenMain
+  ctx.fillText("@WebMvcTest", cx, y + 14)
   ctx.font = "9px monospace"
-  ctx.fillStyle = "rgba(109,179,63,0.55)"
+  ctx.fillStyle = th.greenSub
+  ctx.fillText("couche Web uniquement \u2014 ~400ms", cx, y + 26)
+  ctx.restore()
+
+  const pulse = done ? (0.85 + 0.15*Math.abs(Math.sin(t*2))) : 1
+  ctx.save()
+  ctx.globalAlpha = done ? pulse : 0.22
+  ctx.fillStyle   = done ? th.webFill  : th.webEmpty
+  ctx.strokeStyle = done ? th.webStr   : th.webStrOff
+  ctx.lineWidth   = done ? 2 : 0.8
+  ctx.beginPath(); ctx.roundRect(bX, bY, bW, bH, 6); ctx.fill(); ctx.stroke()
+  ctx.restore()
+
+  ctx.save()
+  ctx.textAlign = "center"; ctx.textBaseline = "middle"
+  ctx.font = "bold 12px monospace"
+  ctx.fillStyle = done ? th.webTxtOn : th.webTxtOff
+  ctx.fillText(done ? "Web Layer \u2713" : "Web Layer", cx, bY + bH*0.38)
+  ctx.font = "9px monospace"
+  ctx.fillStyle = done ? th.webSub : th.webSubOff
+  ctx.fillText("MockMvc + @MockBean", cx, bY + bH*0.75)
+  ctx.restore()
+
+  const MOCKED = ["DataSource","JPA","Security","@Beans"]
+  const mW = (bW - 4) / MOCKED.length
+  const mY = bY + bH + 6
+
+  MOCKED.forEach((name, i) => {
+    const mx = bX + i*(mW+1.3)
+    ctx.save()
+    ctx.fillStyle = th.emptyFill; ctx.strokeStyle = th.mockedStr; ctx.lineWidth = 0.6
+    ctx.beginPath(); ctx.roundRect(mx, mY, mW, 14, 2); ctx.fill(); ctx.stroke()
+    ctx.strokeStyle = th.mockedX; ctx.lineWidth = 0.8
+    ctx.beginPath(); ctx.moveTo(mx+3, mY+3); ctx.lineTo(mx+mW-3, mY+11); ctx.stroke()
+    ctx.font = "7px monospace"; ctx.fillStyle = th.mockedTxt; ctx.textAlign = "center"
+    ctx.fillText(name, mx+mW/2, mY+8)
+    ctx.restore()
+  })
+
+  ctx.save()
+  ctx.font = "8px monospace"; ctx.fillStyle = th.mockedLbl; ctx.textAlign = "center"
+  ctx.fillText("d\u00e9sactiv\u00e9s \u00b7 simul\u00e9s par @MockBean", cx, mY + 24)
+  ctx.restore()
+
+  ctx.save()
+  ctx.font = "bold 10px monospace"
+  ctx.fillStyle = done ? th.greenMain : th.greenT
   ctx.textAlign = "center"
-  ctx.fillText("Service: mocked", cx, doorY - 14)
+  ctx.fillText(done ? "~400ms \u2014 pr\u00eat !" : "En attente...", cx, y+h-6)
   ctx.restore()
 }
