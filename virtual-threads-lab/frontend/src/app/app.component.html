@@ -2,28 +2,61 @@
 
   <header class="header">
     <div class="header-inner">
-      <span class="logo">⚡</span>
+      <span class="logo">&#9889;</span>
       <div class="header-text">
         <h1>Virtual Threads Lab</h1>
-        <p class="subtitle">Java 21 — Bench · Pinning · Context Propagation</p>
+        <p class="subtitle">Java 21 &#8212; Bench &middot; Pinning &middot; Context Propagation</p>
       </div>
       <app-theme-toggle />
     </div>
   </header>
 
+  <div class="backend-banner"
+       [class.banner-sim]="benchService.mode() === 'simulation'"
+       [class.banner-live]="benchService.mode() === 'local'">
+
+    @if (benchService.mode() === 'simulation') {
+      <span class="banner-icon">&#127918;</span>
+      <span class="banner-text">
+        Mode simulation &mdash; m&#233;triques calcul&#233;es en JS.
+        <strong>Vraies m&#233;triques Java :</strong>
+        <code>./start_backend.sh</code> puis
+        <button class="banner-btn" (click)="benchService.retryBackend()">
+          Connecter le backend local
+        </button>
+      </span>
+    }
+
+    @if (benchService.mode() === 'local') {
+      <span class="banner-icon">&#9889;</span>
+      <span class="banner-text banner-live-txt">
+        Backend Java connect&#233; &mdash; m&#233;triques r&#233;elles Spring Boot 3.3 / Java 21
+      </span>
+      <button class="banner-btn-muted" (click)="benchService.forceMode('simulation')">
+        Repasser en simulation
+      </button>
+    }
+
+    @if (benchService.backendError()) {
+      <span class="banner-err">&#9888; {{ benchService.backendError() }}</span>
+    }
+
+  </div>
+
   <nav class="tabs">
-    <button
-      *ngFor="let tab of tabs"
-      [class.active]="activeTab === tab.id"
-      (click)="activeTab = tab.id">
-      {{ tab.icon }} {{ tab.label }}
-    </button>
+    @for (tab of tabs; track tab.id) {
+      <button
+        [class.active]="activeTab === tab.id"
+        (click)="activeTab = tab.id">
+        {{ tab.icon }} {{ tab.label }}
+      </button>
+    }
   </nav>
 
   <main class="content">
-    <app-bench-tab   *ngIf="activeTab === 'bench'"   />
-    <app-pinning-tab *ngIf="activeTab === 'pinning'" />
-    <app-context-tab *ngIf="activeTab === 'context'" />
+    @if (activeTab === 'bench')   { <app-bench-tab />   }
+    @if (activeTab === 'pinning') { <app-pinning-tab /> }
+    @if (activeTab === 'context') { <app-context-tab /> }
   </main>
 
   <footer class="footer">
