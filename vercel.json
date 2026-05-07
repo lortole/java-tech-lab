@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "virtual-threads-lab/frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist/frontend/browser"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}
