@@ -229,7 +229,24 @@ svg {
   &.banner-live { background: rgba(29,158,117,0.08); color: #1D9E75; }
 }
 
-.banner-icon { font-size: 1rem; flex-shrink: 0; }
+.banner-icon {
+  flex-shrink: 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.banner-mode {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.35rem;
+  padding: 0 0.55rem;
+  border-radius: 4px;
+  background: rgba(186,117,23,0.14);
+  border: 1px solid rgba(186,117,23,0.42);
+  color: #fac775;
+  letter-spacing: 0;
+}
 
 .banner-text code {
   background: var(--bg-code); border: 1px solid var(--border);

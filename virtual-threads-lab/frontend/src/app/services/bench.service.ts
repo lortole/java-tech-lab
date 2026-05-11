@@ -33,6 +33,10 @@ export interface JvmInfo {
 
 export type BackendMode = 'simulation' | 'local';
 
+function isLocalFrontend(): boolean {
+  return ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname);
+}
+
 // Simulation : reproduit fidelement le comportement Java
 // Platform threads : n taches en batches de cpu_count -> n * delayMs / cpu_count
 // Virtual threads  : toutes en parallele -> 1 * delayMs
@@ -78,14 +82,17 @@ function simulateJvmInfo(): JvmInfo {
 @Injectable({ providedIn: 'root' })
 export class BenchService {
 
-  private readonly api = 'http://localhost:8080/api';
+  private readonly api = '/api';
+  readonly canUseLocalBackend = isLocalFrontend();
 
   // Signal global : 'simulation' par defaut, 'local' si backend detecte
   mode = signal<BackendMode>('simulation');
   backendError = signal<string | null>(null);
 
   constructor(private http: HttpClient) {
-    this.detectBackend();
+    if (this.canUseLocalBackend) {
+      this.detectBackend();
+    }
   }
 
   // Tente un ping au backend — passe en mode local si repond
@@ -102,11 +109,13 @@ export class BenchService {
 
   // Peut etre appele manuellement depuis l'UI
   retryBackend(): void {
+    if (!this.canUseLocalBackend) return;
     this.backendError.set(null);
     this.detectBackend();
   }
 
   forceMode(m: BackendMode): void {
+    if (m === 'local' && !this.canUseLocalBackend) return;
     this.mode.set(m);
     if (m === 'local') this.detectBackend();
   }

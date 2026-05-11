@@ -1,0 +1,35 @@
+<section class="tab-content home-tab">
+  <div class="home-hero">
+    <p class="home-kicker">Java 21 en pratique</p>
+    <h2>Comprendre ce que les virtual threads changent vraiment.</h2>
+    <p>
+      Ce lab met en scene trois sujets qui reviennent vite en production :
+      le debit des taches I/O, le pinning avec <code>synchronized</code>, et la propagation de contexte.
+    </p>
+  </div>
+
+  <div class="home-grid">
+    <article class="home-card">
+      <span class="home-card-icon">1</span>
+      <h3>Bench</h3>
+      <p>Comparer un pool de platform threads avec des virtual threads sur une charge I/O simple.</p>
+    </article>
+
+    <article class="home-card">
+      <span class="home-card-icon">2</span>
+      <h3>Pinning</h3>
+      <p>Visualiser pourquoi un bloc <code>synchronized</code> peut immobiliser le carrier thread en Java 21.</p>
+    </article>
+
+    <article class="home-card">
+      <span class="home-card-icon">3</span>
+      <h3>Context</h3>
+      <p>Observer les pieges autour des <code>ThreadLocal</code> et des traces dans les workflows concurrents.</p>
+    </article>
+  </div>
+
+  <div class="home-note">
+    <strong>En ligne, le site tourne en simulation.</strong>
+    En local, tu peux lancer le backend Spring Boot pour obtenir les vraies mesures JVM.
+  </div>
+</section>

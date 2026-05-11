@@ -1,5 +1,31 @@
 <section class="module-cap">
 
+  <div class="module-intro">
+    <h3 class="intro-title">CAP &mdash; Th&eacute;or&egrave;me de Brewer</h3>
+    <p class="intro-desc">
+      Dans un syst&egrave;me distribu&eacute;, il est impossible de garantir simultan&eacute;ment
+      <strong>Coh&eacute;rence</strong> (C), <strong>Disponibilit&eacute;</strong> (A) et
+      <strong>Tol&eacute;rance aux partitions</strong> (P). En pratique P est incompressible,
+      donc le vrai choix se fait entre <strong>CP</strong> (r&eacute;ponse coh&eacute;rente ou erreur)
+      et <strong>AP</strong> (toujours disponible, potentiellement obsol&egrave;te).
+    </p>
+    <div class="mermaid">
+graph TD
+    C[Coh&eacute;rence]
+    A[Disponibilit&eacute;]
+    P[Partitions]
+    C-->CP[CP : Redis - HBase]
+    P-->CP
+    A-->AP[AP : Cassandra - CouchDB]
+    P-->AP
+    C-->CA[CA : impossible en distribu&eacute;]
+    A-->CA
+    style CA fill:#ef4444,color:#fff
+    style CP fill:#3b82f6,color:#fff
+    style AP fill:#10b981,color:#fff
+    </div>
+  </div>
+
   <div class="module-header">
     <h2>🟡 CAP — Le triangle impossible</h2>
     <p class="module-desc">

@@ -66,10 +66,10 @@ CREATE TABLE IF NOT EXISTS processed_events (
 -- Données de démonstration
 -- ─────────────────────────────────────────────────────────
 
-INSERT INTO accounts (owner, balance) VALUES
-    ('Alice Martin',  1000.00),
-    ('Bob Dupont',     500.00),
-    ('Chloé Bernard', 2500.00)
+INSERT INTO accounts (owner, balance, created_at, updated_at) VALUES
+    ('Alice Martin',  1000.00, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Bob Dupont',     500.00, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Chloe Bernard', 2500.00, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 ON CONFLICT DO NOTHING;
 
 INSERT INTO inventory (product_id, product_name, stock, reserved) VALUES

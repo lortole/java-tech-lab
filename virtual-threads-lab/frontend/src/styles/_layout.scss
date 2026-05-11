@@ -29,6 +29,7 @@
 
 .tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.25rem;
   padding: 1rem 0;
   border-bottom: 1px solid var(--border-soft);

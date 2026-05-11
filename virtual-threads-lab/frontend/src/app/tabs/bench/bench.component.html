@@ -10,60 +10,62 @@
     </p>
   </div>
 
-  <!-- ── Analogie statique banque ──────────────────────────────── -->
+  <!-- ── Analogie statique I/O ──────────────────────────────── -->
   <div class="analogy-card">
-    <div class="analogy-title">Analogie — La banque</div>
-    <svg width="100%" viewBox="0 0 640 260">
-      <text class="svg-label-title" x="155" y="22" text-anchor="middle">Platform Threads</text>
-      <text class="svg-label-sub"   x="155" y="38" text-anchor="middle">3 guichets, 9 clients attendent</text>
-      <rect x="30"  y="50" width="80" height="34" rx="6" class="svg-box amber"/>
-      <text class="svg-label" x="70"  y="71" text-anchor="middle">Guichet 1</text>
-      <rect x="115" y="50" width="80" height="34" rx="6" class="svg-box amber"/>
-      <text class="svg-label" x="155" y="71" text-anchor="middle">Guichet 2</text>
-      <rect x="200" y="50" width="80" height="34" rx="6" class="svg-box amber"/>
-      <text class="svg-label" x="240" y="71" text-anchor="middle">Guichet 3</text>
-      <circle cx="50"  cy="115" r="9" class="svg-dot gray"/>
-      <circle cx="75"  cy="115" r="9" class="svg-dot gray"/>
-      <circle cx="100" cy="115" r="9" class="svg-dot gray"/>
-      <circle cx="140" cy="115" r="9" class="svg-dot gray"/>
-      <circle cx="165" cy="115" r="9" class="svg-dot gray"/>
-      <circle cx="190" cy="115" r="9" class="svg-dot gray"/>
-      <circle cx="230" cy="115" r="9" class="svg-dot gray"/>
-      <circle cx="255" cy="115" r="9" class="svg-dot gray"/>
-      <circle cx="280" cy="115" r="9" class="svg-dot gray"/>
-      <text class="svg-label-sub" x="155" y="145" text-anchor="middle">9 clients bloqués</text>
-      <rect x="30"  y="158" width="250" height="28" rx="6" class="svg-box red"/>
-      <text class="svg-label" x="155" y="176" text-anchor="middle">~200ms (4 batches)</text>
-      <line x1="320" y1="10" x2="320" y2="240" stroke-dasharray="4 3" class="svg-sep"/>
-      <text class="svg-label-title" x="480" y="22" text-anchor="middle">Virtual Threads</text>
-      <text class="svg-label-sub"   x="480" y="38" text-anchor="middle">12 agents légers, tous actifs</text>
-      <rect x="340" y="50"  width="58" height="30" rx="5" class="svg-box green"/>
-      <text class="svg-label" x="369" y="69" text-anchor="middle">VT 1</text>
-      <rect x="404" y="50"  width="58" height="30" rx="5" class="svg-box green"/>
-      <text class="svg-label" x="433" y="69" text-anchor="middle">VT 2</text>
-      <rect x="468" y="50"  width="58" height="30" rx="5" class="svg-box green"/>
-      <text class="svg-label" x="497" y="69" text-anchor="middle">VT 3</text>
-      <rect x="532" y="50"  width="58" height="30" rx="5" class="svg-box green"/>
-      <text class="svg-label" x="561" y="69" text-anchor="middle">VT 4</text>
-      <rect x="340" y="88"  width="58" height="30" rx="5" class="svg-box green"/>
-      <text class="svg-label" x="369" y="107" text-anchor="middle">VT 5</text>
-      <rect x="404" y="88"  width="58" height="30" rx="5" class="svg-box green"/>
-      <text class="svg-label" x="433" y="107" text-anchor="middle">VT 6</text>
-      <rect x="468" y="88"  width="58" height="30" rx="5" class="svg-box green"/>
-      <text class="svg-label" x="497" y="107" text-anchor="middle">VT 7</text>
-      <rect x="532" y="88"  width="58" height="30" rx="5" class="svg-box green"/>
-      <text class="svg-label" x="561" y="107" text-anchor="middle">VT 8</text>
-      <rect x="340" y="126" width="58" height="30" rx="5" class="svg-box green"/>
-      <text class="svg-label" x="369" y="145" text-anchor="middle">VT 9</text>
-      <rect x="404" y="126" width="58" height="30" rx="5" class="svg-box green"/>
-      <text class="svg-label" x="433" y="145" text-anchor="middle">VT 10</text>
-      <rect x="468" y="126" width="58" height="30" rx="5" class="svg-box green"/>
-      <text class="svg-label" x="497" y="145" text-anchor="middle">VT 11</text>
-      <rect x="532" y="126" width="58" height="30" rx="5" class="svg-box green"/>
-      <text class="svg-label" x="561" y="145" text-anchor="middle">VT 12</text>
-      <rect x="340" y="165" width="250" height="28" rx="6" class="svg-box green"/>
-      <text class="svg-label" x="465" y="183" text-anchor="middle">~55ms (1 batch)</text>
-    </svg>
+    <div class="analogy-title">Ce que le bench mesure</div>
+
+    <div class="io-analogy">
+      <section class="io-panel platform">
+        <div class="io-panel-head">
+          <h3>Platform threads</h3>
+          <span>Pool limit&#233;</span>
+        </div>
+
+        <div class="io-thread-list">
+          <div class="io-thread blocked">
+            <span class="thread-name">OS thread 1</span>
+            <span class="thread-work">requ&#234;te BDD</span>
+          </div>
+          <div class="io-thread blocked">
+            <span class="thread-name">OS thread 2</span>
+            <span class="thread-work">appel HTTP</span>
+          </div>
+          <div class="io-thread blocked">
+            <span class="thread-name">OS thread 3</span>
+            <span class="thread-work">sleep I/O</span>
+          </div>
+        </div>
+
+        <div class="io-queue">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+        </div>
+
+        <p class="io-caption">Pendant l'attente I/O, chaque thread OS reste occup&#233;. Les autres t&#226;ches patientent.</p>
+        <div class="io-result slow">4 batches</div>
+      </section>
+
+      <section class="io-panel virtual">
+        <div class="io-panel-head">
+          <h3>Virtual threads</h3>
+          <span>Un VT par t&#226;che</span>
+        </div>
+
+        <div class="carrier-row">
+          <span class="carrier">Carrier 1</span>
+          <span class="carrier">Carrier 2</span>
+          <span class="carrier">Carrier 3</span>
+        </div>
+
+        <div class="vt-cloud">
+          <span>VT</span><span>VT</span><span>VT</span><span>VT</span><span>VT</span><span>VT</span>
+          <span>VT</span><span>VT</span><span>VT</span><span>VT</span><span>VT</span><span>VT</span>
+        </div>
+
+        <p class="io-caption">Quand une t&#226;che attend l'I/O, son VT est parqu&#233;. Le carrier peut servir une autre t&#226;che.</p>
+        <div class="io-result fast">1 batch</div>
+      </section>
+    </div>
   </div>
 
   <!-- ── Simulation restaurant ──────────────────────────────────── -->

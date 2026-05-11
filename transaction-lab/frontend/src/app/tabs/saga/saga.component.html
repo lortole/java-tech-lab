@@ -1,5 +1,33 @@
 <section class="module-saga">
 
+  <div class="module-intro">
+    <h3 class="intro-title">SAGA &mdash; Transactions distribu&eacute;es</h3>
+    <p class="intro-desc">
+      Le pattern SAGA d&eacute;compose une transaction distribu&eacute;e en une s&eacute;quence d&apos;&eacute;tapes locales.
+      Chaque &eacute;tape publie un &eacute;v&eacute;nement Kafka. En cas d&apos;&eacute;chec, des
+      <strong>transactions compensatoires</strong> annulent les &eacute;tapes pr&eacute;c&eacute;dentes
+      dans l&apos;ordre inverse — sans verrou distribu&eacute;.
+    </p>
+    <div class="mermaid">
+sequenceDiagram
+    participant OS as OrderService
+    participant IS as InventoryService
+    participant PS as PaymentService
+    OS->>IS: r&eacute;server stock
+    IS-->>OS: r&eacute;serv&eacute;
+    OS->>PS: paiement
+    alt &eacute;chec paiement
+        PS-->>OS: refus&eacute;
+        OS->>IS: lib&eacute;rer stock
+        IS-->>OS: lib&eacute;r&eacute;
+        Note over OS: commande annul&eacute;e
+    else succ&egrave;s
+        PS-->>OS: confirm&eacute;
+        Note over OS: commande confirm&eacute;e
+    end
+    </div>
+  </div>
+
   <div class="module-header">
     <h2>🔴 SAGA — Transactions distribuées</h2>
     <p class="module-desc">

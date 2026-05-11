@@ -58,6 +58,9 @@
   background: var(--bg-card);
   border-bottom: 1px solid var(--border);
   padding: 0 2.5rem;
+  position: sticky;
+  top: var(--header-height, 72px);
+  z-index: 99;
 }
 
 .tab-btn {

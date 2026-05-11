@@ -1,0 +1,200 @@
+<div class="home-page">
+
+  <!-- Section 1 — Hero -->
+  <section class="home-hero">
+    <div class="hero-inner">
+      <div class="hero-badge">&#x1F9EA; Kata p&eacute;dagogique</div>
+      <h1 class="hero-title">Transaction Lab</h1>
+      <p class="hero-subtitle">
+        Explorez les patterns de transactions distribu&eacute;s en conditions r&eacute;elles
+        &mdash; chaque module est un kata interactif avec Spring Boot et Angular.
+      </p>
+      <div class="stack-badges">
+        <span class="stack-badge">Java 21</span>
+        <span class="stack-badge">Spring Boot 3.3</span>
+        <span class="stack-badge">Angular 18</span>
+        <span class="stack-badge">Kafka</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2 — Pourquoi ce lab ? -->
+  <section class="why-section">
+    <h2 class="section-title">Pourquoi ce lab&nbsp;?</h2>
+    <div class="why-card">
+      <p class="why-intro">
+        Dans un syst&egrave;me distribu&eacute;, garantir la coh&eacute;rence des donn&eacute;es
+        est l'un des d&eacute;fis les plus sous-estim&eacute;s du d&eacute;veloppement backend.
+        On le lit dans les livres. On le <em>comprend</em> en le cassant.
+      </p>
+      <div class="why-questions">
+        <p class="why-question">Que se passe-t-il si le serveur tombe entre le d&eacute;bit et le cr&eacute;dit&nbsp;?</p>
+        <p class="why-question">Comment Redis choisit entre coh&eacute;rence et disponibilit&eacute; lors d'une partition&nbsp;?</p>
+        <p class="why-question">Comment annuler une commande qui a d&eacute;j&agrave; d&eacute;clench&eacute; 3&nbsp;micro-services&nbsp;?</p>
+      </div>
+      <p class="why-cta">Ce lab te fait <strong>vivre les pannes</strong>, pas juste les lire.</p>
+    </div>
+  </section>
+
+  <!-- Section 3 — Les 3 modules -->
+  <section class="modules-section">
+    <h2 class="section-title">3 modules &agrave; explorer</h2>
+    <div class="modules-grid">
+
+      <div class="module-card module-card--acid">
+        <span class="module-card-icon">&#x1F4B3;</span>
+        <div class="module-card-body">
+          <div class="module-card-header">
+            <h3 class="module-card-title">ACID</h3>
+            <span class="level-badge level-badge--junior">Junior</span>
+          </div>
+          <p class="module-card-desc">
+            Observez l'atomicit&eacute; en action sur un virement bancaire.<br>
+            Spring <code>&#64;Transactional</code> annule tout ou rien.
+          </p>
+          <div class="module-card-meta">
+            <p class="module-card-prereq">
+              <strong>Pr&eacute;requis&nbsp;:</strong> Spring, JPA, SQL
+            </p>
+            <p class="module-card-outcome">
+              <strong>Apr&egrave;s&nbsp;:</strong> Provoquer et observer un rollback en conditions r&eacute;elles
+            </p>
+          </div>
+          <a href="https://github.com/lortole/java-tech-lab/blob/main/transaction-lab/docs/kata-acid.md"
+             target="_blank" rel="noopener noreferrer" class="module-card-link">
+            Guide kata ACID &#x2192;
+          </a>
+        </div>
+      </div>
+
+      <div class="module-card module-card--cap">
+        <span class="module-card-icon">&#x1F5A7;</span>
+        <div class="module-card-body">
+          <div class="module-card-header">
+            <h3 class="module-card-title">CAP</h3>
+            <span class="level-badge level-badge--confirmed">Confirm&eacute;</span>
+          </div>
+          <p class="module-card-desc">
+            Simulez le th&eacute;or&egrave;me de Brewer sur un cluster Redis.<br>
+            Choisissez entre coh&eacute;rence et disponibilit&eacute; lors d'une partition.
+          </p>
+          <div class="module-card-meta">
+            <p class="module-card-prereq">
+              <strong>Pr&eacute;requis&nbsp;:</strong> Redis, notions de cluster
+            </p>
+            <p class="module-card-outcome">
+              <strong>Apr&egrave;s&nbsp;:</strong> Simuler une partition et choisir entre CP et AP
+            </p>
+          </div>
+          <a href="https://github.com/lortole/java-tech-lab/blob/main/transaction-lab/docs/kata-cap.md"
+             target="_blank" rel="noopener noreferrer" class="module-card-link">
+            Guide kata CAP &#x2192;
+          </a>
+        </div>
+      </div>
+
+      <div class="module-card module-card--saga">
+        <span class="module-card-icon">&#x1F4E8;</span>
+        <div class="module-card-body">
+          <div class="module-card-header">
+            <h3 class="module-card-title">SAGA</h3>
+            <span class="level-badge level-badge--senior">Senior</span>
+          </div>
+          <p class="module-card-desc">
+            Orchestrez une transaction distribu&eacute;e via Kafka.<br>
+            Ma&icirc;trisez les compensations et la coh&eacute;rence &eacute;ventuelle.
+          </p>
+          <div class="module-card-meta">
+            <p class="module-card-prereq">
+              <strong>Pr&eacute;requis&nbsp;:</strong> Kafka, micro-services, REST
+            </p>
+            <p class="module-card-outcome">
+              <strong>Apr&egrave;s&nbsp;:</strong> Impl&eacute;menter des compensations distribu&eacute;es
+            </p>
+          </div>
+          <a href="https://github.com/lortole/java-tech-lab/blob/main/transaction-lab/docs/kata-saga.md"
+             target="_blank" rel="noopener noreferrer" class="module-card-link">
+            Guide kata SAGA &#x2192;
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Section 4 — Parcours recommandé -->
+  <section class="roadmap-section">
+    <h2 class="section-title">Parcours recommand&eacute;</h2>
+    <div class="roadmap-card">
+      <div class="roadmap-timeline">
+
+        <div class="roadmap-step roadmap-step--start">
+          <div class="roadmap-dot">J</div>
+          <span class="roadmap-label">Junior</span>
+        </div>
+
+        <div class="roadmap-connector"></div>
+
+        <div class="roadmap-step roadmap-step--acid">
+          <div class="roadmap-dot">1</div>
+          <span class="roadmap-label">ACID</span>
+          <span class="roadmap-sublabel">Atomicit&eacute;</span>
+        </div>
+
+        <div class="roadmap-connector"></div>
+
+        <div class="roadmap-step roadmap-step--cap">
+          <div class="roadmap-dot">2</div>
+          <span class="roadmap-label">CAP</span>
+          <span class="roadmap-sublabel">Partition</span>
+        </div>
+
+        <div class="roadmap-connector"></div>
+
+        <div class="roadmap-step roadmap-step--saga">
+          <div class="roadmap-dot">3</div>
+          <span class="roadmap-label">SAGA</span>
+          <span class="roadmap-sublabel">Compensation</span>
+        </div>
+
+        <div class="roadmap-connector"></div>
+
+        <div class="roadmap-step roadmap-step--end">
+          <div class="roadmap-dot">E</div>
+          <span class="roadmap-label">Expert</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5 — Objectif pédagogique -->
+  <section class="kata-section">
+    <div class="kata-card">
+      <span class="kata-icon">&#x1F393;</span>
+      <div class="kata-content">
+        <h2 class="kata-title">Objectif p&eacute;dagogique</h2>
+        <p class="kata-text">
+          Chaque module suit l'approche <strong>kata</strong>&nbsp;:
+          manipulez le syst&egrave;me jusqu'&agrave; provoquer la panne,
+          observez la r&eacute;action, comprenez pourquoi.
+          Les guides kata dans le d&eacute;p&ocirc;t vous accompagnent &eacute;tape par &eacute;tape
+          pour ancrer les concepts ACID, CAP et SAGA dans votre m&eacute;moire musculaire de d&eacute;veloppeur.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="home-footer">
+    <a
+      href="https://github.com/lortole/java-tech-lab"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="footer-github">
+      &#x1F517; GitHub &mdash; lortole/java-tech-lab
+    </a>
+    <span class="footer-author">Par Lo&iuml;c ORTOL&Eacute; &middot; Klanik</span>
+  </footer>
+
+</div>

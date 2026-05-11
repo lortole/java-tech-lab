@@ -1,1 +1,142 @@
+.io-analogy {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
 
+.io-panel {
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.io-panel-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+
+  h3 {
+    color: var(--text);
+    font-size: 1rem;
+  }
+
+  span {
+    color: var(--text-dim);
+    font-size: 0.76rem;
+  }
+}
+
+.io-thread-list {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.io-thread {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(226, 75, 74, 0.28);
+  border-radius: 6px;
+  background: rgba(226, 75, 74, 0.08);
+  padding: 0.65rem 0.75rem;
+}
+
+.thread-name {
+  color: var(--text);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.thread-work {
+  color: #f0a0a0;
+  font-size: 0.78rem;
+  text-align: right;
+}
+
+.io-queue {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 0.35rem;
+  margin: 0.9rem 0 0.75rem;
+
+  span {
+    height: 1.25rem;
+    border-radius: 999px;
+    background: rgba(136, 135, 128, 0.45);
+  }
+}
+
+.carrier-row,
+.vt-cloud {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.carrier {
+  border: 1px solid rgba(70, 149, 235, 0.35);
+  border-radius: 6px;
+  background: rgba(70, 149, 235, 0.1);
+  color: var(--blue);
+  padding: 0.65rem 0.5rem;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.vt-cloud {
+  grid-template-columns: repeat(6, 1fr);
+  margin: 0.9rem 0 0.75rem;
+
+  span {
+    border: 1px solid rgba(29, 158, 117, 0.35);
+    border-radius: 6px;
+    background: rgba(29, 158, 117, 0.11);
+    color: #8ed8bc;
+    padding: 0.45rem 0.25rem;
+    text-align: center;
+    font-size: 0.74rem;
+    font-weight: 700;
+  }
+}
+
+.io-caption {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  min-height: 3.6rem;
+}
+
+.io-result {
+  border-radius: 6px;
+  padding: 0.55rem 0.75rem;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+
+  &.slow {
+    background: rgba(226, 75, 74, 0.1);
+    border: 1px solid rgba(226, 75, 74, 0.32);
+    color: #f0a0a0;
+  }
+
+  &.fast {
+    background: rgba(29, 158, 117, 0.1);
+    border: 1px solid rgba(29, 158, 117, 0.32);
+    color: #8ed8bc;
+  }
+}
+
+@media (max-width: 760px) {
+  .io-analogy {
+    grid-template-columns: 1fr;
+  }
+
+  .io-caption {
+    min-height: auto;
+  }
+}

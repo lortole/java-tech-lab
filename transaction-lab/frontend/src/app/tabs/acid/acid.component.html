@@ -1,5 +1,32 @@
 <section class="module-acid">
 
+  <div class="module-intro">
+    <h3 class="intro-title">ACID &mdash; Transactions relationnelles</h3>
+    <div class="intro-concepts">
+      <p class="concept-item"><strong>A</strong> &mdash; <strong>Atomicit&eacute;</strong>&nbsp;: tout ou rien. Si une &eacute;tape &eacute;choue, toutes les &eacute;critures sont annul&eacute;es.</p>
+      <p class="concept-item"><strong>C</strong> &mdash; <strong>Coh&eacute;rence</strong>&nbsp;: la base reste dans un &eacute;tat valide avant et apr&egrave;s chaque transaction.</p>
+      <p class="concept-item"><strong>I</strong> &mdash; <strong>Isolation</strong>&nbsp;: les transactions concurrentes ne se voient pas mutuellement avant le commit.</p>
+      <p class="concept-item"><strong>D</strong> &mdash; <strong>Durabilit&eacute;</strong>&nbsp;: apr&egrave;s un commit, les donn&eacute;es survivent aux pannes syst&egrave;me.</p>
+    </div>
+    <div class="mermaid">
+sequenceDiagram
+    participant C as Client
+    participant T as Spring
+    participant DB as Database
+    C->>T: virement(100&euro;)
+    T->>DB: BEGIN
+    T->>DB: d&eacute;bit compte A
+    alt panne simul&eacute;e
+        T->>DB: ROLLBACK
+        DB-->>C: &eacute;tat restaur&eacute;
+    else succ&egrave;s
+        T->>DB: cr&eacute;dit compte B
+        T->>DB: COMMIT
+        DB-->>C: OK
+    end
+    </div>
+  </div>
+
   <div class="module-header">
     <h2>🔵 ACID — Transactions relationnelles</h2>
     <p class="module-desc">

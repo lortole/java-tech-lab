@@ -30,6 +30,7 @@
 
   <main class="tab-content">
     @switch (activeTab()) {
+      @case ('home') { <app-home /> }
       @case ('acid') { <app-acid /> }
       @case ('cap')  { <app-cap  /> }
       @case ('saga') { <app-saga /> }
