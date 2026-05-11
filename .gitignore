@@ -26,3 +26,11 @@ virtual-threads-lab/files.zip:Zone.Identifier
 .idea/
 *.iml
 .vscode/
+
+# Transaction Lab - Angular
+transaction-lab/frontend/.angular/
+transaction-lab/frontend/dist/
+transaction-lab/frontend/node_modules/
+
+# Transaction Lab - Spring Boot
+transaction-lab/backend/target/

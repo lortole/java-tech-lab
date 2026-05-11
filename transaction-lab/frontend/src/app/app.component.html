@@ -1,0 +1,39 @@
+<div class="app-shell">
+
+  <header class="app-header">
+    <div class="header-left">
+      <span class="header-logo">🧪</span>
+      <div class="header-titles">
+        <h1 class="header-title">Transaction Lab</h1>
+        <span class="header-subtitle">ACID · CAP · SAGA — by Loïc ORTOLÉ · Klanik</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <a href="https://github.com/lortole/java-tech-lab" target="_blank" class="header-link">
+        GitHub
+      </a>
+      <app-theme-toggle />
+    </div>
+  </header>
+
+  <nav class="tabs-nav">
+    @for (tab of tabs; track tab.id) {
+      <button
+        class="tab-btn"
+        [class]="tab.color"
+        [class.active]="activeTab() === tab.id"
+        (click)="setTab(tab.id)">
+        {{ tab.label }}
+      </button>
+    }
+  </nav>
+
+  <main class="tab-content">
+    @switch (activeTab()) {
+      @case ('acid') { <app-acid /> }
+      @case ('cap')  { <app-cap  /> }
+      @case ('saga') { <app-saga /> }
+    }
+  </main>
+
+</div>

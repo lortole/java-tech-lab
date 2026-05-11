@@ -1,8 +1,0 @@
-dev/lortole/virtualthreadslab/bench/PlatformVsVirtualBench$BenchResult.class
-dev/lortole/virtualthreadslab/context/ContextPropagationDemo.class
-dev/lortole/virtualthreadslab/pinning/PlatformVsLockFreeBench.class
-dev/lortole/virtualthreadslab/bench/PlatformVsVirtualBench.class
-dev/lortole/virtualthreadslab/api/BenchController.class
-dev/lortole/virtualthreadslab/pinning/PinningDemo$PinningResult.class
-dev/lortole/virtualthreadslab/VirtualThreadsLabApplication.class
-dev/lortole/virtualthreadslab/pinning/PinningDemo.class

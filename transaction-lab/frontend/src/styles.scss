@@ -1,0 +1,9 @@
+// ── Ordre strict — pas de @use (bug Angular) ───────────────
+@import 'styles/tokens';
+@import 'styles/reset';
+@import 'styles/layout';
+@import 'styles/components';
+@import 'styles/acid';
+@import 'styles/cap';
+@import 'styles/saga';
+@import 'styles/animations';

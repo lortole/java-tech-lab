@@ -1,0 +1,119 @@
+<section class="module-acid">
+
+  <div class="module-header">
+    <h2>🔵 ACID — Transactions relationnelles</h2>
+    <p class="module-desc">
+      Observez l'<strong>Atomicité</strong> en action : un virement interrompu à mi-chemin
+      ne laisse aucune trace. Spring annule automatiquement l'ensemble de la transaction.
+    </p>
+    <a class="doc-link" href="https://github.com/lortole/java-tech-lab/blob/main/transaction-lab/docs/kata-acid.md" target="_blank">
+      📖 Guide kata ACID →
+    </a>
+  </div>
+
+  <!-- Comptes -->
+  <div class="accounts-grid">
+    @for (account of accounts(); track account.id) {
+      <div class="account-card" [class.highlighted]="lastResult() && (lastResult()!.fromOwner === account.owner || lastResult()!.toOwner === account.owner)">
+        <div class="account-owner">{{ account.owner }}</div>
+        <div class="account-balance">{{ account.balance | number:'1.2-2' }} €</div>
+        <div class="account-id">Compte #{{ account.id }}</div>
+      </div>
+    }
+  </div>
+
+  <!-- Formulaire virement -->
+  <div class="transfer-form card">
+    <h3>Effectuer un virement</h3>
+
+    <div class="form-row">
+      <label>Compte source
+        <select [(ngModel)]="form.fromId">
+          <option value="">-- choisir --</option>
+          @for (a of accounts(); track a.id) {
+            <option [value]="a.id">{{ a.owner }} ({{ a.balance | number:'1.2-2' }}€)</option>
+          }
+        </select>
+      </label>
+
+      <label>Compte cible
+        <select [(ngModel)]="form.toId">
+          <option value="">-- choisir --</option>
+          @for (a of accounts(); track a.id) {
+            <option [value]="a.id">{{ a.owner }}</option>
+          }
+        </select>
+      </label>
+
+      <label>Montant (€)
+        <input type="number" [(ngModel)]="form.amount" min="1" placeholder="100" />
+      </label>
+    </div>
+
+    <div class="form-row form-row--checkbox">
+      <label class="checkbox-label">
+        <input type="checkbox" [(ngModel)]="form.forceFailAfterDebit" />
+        <span>💥 Simuler une panne <em>après</em> le débit — démonstration rollback</span>
+      </label>
+    </div>
+
+    @if (form.forceFailAfterDebit) {
+      <div class="alert alert--warning">
+        ⚠️ Le compte source sera débité puis une exception sera levée.
+        Spring va annuler <strong>tout</strong> — le solde reviendra à son état initial.
+      </div>
+    }
+
+    <div class="form-actions">
+      <button class="btn btn--primary" (click)="transfer()" [disabled]="loading()">
+        {{ loading() ? 'En cours…' : 'Virer →' }}
+      </button>
+      <button class="btn btn--ghost" (click)="reset()">↺ Réinitialiser les soldes</button>
+    </div>
+  </div>
+
+  <!-- Résultat -->
+  @if (lastResult(); as r) {
+    <div class="result-card card" [class.result-success]="r.success" [class.result-rollback]="!r.success">
+      <div class="result-title">
+        {{ r.success ? '✅ Transaction COMMITTED' : '🔄 Transaction ROLLED BACK' }}
+      </div>
+      <div class="result-message">{{ r.message }}</div>
+      @if (r.fromOwner) {
+        <div class="result-balances">
+          <span>{{ r.fromOwner }} : <strong>{{ r.fromBalance | number:'1.2-2' }}€</strong></span>
+          <span>{{ r.toOwner }} : <strong>{{ r.toBalance | number:'1.2-2' }}€</strong></span>
+        </div>
+      }
+      @if (!r.success) {
+        <div class="result-explain">
+          Les soldes sont <strong>identiques à l'état initial</strong> — c'est l'Atomicité.
+          Ni le débit ni le crédit n'ont persisté.
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Historique -->
+  @if (history().length > 0) {
+    <div class="history card">
+      <h3>Historique des virements</h3>
+      <table class="history-table">
+        <thead>
+          <tr><th>De</th><th>Vers</th><th>Montant</th><th>Statut</th></tr>
+        </thead>
+        <tbody>
+          @for (t of history(); track t.id) {
+            <tr [class.row-rollback]="t.status === 'ROLLED_BACK'">
+              <td>{{ t.from }}</td>
+              <td>{{ t.to }}</td>
+              <td>{{ t.amount | number:'1.2-2' }}€</td>
+              <td><span class="badge" [class]="'badge--' + t.status.toLowerCase()">{{ t.status }}</span></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+</section>

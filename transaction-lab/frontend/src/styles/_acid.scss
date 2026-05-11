@@ -1,0 +1,41 @@
+// ── ACID ─────────────────────────────────────────────────────
+.accounts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.account-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  text-align: center;
+  transition: border-color .2s, box-shadow .2s;
+
+  &.highlighted { border-color: var(--accent-acid); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-acid) 15%, transparent); }
+}
+
+.account-owner { font-size: .9rem; color: var(--text-secondary); margin-bottom: .4rem; }
+.account-balance { font-size: 1.6rem; font-weight: 700; color: var(--text-primary); }
+.account-id { font-size: .75rem; color: var(--text-muted); margin-top: .3rem; }
+
+.result-card {
+  margin-top: 1.5rem;
+  border-left: 4px solid var(--border);
+  &.result-success { border-left-color: var(--success); }
+  &.result-rollback { border-left-color: var(--warning); }
+}
+.result-title { font-size: 1.1rem; font-weight: 600; margin-bottom: .5rem; }
+.result-balances { display: flex; gap: 2rem; margin: .75rem 0; font-size: .9rem; }
+.result-explain { font-size: .85rem; color: var(--text-secondary); margin-top: .5rem; }
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .875rem;
+  th, td { padding: .5rem .75rem; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--text-muted); font-weight: 500; }
+  .row-rollback td { color: var(--warning); }
+}

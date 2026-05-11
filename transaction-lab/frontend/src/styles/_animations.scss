@@ -1,0 +1,42 @@
+// ── Animations ───────────────────────────────────────────────
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .3; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+// Classes utilitaires
+.fade-in   { animation: fadeIn  .25s ease-out; }
+.slide-in  { animation: slideIn .2s  ease-out; }
+
+// Skeleton loader
+.skeleton {
+  background: linear-gradient(90deg,
+    var(--bg-secondary) 25%,
+    var(--border) 50%,
+    var(--bg-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: var(--radius-sm);
+}
+
+// Transition de thème fluide
+* { transition: background-color .15s, border-color .15s, color .1s; }
+// Sauf les éléments interactifs qui ont leurs propres transitions
+button, input, select, a { transition: all .15s; }

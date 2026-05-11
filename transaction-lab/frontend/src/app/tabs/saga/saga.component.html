@@ -1,0 +1,137 @@
+<section class="module-saga">
+
+  <div class="module-header">
+    <h2>🔴 SAGA — Transactions distribuées</h2>
+    <p class="module-desc">
+      Observez la <strong>SAGA chorégraphiée</strong> en temps réel.
+      Chaque topic Kafka s'allume dans l'ordre. Forcez un échec de paiement
+      pour déclencher la <strong>compensation</strong> automatique.
+    </p>
+    <a class="doc-link" href="https://github.com/lortole/java-tech-lab/blob/main/transaction-lab/docs/kata-saga.md" target="_blank">
+      📖 Guide kata SAGA →
+    </a>
+  </div>
+
+  <!-- Topologie SAGA -->
+  <div class="saga-topology card">
+    <h3>Topologie des topics Kafka</h3>
+    <div class="topology-flow">
+      <div class="topic-node topic-start">commande‑créée</div>
+      <div class="topic-arrow">→</div>
+      <div class="topic-node">articles‑réservés</div>
+      <div class="topic-arrow">→</div>
+      <div class="topic-node">paiement‑effectué</div>
+      <div class="topic-arrow">→</div>
+      <div class="topic-node topic-end">✅ email</div>
+    </div>
+    <div class="topology-compensation">
+      <span class="comp-label">Compensation :</span>
+      <div class="topic-node topic-fail">paiement‑échoué</div>
+      <div class="topic-arrow">→</div>
+      <div class="topic-node topic-comp">articles‑libérés</div>
+      <div class="topic-arrow">→</div>
+      <div class="topic-node topic-comp">🔄 commande annulée</div>
+    </div>
+  </div>
+
+  <div class="saga-main">
+
+    <!-- Formulaire commande -->
+    <div class="order-form card">
+      <h3>Nouvelle commande</h3>
+
+      <div class="product-picker">
+        @for (p of products; track p.id) {
+          <button class="product-btn"
+                  [class.active]="form.productId === p.id"
+                  (click)="selectProduct(p.id)">
+            <span class="product-name">{{ p.name }}</span>
+            <span class="product-price">{{ p.price }}€</span>
+          </button>
+        }
+      </div>
+
+      <div class="form-row">
+        <label>Quantité
+          <input type="number" [(ngModel)]="form.quantity" min="1" max="10" />
+        </label>
+        <label>Montant calculé
+          <input type="number" [(ngModel)]="form.amount" [readonly]="!form.forceFailPayment" />
+        </label>
+      </div>
+
+      <div class="form-row form-row--checkbox">
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="form.forceFailPayment" />
+          <span>💥 Forcer l'échec du paiement — déclenche la compensation</span>
+        </label>
+      </div>
+
+      @if (form.forceFailPayment) {
+        <div class="alert alert--warning">
+          ⚠️ Le montant sera forcé à 99 999€ → paiement refusé →
+          le stock sera <strong>libéré automatiquement</strong> si le kata de compensation est implémenté.
+        </div>
+      }
+
+      <button class="btn btn--primary" (click)="placeOrder()" [disabled]="loading()">
+        {{ loading() ? 'Traitement…' : '🛒 Passer la commande' }}
+      </button>
+    </div>
+
+    <!-- Stock en temps réel -->
+    <div class="inventory card">
+      <h3>Stock en temps réel</h3>
+      <table class="inventory-table">
+        <thead><tr><th>Produit</th><th>Stock</th><th>Réservé</th><th>Disponible</th></tr></thead>
+        <tbody>
+          @for (item of inventory(); track item.productId) {
+            <tr>
+              <td>{{ item.productName }}</td>
+              <td>{{ item.stock }}</td>
+              <td class="reserved">{{ item.reserved }}</td>
+              <td [class.low-stock]="item.available <= 2">{{ item.available }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- Commandes récentes -->
+  @if (orders().length > 0) {
+    <div class="orders-list card">
+      <h3>Commandes récentes <span class="live-badge">● LIVE</span></h3>
+      <div class="orders-scroll">
+        @for (order of orders(); track order.id) {
+          <div class="order-row" [class.order-active]="activeOrderId() === order.id"
+               [class.order-confirmed]="order.status === 'CONFIRMED'"
+               [class.order-cancelled]="order.status === 'CANCELLED'"
+               [class.order-compensating]="order.status === 'COMPENSATION_IN_PROGRESS'">
+            <div class="order-meta">
+              <span class="order-id">#{{ order.id }}</span>
+              <span class="order-product">{{ order.productId }}</span>
+              <span class="order-amount">{{ order.amount | number:'1.2-2' }}€</span>
+            </div>
+            <div class="order-status">
+              <span class="status-badge" [class]="'status--' + order.status.toLowerCase()">
+                {{ statusLabel(order.status) }}
+              </span>
+            </div>
+            @if (!isTerminal(order.status)) {
+              <div class="saga-progress">
+                <div class="progress-dot" [class.done]="['INVENTORY_RESERVED','PAYMENT_PROCESSING','CONFIRMED'].includes(order.status)">📦</div>
+                <div class="progress-line"></div>
+                <div class="progress-dot" [class.done]="['PAYMENT_PROCESSING','CONFIRMED'].includes(order.status)">💳</div>
+                <div class="progress-line"></div>
+                <div class="progress-dot" [class.done]="order.status === 'CONFIRMED'">✅</div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+</section>

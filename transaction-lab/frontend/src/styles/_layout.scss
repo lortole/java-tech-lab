@@ -1,0 +1,106 @@
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  background: var(--bg-card);
+  border-bottom: 2px solid var(--accent-acid);
+  padding: 1rem 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-left { display: flex; align-items: center; gap: 1rem; }
+
+.header-logo { font-size: 2rem; }
+
+.header-title { font-size: 1.4rem; font-weight: 700; color: var(--text-primary); }
+.header-subtitle { font-size: .8rem; color: var(--text-muted); display: block; }
+
+.header-right { display: flex; align-items: center; gap: 1rem; }
+
+.header-link {
+  font-size: .85rem;
+  color: var(--text-secondary);
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: border-color .2s;
+  &:hover { border-color: var(--accent-acid); text-decoration: none; }
+}
+
+// ── Theme pill ─────────────────────────────────────────────
+.theme-pill {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .35rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: .85rem;
+  transition: all .2s;
+  &:hover { border-color: var(--accent-acid); color: var(--text-primary); }
+}
+
+// ── Tabs nav ───────────────────────────────────────────────
+.tabs-nav {
+  display: flex;
+  gap: 0;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2.5rem;
+}
+
+.tab-btn {
+  padding: .8rem 1.8rem;
+  border: none;
+  border-bottom: 3px solid transparent;
+  background: none;
+  color: var(--text-secondary);
+  font-size: .95rem;
+  font-weight: 500;
+  transition: all .2s;
+  margin-bottom: -1px;
+
+  &:hover { color: var(--text-primary); }
+
+  &.active {
+    color: var(--text-primary);
+    &.tab-acid  { border-bottom-color: var(--accent-acid); }
+    &.tab-cap   { border-bottom-color: var(--accent-cap);  }
+    &.tab-saga  { border-bottom-color: var(--accent-saga); }
+  }
+}
+
+// ── Content ────────────────────────────────────────────────
+.tab-content {
+  flex: 1;
+  padding: 2.5rem;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+// ── Module header commun ───────────────────────────────────
+.module-header {
+  margin-bottom: 2rem;
+  h2 { font-size: 1.5rem; margin-bottom: .5rem; }
+  .module-desc { color: var(--text-secondary); margin-bottom: .75rem; }
+  .doc-link { font-size: .85rem; color: var(--text-muted); }
+}
+
+// ── Loading ─────────────────────────────────────────────────
+.loading-state {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-muted);
+}

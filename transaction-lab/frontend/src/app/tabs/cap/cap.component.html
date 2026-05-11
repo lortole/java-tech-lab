@@ -1,0 +1,142 @@
+<section class="module-cap">
+
+  <div class="module-header">
+    <h2>🟡 CAP — Le triangle impossible</h2>
+    <p class="module-desc">
+      Simulez une <strong>partition réseau</strong> entre deux nœuds.
+      Choisissez entre <strong>CP</strong> (cohérence — le nœud B refuse) et
+      <strong>AP</strong> (disponibilité — le nœud B répond avec une valeur obsolète).
+    </p>
+    <a class="doc-link" href="https://github.com/lortole/java-tech-lab/blob/main/transaction-lab/docs/kata-cap.md" target="_blank">
+      📖 Guide kata CAP →
+    </a>
+  </div>
+
+  @if (state(); as s) {
+
+    <!-- Contrôles -->
+    <div class="cap-controls card">
+      <div class="controls-row">
+
+        <div class="control-group">
+          <span class="control-label">Partition réseau</span>
+          <div class="toggle-group">
+            <button class="btn" [class.btn--danger]="!s.partitionActive" [class.btn--ghost]="s.partitionActive"
+                    (click)="togglePartition(true)" [disabled]="s.partitionActive">
+              ✂️ Couper
+            </button>
+            <button class="btn" [class.btn--success]="s.partitionActive" [class.btn--ghost]="!s.partitionActive"
+                    (click)="togglePartition(false)" [disabled]="!s.partitionActive">
+              🔗 Rétablir
+            </button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <span class="control-label">Mode</span>
+          <div class="toggle-group">
+            <button class="btn" [class.btn--blue]="s.modeCp" [class.btn--ghost]="!s.modeCp"
+                    (click)="setMode(true)">
+              🔵 CP
+            </button>
+            <button class="btn" [class.btn--green]="!s.modeCp" [class.btn--ghost]="s.modeCp"
+                    (click)="setMode(false)">
+              🟢 AP
+            </button>
+          </div>
+        </div>
+
+        <button class="btn btn--ghost" (click)="reset()">↺ Reset</button>
+      </div>
+
+      <!-- Explication dynamique -->
+      <div class="cap-explanation" [class.explanation-cp]="s.modeCp && s.partitionActive"
+                                    [class.explanation-ap]="!s.modeCp && s.partitionActive">
+        {{ s.explanation }}
+      </div>
+    </div>
+
+    <!-- Visualisation des nœuds -->
+    <div class="nodes-visual">
+
+      <div class="node-card" [class.node-available]="s.nodeA.available">
+        <div class="node-header">
+          <span class="node-id">Nœud A</span>
+          <span class="node-role">Leader</span>
+        </div>
+        <div class="node-data">
+          @for (entry of s.nodeA.data | keyvalue; track entry.key) {
+            <div class="data-row">
+              <span class="data-key">{{ entry.key }}</span>
+              <span class="data-value">{{ entry.value }}</span>
+            </div>
+          }
+        </div>
+        <div class="node-version">v{{ s.nodeA.version }}</div>
+        <div class="node-status">✅ Disponible</div>
+      </div>
+
+      <!-- Lien réseau animé -->
+      <div class="network-link" [class.partitioned]="s.partitionActive">
+        <div class="link-line"></div>
+        <div class="link-label">{{ s.partitionActive ? '✂️ Partition' : '🔗 Réseau OK' }}</div>
+      </div>
+
+      <div class="node-card" [class.node-available]="s.nodeB.available" [class.node-unavailable]="!s.nodeB.available">
+        <div class="node-header">
+          <span class="node-id">Nœud B</span>
+          <span class="node-role">Follower</span>
+        </div>
+        <div class="node-data">
+          @for (entry of s.nodeB.data | keyvalue; track entry.key) {
+            <div class="data-row" [class.stale]="s.nodeB.version < s.nodeA.version">
+              <span class="data-key">{{ entry.key }}</span>
+              <span class="data-value">{{ entry.value }}</span>
+            </div>
+          }
+        </div>
+        <div class="node-version">v{{ s.nodeB.version }}</div>
+        <div class="node-status">{{ s.nodeB.message }}</div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="cap-actions card">
+      <div class="action-group">
+        <h3>1. Écrire sur Nœud A</h3>
+        <div class="write-row">
+          <input type="text" [(ngModel)]="writeValue" placeholder="nouvelle valeur…" />
+          <button class="btn btn--primary" (click)="write()" [disabled]="loading() || !writeValue.trim()">
+            Écrire →
+          </button>
+        </div>
+        <p class="action-hint">
+          Si la partition est active, B ne recevra pas cette mise à jour.
+        </p>
+      </div>
+
+      <div class="action-group">
+        <h3>2. Lire depuis Nœud B</h3>
+        <button class="btn btn--secondary" (click)="readB()">Lire depuis B</button>
+        @if (readResult(); as r) {
+          <div class="read-result" [class.read-unavailable]="!r.available" [class.read-stale]="r.available && s.partitionActive">
+            <div class="read-status">{{ r.message }}</div>
+            @if (r.available) {
+              @for (entry of r.data | keyvalue; track entry.key) {
+                <div class="data-row"><span class="data-key">{{ entry.key }}</span> = <strong>{{ entry.value }}</strong></div>
+              }
+            }
+          </div>
+        }
+        <p class="action-hint">
+          Mode CP + partition → <code>503 Service Unavailable</code><br>
+          Mode AP + partition → répond avec la valeur de B (potentiellement v{{ s.nodeB.version }} vs v{{ s.nodeA.version }})
+        </p>
+      </div>
+    </div>
+
+  } @else {
+    <div class="loading-state">Connexion au backend…</div>
+  }
+
+</section>
