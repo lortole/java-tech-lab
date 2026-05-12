@@ -1,0 +1,148 @@
+// ── Mobile responsive (380px priority) ───────────────────────
+// Breakpoint A : 640px — tablets + large phones
+// Breakpoint B : 440px — small phones (380px target)
+
+// ═══════════════════════════════════════════════════════════════
+// A — 640px
+// ═══════════════════════════════════════════════════════════════
+@media (max-width: 640px) {
+
+  // ── Header ──────────────────────────────────────────────────
+  .app-header {
+    padding: .75rem 1rem;
+  }
+  .header-subtitle { display: none; }
+
+  // ── Tabs nav : scrollable, buttons compact ───────────────────
+  .tabs-nav {
+    padding: 0 .5rem;
+    padding-bottom: 3px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+  }
+  .tab-btn {
+    padding: .6rem .85rem;
+    font-size: .85rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  // ── Tab content ──────────────────────────────────────────────
+  .tab-content { padding: 1.25rem 1rem; }
+
+  // ── Module header ────────────────────────────────────────────
+  .module-header h2 { font-size: 1.2rem; }
+
+  // ── Home hero : negative margins match reduced padding ───────
+  .home-hero {
+    margin: -1.25rem -1rem 2rem;
+    padding: 2.5rem 1.5rem;
+  }
+
+  // ── ACID : balances empilees, tables scrollables ─────────────
+  .result-balances {
+    flex-direction: column;
+    gap: .5rem;
+  }
+  .isolation-table,
+  .history-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  // ── CAP : noeuds en colonne, actions en 1 colonne ────────────
+  .nodes-visual {
+    flex-direction: column;
+    align-items: stretch;
+    gap: .75rem;
+  }
+  .network-link {
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+    height: auto;
+    padding: .25rem 0;
+  }
+  .cap-actions {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  // ── SAGA : grille principale en 1 colonne ────────────────────
+  .saga-main {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .order-row {
+    flex-wrap: wrap;
+    gap: .5rem;
+  }
+  .order-meta {
+    flex-wrap: wrap;
+    gap: .5rem;
+    flex: 1 1 100%;
+  }
+  .saga-progress {
+    flex-wrap: wrap;
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// B — 440px (cible 380px)
+// ═══════════════════════════════════════════════════════════════
+@media (max-width: 440px) {
+
+  // ── Header ──────────────────────────────────────────────────
+  .app-header { padding: .6rem .75rem; }
+
+  // ── Tabs nav ─────────────────────────────────────────────────
+  .tabs-nav { padding: 0 .25rem; padding-bottom: 3px; }
+  .tab-btn  { padding: .55rem .65rem; font-size: .78rem; }
+
+  // ── Tab content ──────────────────────────────────────────────
+  .tab-content { padding: .875rem .75rem; }
+
+  // ── Home hero : match .75rem padding ────────────────────────
+  .home-hero {
+    margin: -.875rem -.75rem 1.5rem;
+    padding: 2rem 1rem;
+  }
+  .hero-title { font-size: 1.75rem; }
+
+  // ── Forms : colonnes forcees sur petit ecran ─────────────────
+  .form-row {
+    flex-direction: column;
+    label { min-width: 0; }
+  }
+
+  // ── CAP table scrollable ─────────────────────────────────────
+  .cap-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  // ── SAGA pipeline : boites plus petites ─────────────────────
+  .sim-step-box {
+    min-width: 72px;
+    font-size: .75rem;
+    padding: .4rem .5rem;
+  }
+  .sim-connector { width: 16px; }
+
+  // ── Cards : moins de padding interne ────────────────────────
+  .card { padding: 1rem; }
+
+  // ── Nodes visuels CAP ────────────────────────────────────────
+  .node-card { padding: .875rem; }
+
+  // ── ACID isolation table : encore plus compact ───────────────
+  .isolation-table {
+    font-size: .72rem;
+    th, td { padding: .3rem .4rem; }
+  }
+}

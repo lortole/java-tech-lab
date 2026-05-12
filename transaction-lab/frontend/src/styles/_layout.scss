@@ -111,3 +111,34 @@
   padding: 3rem;
   color: var(--text-muted);
 }
+
+// ── Navbar mobile ─────────────────────────────────────────────
+@media (max-width: 640px) {
+  // Corrige --header-height pour le sticky de .tabs-nav
+  :root { --header-height: 56px; }
+
+  // .header-titles : min-width:0 permet au flex-item de se retrecir
+  // overflow:hidden + ellipsis evite le debordement si titre long
+  .header-titles {
+    min-width: 0;
+    overflow: hidden;
+  }
+  .header-title {
+    font-size: 1.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // Supprime le bouton GitHub : libere ~86px dans le header-right
+  .header-link { display: none; }
+
+  // Theme toggle : masque le label texte, garde l'icone seule
+  .theme-label { display: none; }
+  .theme-pill  { padding: .35rem .5rem; }
+}
+
+@media (max-width: 440px) {
+  :root { --header-height: 48px; }
+  .header-title { font-size: 1rem; }
+}
