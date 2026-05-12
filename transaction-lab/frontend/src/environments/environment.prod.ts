@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://java-tech-lab-production.up.railway.app'
+  apiUrl: 'https://lortole-transaction-lab-production.up.railway.app'
 };
