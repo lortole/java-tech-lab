@@ -24,7 +24,7 @@ echo ""
 echo "🥷 Virtual Threads Lab — Frontend"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "📍 URL    : http://localhost:4200"
-echo "🔗 API    : http://localhost:8080 (backend requis)"
+echo "🔗 API    : http://localhost:8082 (backend requis)"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
