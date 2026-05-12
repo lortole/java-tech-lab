@@ -179,7 +179,7 @@ Utilisez l'endpoint de test de charge :
 
 ```bash
 # Lancer 100 virements concurrents
-curl -X POST http://localhost:8080/api/acid/benchmark \
+curl -X POST http://localhost:8081/api/acid/benchmark \
   -H "Content-Type: application/json" \
   -d '{"threads": 10, "iterations": 10, "isolation": "SERIALIZABLE"}'
 ```

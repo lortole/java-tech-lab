@@ -18,10 +18,18 @@ export class CapComponent implements OnInit {
   private http = inject(HttpClient);
   private api = environment.apiUrl;
 
-  state = signal<ClusterState | null>(null);
-  readResult = signal<NodeState | null>(null);
-  loading = signal(false);
-  writeValue = '';
+  state       = signal<ClusterState | null>(null);
+  readResult  = signal<NodeState | null>(null);
+  loading     = signal(false);
+  writeValue  = '';
+
+  // ── Local simulation ─────────────────────────────────────
+  simPartition  = signal(false);
+  simModeCp     = signal(true);
+  simNodeAVal   = signal('initial');
+  simNodeBVal   = signal('initial');
+  simWriteInput = '';
+  simNodeBStatus = signal('');
 
   ngOnInit() { this.loadState(); }
 
@@ -55,5 +63,32 @@ export class CapComponent implements OnInit {
   reset() {
     this.http.post<ClusterState>(`${this.api}/api/cap/reset`, {})
       .subscribe({ next: s => { this.state.set(s); this.readResult.set(null); }, error: () => {} });
+  }
+
+  toggleSimPartition() { this.simPartition.update(v => !v); this.simNodeBStatus.set(''); }
+
+  toggleSimMode(cp: boolean) { this.simModeCp.set(cp); this.simNodeBStatus.set(''); }
+
+  writeSimNodeA() {
+    const val = this.simWriteInput.trim();
+    if (!val) return;
+    this.simNodeAVal.set(val);
+    if (!this.simPartition()) {
+      this.simNodeBVal.set(val);
+      this.simNodeBStatus.set('OK -- synchronise avec A');
+    } else {
+      this.simNodeBStatus.set('Partition active -- B non mis a jour');
+    }
+    this.simWriteInput = '';
+  }
+
+  readSimNodeB() {
+    if (!this.simPartition()) {
+      this.simNodeBStatus.set('OK -- valeur : ' + this.simNodeBVal());
+    } else if (this.simModeCp()) {
+      this.simNodeBStatus.set('REFUSE (CP) -- coherence garantie');
+    } else {
+      this.simNodeBStatus.set('OBSOLETE (AP) -- valeur : ' + this.simNodeBVal());
+    }
   }
 }

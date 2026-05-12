@@ -2,10 +2,14 @@
 
   <header class="app-header">
     <div class="header-left">
-      <span class="header-logo">🧪</span>
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+           xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M9 3h6v2H9V3zm-1 4h8l1 10H7L8 7zm3 3v4h2v-4h-2z"
+              fill="currentColor"/>
+      </svg>
       <div class="header-titles">
         <h1 class="header-title">Transaction Lab</h1>
-        <span class="header-subtitle">ACID · CAP · SAGA — by Loïc ORTOLÉ · Klanik</span>
+        <span class="header-subtitle">ACID &middot; CAP &middot; SAGA &middot; BASE &mdash; by Lo&iuml;c ORTOL&Eacute; &middot; Klanik</span>
       </div>
     </div>
     <div class="header-right">
@@ -34,6 +38,7 @@
       @case ('acid') { <app-acid /> }
       @case ('cap')  { <app-cap  /> }
       @case ('saga') { <app-saga /> }
+      @case ('base') { <app-base /> }
     }
   </main>
 

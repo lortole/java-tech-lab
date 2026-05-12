@@ -84,7 +84,7 @@ Créez `transaction-lab/backend/Dockerfile` :
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY target/transaction-lab-*.jar app.jar
-EXPOSE 8080
+EXPOSE 8081
 ENTRYPOINT ["java", \
   "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE:prod}", \
   "-jar", "app.jar"]

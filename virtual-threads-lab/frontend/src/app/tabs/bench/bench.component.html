@@ -10,6 +10,58 @@
     </p>
   </div>
 
+  <div class="bench-primer">
+    <section class="bench-primer-card">
+      <h3>Ce qu'il faut retenir</h3>
+      <p>
+        Un platform thread est un thread OS coûteux : si la tâche attend une réponse réseau
+        ou BDD, le thread reste occupé à ne rien faire. Un virtual thread peut être parqué :
+        son carrier repart exécuter une autre tâche pendant l'attente.
+      </p>
+    </section>
+
+    <section class="bench-primer-card">
+      <h3>Quand ça aide</h3>
+      <div class="bench-chip-grid">
+        <span>API REST</span>
+        <span>JDBC</span>
+        <span>Appels HTTP</span>
+        <span>Files/messages</span>
+      </div>
+    </section>
+
+    <section class="bench-primer-card">
+      <h3>Quand ça n'aide pas</h3>
+      <p>
+        Si le travail est surtout CPU-bound, les virtual threads ne créent pas de CPU.
+        Ils améliorent surtout la concurrence quand beaucoup de tâches attendent.
+      </p>
+    </section>
+  </div>
+
+  <div class="bench-timeline-card">
+    <div class="analogy-title">Une même tâche I/O vue par le scheduler</div>
+    <div class="bench-timeline">
+      <div class="bench-timeline-row">
+        <strong>Platform thread</strong>
+        <div class="bench-track platform">
+          <span>CPU</span>
+          <span>attente BDD : thread OS bloqué</span>
+          <span>CPU</span>
+        </div>
+      </div>
+      <div class="bench-timeline-row">
+        <strong>Virtual thread</strong>
+        <div class="bench-track virtual">
+          <span>CPU</span>
+          <span>VT parqué</span>
+          <span>carrier libre</span>
+          <span>reprise</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ── Analogie statique I/O ──────────────────────────────── -->
   <div class="analogy-card">
     <div class="analogy-title">Ce que le bench mesure</div>

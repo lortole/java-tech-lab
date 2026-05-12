@@ -10,6 +10,54 @@
     </p>
   </div>
 
+  <div class="context-primer">
+    <section class="context-primer-card">
+      <h3>Le problème</h3>
+      <p>
+        Dans une app web, le contexte transporte souvent un <code>traceId</code>,
+        un utilisateur courant, une locale ou des informations de sécurité.
+        Si une tâche part dans un autre virtual thread sans propagation, les logs deviennent difficiles à relier.
+      </p>
+    </section>
+
+    <section class="context-flow-card">
+      <h3>Ce qui se passe au fork</h3>
+      <div class="context-flow">
+        <div class="ctx-node parent">Thread parent<br><span>traceId=abc-123</span></div>
+        <div class="ctx-arrow">fork</div>
+        <div class="ctx-node child bad">Virtual thread<br><span>traceId=null</span></div>
+      </div>
+      <p>Un <code>ThreadLocal</code> appartient au thread qui le porte. Créer un VT ne copie pas automatiquement son contenu.</p>
+    </section>
+
+    <section class="context-primer-card">
+      <h3>La bonne question</h3>
+      <p>
+        Le sujet n'est pas seulement "est-ce que le code compile ?".
+        C'est : est-ce que le contexte métier et observabilité traverse les frontières de concurrence ?
+      </p>
+    </section>
+  </div>
+
+  <div class="context-solutions">
+    <div class="solution-card bad">
+      <strong>ThreadLocal seul</strong>
+      <span>simple, mais perdu dès qu'on change de thread</span>
+    </div>
+    <div class="solution-card warn">
+      <strong>Copie manuelle MDC</strong>
+      <span>fonctionne, mais demande discipline et cleanup</span>
+    </div>
+    <div class="solution-card ok">
+      <strong>ScopedValue</strong>
+      <span>modèle explicite, immuable, adapté à la concurrence structurée</span>
+    </div>
+    <div class="solution-card ok">
+      <strong>Micrometer</strong>
+      <span>pratique dans Spring Boot pour propager sans polluer le code métier</span>
+    </div>
+  </div>
+
   <div class="jvm-info">
     <span>Java 21</span>
     <span>12 CPUs</span>

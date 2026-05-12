@@ -8,35 +8,53 @@
       <strong>transactions compensatoires</strong> annulent les &eacute;tapes pr&eacute;c&eacute;dentes
       dans l&apos;ordre inverse — sans verrou distribu&eacute;.
     </p>
-    <div class="mermaid">
-sequenceDiagram
-    participant OS as OrderService
-    participant IS as InventoryService
-    participant PS as PaymentService
-    OS->>IS: r&eacute;server stock
-    IS-->>OS: r&eacute;serv&eacute;
-    OS->>PS: paiement
-    alt &eacute;chec paiement
-        PS-->>OS: refus&eacute;
-        OS->>IS: lib&eacute;rer stock
-        IS-->>OS: lib&eacute;r&eacute;
-        Note over OS: commande annul&eacute;e
-    else succ&egrave;s
-        PS-->>OS: confirm&eacute;
-        Note over OS: commande confirm&eacute;e
-    end
-    </div>
+    <svg viewBox="0 0 700 200" width="100%" xmlns="http://www.w3.org/2000/svg">
+      <text x="5" y="18" font-family="sans-serif" font-size="10" fill="#3b82f6">Happy path</text>
+      <rect x="5" y="24" width="120" height="36" rx="4" fill="#3b82f6"/>
+      <text x="65" y="47" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">Commande</text>
+      <line x1="125" y1="42" x2="175" y2="42" stroke="#3b82f6" stroke-width="2"/>
+      <polygon points="173,37 185,42 173,47" fill="#3b82f6"/>
+      <rect x="185" y="24" width="125" height="36" rx="4" fill="#3b82f6"/>
+      <text x="247" y="47" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">Stock reserve</text>
+      <line x1="310" y1="42" x2="360" y2="42" stroke="#3b82f6" stroke-width="2"/>
+      <polygon points="358,37 370,42 358,47" fill="#3b82f6"/>
+      <rect x="370" y="24" width="125" height="36" rx="4" fill="#3b82f6"/>
+      <text x="432" y="47" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">Paiement OK</text>
+      <line x1="495" y1="42" x2="545" y2="42" stroke="#3b82f6" stroke-width="2"/>
+      <polygon points="543,37 555,42 543,47" fill="#22c55e"/>
+      <rect x="555" y="24" width="125" height="36" rx="4" fill="#22c55e"/>
+      <text x="617" y="47" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">Confirme [OK]</text>
+      <line x1="0" y1="95" x2="700" y2="95" stroke="#4a5568" stroke-width="1" stroke-dasharray="4,4"/>
+      <text x="5" y="118" font-family="sans-serif" font-size="10" fill="#ef4444">Compensation</text>
+      <rect x="5" y="128" width="120" height="36" rx="4" fill="#94a3b8"/>
+      <text x="65" y="151" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">Commande</text>
+      <line x1="125" y1="146" x2="175" y2="146" stroke="#ef4444" stroke-width="2"/>
+      <polygon points="173,141 185,146 173,151" fill="#ef4444"/>
+      <rect x="185" y="128" width="125" height="36" rx="4" fill="#94a3b8"/>
+      <text x="247" y="151" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">Stock reserve</text>
+      <line x1="310" y1="146" x2="360" y2="146" stroke="#ef4444" stroke-width="2"/>
+      <polygon points="358,141 370,146 358,151" fill="#ef4444"/>
+      <rect x="370" y="128" width="125" height="36" rx="4" fill="#ef4444"/>
+      <text x="432" y="147" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">Paiement [X]</text>
+      <text x="432" y="160" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#fff">refuse</text>
+      <line x1="495" y1="146" x2="545" y2="146" stroke="#ef4444" stroke-width="2"/>
+      <polygon points="543,141 555,146 543,151" fill="#ef4444"/>
+      <rect x="555" y="128" width="125" height="36" rx="4" fill="#dc2626"/>
+      <text x="617" y="151" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">Stock libere</text>
+      <text x="617" y="164" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#fff">[compensation]</text>
+      <line x1="432" y1="60" x2="432" y2="128" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.6"/>
+    </svg>
   </div>
 
   <div class="module-header">
-    <h2>🔴 SAGA — Transactions distribuées</h2>
+    <h2>SAGA &mdash; Transactions distribu&eacute;es</h2>
     <p class="module-desc">
-      Observez la <strong>SAGA chorégraphiée</strong> en temps réel.
-      Chaque topic Kafka s'allume dans l'ordre. Forcez un échec de paiement
-      pour déclencher la <strong>compensation</strong> automatique.
+      Observez la <strong>SAGA chor&eacute;graphi&eacute;e</strong> en temps r&eacute;el.
+      Chaque topic Kafka s'allume dans l'ordre. Forcez un &eacute;chec de paiement
+      pour d&eacute;clencher la <strong>compensation</strong> automatique.
     </p>
     <a class="doc-link" href="https://github.com/lortole/java-tech-lab/blob/main/transaction-lab/docs/kata-saga.md" target="_blank">
-      📖 Guide kata SAGA →
+      Guide kata SAGA &#x2192;
     </a>
   </div>
 
@@ -44,21 +62,21 @@ sequenceDiagram
   <div class="saga-topology card">
     <h3>Topologie des topics Kafka</h3>
     <div class="topology-flow">
-      <div class="topic-node topic-start">commande‑créée</div>
-      <div class="topic-arrow">→</div>
-      <div class="topic-node">articles‑réservés</div>
-      <div class="topic-arrow">→</div>
-      <div class="topic-node">paiement‑effectué</div>
-      <div class="topic-arrow">→</div>
-      <div class="topic-node topic-end">✅ email</div>
+      <div class="topic-node topic-start">commande-cr&eacute;&eacute;e</div>
+      <div class="topic-arrow">&#x2192;</div>
+      <div class="topic-node">articles-r&eacute;serv&eacute;s</div>
+      <div class="topic-arrow">&#x2192;</div>
+      <div class="topic-node">paiement-effectu&eacute;</div>
+      <div class="topic-arrow">&#x2192;</div>
+      <div class="topic-node topic-end">email envoy&eacute;</div>
     </div>
     <div class="topology-compensation">
       <span class="comp-label">Compensation :</span>
-      <div class="topic-node topic-fail">paiement‑échoué</div>
-      <div class="topic-arrow">→</div>
-      <div class="topic-node topic-comp">articles‑libérés</div>
-      <div class="topic-arrow">→</div>
-      <div class="topic-node topic-comp">🔄 commande annulée</div>
+      <div class="topic-node topic-fail">paiement-&eacute;chou&eacute;</div>
+      <div class="topic-arrow">&#x2192;</div>
+      <div class="topic-node topic-comp">articles-lib&eacute;r&eacute;s</div>
+      <div class="topic-arrow">&#x2192;</div>
+      <div class="topic-node topic-comp">commande annul&eacute;e</div>
     </div>
   </div>
 
@@ -74,16 +92,16 @@ sequenceDiagram
                   [class.active]="form.productId === p.id"
                   (click)="selectProduct(p.id)">
             <span class="product-name">{{ p.name }}</span>
-            <span class="product-price">{{ p.price }}€</span>
+            <span class="product-price">{{ p.price }}&euro;</span>
           </button>
         }
       </div>
 
       <div class="form-row">
-        <label>Quantité
+        <label>Quantit&eacute;
           <input type="number" [(ngModel)]="form.quantity" min="1" max="10" />
         </label>
-        <label>Montant calculé
+        <label>Montant calcul&eacute;
           <input type="number" [(ngModel)]="form.amount" [readonly]="!form.forceFailPayment" />
         </label>
       </div>
@@ -91,27 +109,28 @@ sequenceDiagram
       <div class="form-row form-row--checkbox">
         <label class="checkbox-label">
           <input type="checkbox" [(ngModel)]="form.forceFailPayment" />
-          <span>💥 Forcer l'échec du paiement — déclenche la compensation</span>
+          <span>Forcer l'&eacute;chec du paiement &mdash; d&eacute;clenche la compensation</span>
         </label>
       </div>
 
       @if (form.forceFailPayment) {
         <div class="alert alert--warning">
-          ⚠️ Le montant sera forcé à 99 999€ → paiement refusé →
-          le stock sera <strong>libéré automatiquement</strong> si le kata de compensation est implémenté.
+          Le montant sera forc&eacute; &agrave; 99&nbsp;999&euro; &mdash; paiement refus&eacute; &mdash;
+          le stock sera <strong>lib&eacute;r&eacute; automatiquement</strong> si le kata de compensation est impl&eacute;ment&eacute;.
         </div>
       }
 
       <button class="btn btn--primary" (click)="placeOrder()" [disabled]="loading()">
-        {{ loading() ? 'Traitement…' : '🛒 Passer la commande' }}
+        @if (loading()) { Traitement... }
+        @else { Passer la commande }
       </button>
     </div>
 
-    <!-- Stock en temps réel -->
+    <!-- Stock en temps reel -->
     <div class="inventory card">
-      <h3>Stock en temps réel</h3>
+      <h3>Stock en temps r&eacute;el</h3>
       <table class="inventory-table">
-        <thead><tr><th>Produit</th><th>Stock</th><th>Réservé</th><th>Disponible</th></tr></thead>
+        <thead><tr><th>Produit</th><th>Stock</th><th>R&eacute;serv&eacute;</th><th>Disponible</th></tr></thead>
         <tbody>
           @for (item of inventory(); track item.productId) {
             <tr>
@@ -127,10 +146,10 @@ sequenceDiagram
 
   </div>
 
-  <!-- Commandes récentes -->
+  <!-- Commandes recentes -->
   @if (orders().length > 0) {
     <div class="orders-list card">
-      <h3>Commandes récentes <span class="live-badge">● LIVE</span></h3>
+      <h3>Commandes r&eacute;centes <span class="live-badge">LIVE</span></h3>
       <div class="orders-scroll">
         @for (order of orders(); track order.id) {
           <div class="order-row" [class.order-active]="activeOrderId() === order.id"
@@ -140,7 +159,7 @@ sequenceDiagram
             <div class="order-meta">
               <span class="order-id">#{{ order.id }}</span>
               <span class="order-product">{{ order.productId }}</span>
-              <span class="order-amount">{{ order.amount | number:'1.2-2' }}€</span>
+              <span class="order-amount">{{ order.amount | number:'1.2-2' }}&euro;</span>
             </div>
             <div class="order-status">
               <span class="status-badge" [class]="'status--' + order.status.toLowerCase()">
@@ -149,11 +168,11 @@ sequenceDiagram
             </div>
             @if (!isTerminal(order.status)) {
               <div class="saga-progress">
-                <div class="progress-dot" [class.done]="['INVENTORY_RESERVED','PAYMENT_PROCESSING','CONFIRMED'].includes(order.status)">📦</div>
+                <div class="progress-dot" [class.done]="['INVENTORY_RESERVED','PAYMENT_PROCESSING','CONFIRMED'].includes(order.status)">S</div>
                 <div class="progress-line"></div>
-                <div class="progress-dot" [class.done]="['PAYMENT_PROCESSING','CONFIRMED'].includes(order.status)">💳</div>
+                <div class="progress-dot" [class.done]="['PAYMENT_PROCESSING','CONFIRMED'].includes(order.status)">P</div>
                 <div class="progress-line"></div>
-                <div class="progress-dot" [class.done]="order.status === 'CONFIRMED'">✅</div>
+                <div class="progress-dot" [class.done]="order.status === 'CONFIRMED'">OK</div>
               </div>
             }
           </div>
@@ -161,5 +180,67 @@ sequenceDiagram
       </div>
     </div>
   }
+
+  <!-- Orchestr&eacute;e vs Chor&eacute;graphi&eacute;e -->
+  <div class="card" style="margin-top:1.5rem">
+    <h3>Orchestr&eacute;e vs Chor&eacute;graphi&eacute;e</h3>
+    <div class="arch-grid">
+
+      <div class="arch-card">
+        <div class="arch-title">Orchestr&eacute;e</div>
+        <p class="arch-desc">
+          Un coordinateur central envoie des commandes &agrave; chaque service.
+          Il contr&ocirc;le le flux et d&eacute;cide des compensations.
+          Plus facile &agrave; d&eacute;boguer, couplage fort au coordinateur.
+        </p>
+        <span class="arch-badge">Axon Framework</span>
+        &nbsp;
+        <span class="arch-badge">Temporal</span>
+      </div>
+
+      <div class="arch-card">
+        <div class="arch-title">Chor&eacute;graphi&eacute;e</div>
+        <p class="arch-desc">
+          Chaque service r&eacute;agit &agrave; des &eacute;v&egrave;nements Kafka sans coordinateur.
+          Plus r&eacute;silient et d&eacute;coupl&eacute;, mais le flux global est difficile &agrave; tracer.
+        </p>
+        <span class="arch-badge">Kafka Events</span>
+        &nbsp;
+        <span class="arch-badge">Spring + Kafka</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Simulation SAGA locale -->
+  <div class="saga-sim card">
+    <h3>Simulation SAGA : pipeline de commande</h3>
+    <div class="sim-pipeline">
+      @for (step of sagaSteps(); track step.label; let i = $index) {
+        @if (i > 0) { <div class="sim-connector"></div> }
+        <div class="sim-step-box"
+             [class.sim-step-box--running]="step.status === 'running'"
+             [class.sim-step-box--done]="step.status === 'done'"
+             [class.sim-step-box--failed]="step.status === 'failed'"
+             [class.sim-step-box--compensating]="step.status === 'compensating'">
+          {{ step.label }}
+          @if (step.status === 'compensating') {
+            <div style="font-size:.7rem;margin-top:.2rem">compensation</div>
+          }
+        </div>
+      }
+    </div>
+    <div class="form-actions">
+      <button class="btn btn--primary" (click)="runSaga()" [disabled]="sagaRunning()">
+        Lancer commande
+      </button>
+      <button class="btn btn--danger" (click)="runSagaFail()" [disabled]="sagaRunning()">
+        Simuler &eacute;chec paiement
+      </button>
+      <button class="btn btn--ghost" (click)="resetSaga()">
+        R&eacute;initialiser
+      </button>
+    </div>
+  </div>
 
 </section>

@@ -16,7 +16,7 @@
 
   <!-- ── Intro narrative ────────────────────────────────────────── -->
   <div class="narrative-card">
-    <div class="narrative-scene">🛒 Au supermarché</div>
+    <div class="narrative-scene">Au supermarché</div>
     <p class="narrative-text">
       Il y a <strong>{{ nCaisses }} caisses ouvertes</strong> et
       <strong>{{ nClients }} clients</strong> à servir.
@@ -28,24 +28,111 @@
     </p>
     <div class="narrative-split">
       <div class="narrative-option bad">
-        <span class="narrative-option-title">😤 synchronized</span>
+        <span class="narrative-option-title">synchronized</span>
         <span class="narrative-option-desc">
           Le caissier reste planté. Il attend. Il bloque la caisse entière.
           Quand tous les caissiers attendent en même temps → <strong>le supermarché freeze</strong>.
         </span>
       </div>
       <div class="narrative-option good">
-        <span class="narrative-option-title">😊 ReentrantLock</span>
+        <span class="narrative-option-title">ReentrantLock</span>
         <span class="narrative-option-desc">
-          Le caissier dit "prenez votre temps" et se libère.
-          Il revient dès que la carte est prête. Les autres clients avancent. <strong>Throughput maintenu.</strong>
+          Le caissier lance l'attente, puis se libère presque aussitôt.
+          Quand la carte est prête, il revient finir l'encaissement. <strong>Throughput maintenu.</strong>
         </span>
       </div>
     </div>
     <p class="narrative-conclusion">
       En Java : le "client qui cherche sa carte" = l'I/O (appel BDD, requête HTTP).
-      Le "caissier" = le carrier OS. Lance la simulation 👇
+      Le "caissier" = le carrier OS. Lance la simulation.
     </p>
+  </div>
+
+  <div class="pinning-guide">
+    <section class="pinning-guide-card">
+      <h3>Ta lecture est la bonne</h3>
+      <p>
+        Avec <code>ReentrantLock</code>, le carrier ressemble à un caissier mobile :
+        il passe rapidement d'une caisse à l'autre pour démarrer ou terminer une opération,
+        puis laisse le client attendre sans immobiliser la caisse.
+      </p>
+      <p>
+        Avec <code>synchronized</code> en Java 21, le carrier reste attaché à la caisse
+        pendant toute l'attente. Il ne peut pas aller aider ailleurs, même si le virtual thread
+        ne fait rien de CPU à ce moment-là.
+      </p>
+    </section>
+
+    <section class="pinning-guide-card">
+      <h3>Traduction Java</h3>
+      <div class="pinning-map">
+        <span>Client</span><strong>Virtual thread</strong>
+        <span>Caissier</span><strong>Carrier / OS thread</strong>
+        <span>Chercher la carte</span><strong>I/O bloquante</strong>
+        <span>Caisse immobilisée</span><strong>Pinning</strong>
+      </div>
+    </section>
+  </div>
+
+  <div class="pinning-visuals">
+    <section class="pinning-chart-card">
+      <div class="pinning-chart-head">
+        <h3>Carrier pendant une attente I/O</h3>
+        <span>même attente, impact différent</span>
+      </div>
+
+      <div class="timeline-compare">
+        <div class="timeline-row sync">
+          <div class="timeline-label">synchronized</div>
+          <div class="timeline-track">
+            <span class="segment cpu">entrée lock</span>
+            <span class="segment wait">attente I/O : carrier bloqué</span>
+            <span class="segment cpu">sortie</span>
+          </div>
+        </div>
+
+        <div class="timeline-row lock">
+          <div class="timeline-label">ReentrantLock</div>
+          <div class="timeline-track">
+            <span class="segment cpu">lock</span>
+            <span class="segment parked">VT parqué</span>
+            <span class="segment free">carrier libre</span>
+            <span class="segment cpu">reprise</span>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        Dans les deux cas, la ressource protégée reste exclusive. La différence est le coût caché :
+        avec <code>synchronized</code>, l'attente consomme un carrier ; avec <code>ReentrantLock</code>,
+        le scheduler peut le réutiliser.
+      </p>
+    </section>
+
+    <section class="pinning-chart-card">
+      <div class="pinning-chart-head">
+        <h3>Ce que fait le scheduler</h3>
+        <span>vue simplifiée</span>
+      </div>
+
+      <div class="scheduler-flow">
+        <div class="flow-node vt">Virtual thread</div>
+        <div class="flow-arrow">demande I/O</div>
+        <div class="flow-node io">Attente</div>
+        <div class="flow-split">
+          <div class="flow-path bad">
+            <strong>synchronized</strong>
+            <span>VT attaché au carrier</span>
+            <em>moins de carriers disponibles</em>
+          </div>
+          <div class="flow-path good">
+            <strong>ReentrantLock</strong>
+            <span>VT parqué</span>
+            <em>carrier rendu au pool</em>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 
   <!-- ── Simulation ─────────────────────────────────────────────── -->
@@ -79,8 +166,8 @@
 
       <!-- Platform / synchronized -->
       <div class="sim-side">
-        <div class="sim-title">synchronized 🔒</div>
-        <div class="sim-subtitle">Caissier bloqué — attend la carte bleue</div>
+        <div class="sim-title">synchronized</div>
+        <div class="sim-subtitle">Un carrier reste bloqué sur une seule caisse</div>
 
         <div class="supermarche-caisses">
           <div *ngFor="let c of pCaisses; trackBy: trackById"
@@ -132,8 +219,8 @@
 
       <!-- Virtual / ReentrantLock -->
       <div class="sim-side">
-        <div class="sim-title">ReentrantLock 🟢</div>
-        <div class="sim-subtitle">Caissier libre pendant la recherche de carte</div>
+        <div class="sim-title">ReentrantLock</div>
+        <div class="sim-subtitle">Le carrier se libère et revient quand c'est prêt</div>
 
         <div class="supermarche-caisses">
           <div *ngFor="let c of vCaisses; trackBy: trackById"
@@ -195,6 +282,16 @@
 
   <!-- ── Explication résultats ───────────────────────────────────── -->
   <div class="results-explain">
+    <div class="pinning-takeaway">
+      <h3>Le point important</h3>
+      <p>
+        <code>ReentrantLock</code> ne rend pas la section critique parallèle :
+        un lock partagé reste un passage un par un. La différence, c'est ce qui arrive
+        pendant l'attente. Avec <code>synchronized</code>, l'attente garde un carrier.
+        Avec <code>ReentrantLock</code>, l'attente parque le virtual thread et rend le carrier au scheduler.
+      </p>
+    </div>
+
     <div class="result-explain-grid">
       <div class="result-box blue">
         <div class="result-box-label">Sans lock</div>

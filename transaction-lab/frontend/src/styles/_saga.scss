@@ -99,6 +99,84 @@
   &.status--compensation_in_progress { background: color-mix(in srgb, var(--warning) 15%, transparent); color: var(--warning); }
 }
 
+// ── Architecture cards ────────────────────────────────────────
+.arch-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: .75rem;
+
+  @media (max-width: 600px) { grid-template-columns: 1fr; }
+}
+
+.arch-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+
+.arch-title { font-size: .95rem; font-weight: 700; color: var(--text-primary); margin-bottom: .5rem; }
+.arch-desc  { font-size: .83rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: .75rem; }
+
+.arch-badge {
+  display: inline-block;
+  padding: .18rem .55rem;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 600;
+  background: color-mix(in srgb, var(--info) 12%, transparent);
+  color: var(--info);
+  border: 1px solid color-mix(in srgb, var(--info) 25%, transparent);
+}
+
+// ── SAGA simulation ───────────────────────────────────────────
+.saga-sim { margin-top: 1.5rem; }
+
+.sim-pipeline {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow-x: auto;
+  padding: 1rem 0;
+}
+
+.sim-step-box {
+  flex-shrink: 0;
+  min-width: 90px;
+  padding: .6rem .9rem;
+  border-radius: var(--radius-sm);
+  font-size: .83rem;
+  font-weight: 600;
+  border: 2px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  text-align: center;
+  transition: border-color .25s, background .25s, color .25s;
+
+  &--running     { border-color: var(--info);    color: var(--info);    background: color-mix(in srgb, var(--info)    8%, var(--bg-card)); animation: pulse .8s ease-in-out infinite; }
+  &--done        { border-color: var(--success); color: var(--success); background: color-mix(in srgb, var(--success) 8%, var(--bg-card)); }
+  &--failed      { border-color: var(--danger);  color: var(--danger);  background: color-mix(in srgb, var(--danger)  8%, var(--bg-card)); }
+  &--compensating{ border-color: var(--warning); color: var(--warning); background: color-mix(in srgb, var(--warning) 8%, var(--bg-card)); }
+}
+
+.sim-connector {
+  flex-shrink: 0;
+  width: 28px;
+  height: 2px;
+  background: var(--border);
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: -1px;
+    top: -4px;
+    border: 5px solid transparent;
+    border-left-color: var(--border);
+  }
+}
+
 .saga-progress { display: flex; align-items: center; gap: .25rem; }
 .progress-dot  { font-size: .8rem; opacity: .3; transition: opacity .3s; &.done { opacity: 1; } }
 .progress-line { width: 20px; height: 1px; background: var(--border); }

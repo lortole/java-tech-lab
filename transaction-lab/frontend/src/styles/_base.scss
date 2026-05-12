@@ -1,0 +1,130 @@
+// ── BASE module ───────────────────────────────────────────────
+
+// Tab indicator
+.tab-btn.active.tab-base { border-bottom-color: #7c3aed; }
+
+// ── Intro (scoped) ────────────────────────────────────────────
+.module-base {
+  .module-intro {
+    background: color-mix(in srgb, #7c3aed 4%, var(--bg-card));
+    border: 1px solid color-mix(in srgb, #7c3aed 20%, var(--border));
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .intro-title { font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: .6rem; }
+  .intro-desc  { font-size: .875rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: .5rem; }
+}
+
+// ── ACID vs BASE comparison table ────────────────────────────
+.base-compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .84rem;
+  margin-top: .75rem;
+
+  th, td { padding: .45rem .75rem; border-bottom: 1px solid var(--border); text-align: left; }
+  th     { color: var(--text-muted); font-weight: 600; background: var(--bg-secondary); }
+  th:nth-child(2) { color: var(--accent-acid); }
+  th:nth-child(3) { color: #7c3aed; }
+  td:first-child  { font-weight: 600; color: var(--text-primary); }
+}
+
+.base-plus { color: var(--success); font-weight: 600; }
+
+// ── Node simulation ───────────────────────────────────────────
+.base-sim { margin-top: 0; }
+
+.base-nodes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: .75rem 0;
+
+  @media (max-width: 600px) { grid-template-columns: 1fr; }
+}
+
+.base-node {
+  padding: 1rem;
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+  background: var(--bg-secondary);
+  text-align: center;
+  transition: border-color .4s, background .4s;
+
+  &.synced  {
+    border-color: var(--success);
+    background: color-mix(in srgb, var(--success) 8%, var(--bg-card));
+  }
+  &.stale   {
+    border-color: var(--warning);
+    background: color-mix(in srgb, var(--warning) 8%, var(--bg-card));
+  }
+  &.outdated {
+    border-color: var(--danger);
+    background: color-mix(in srgb, var(--danger) 8%, var(--bg-card));
+  }
+}
+
+.base-node-label { font-size: .72rem; color: var(--text-muted); margin-bottom: .4rem; }
+.base-node-value { font-size: 1.2rem; font-weight: 700; color: var(--text-primary); }
+
+.convergence-label {
+  display: inline-block;
+  padding: .3rem .85rem;
+  background: color-mix(in srgb, var(--success) 14%, transparent);
+  color: var(--success);
+  border: 1px solid color-mix(in srgb, var(--success) 30%, transparent);
+  border-radius: 999px;
+  font-size: .82rem;
+  font-weight: 600;
+  margin-bottom: .75rem;
+}
+
+// ── Use-case cards ────────────────────────────────────────────
+.base-usecases {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: .75rem;
+
+  @media (max-width: 600px) { grid-template-columns: 1fr; }
+}
+
+.base-usecase-card {
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.base-usecase-title { font-size: .9rem; font-weight: 700; color: var(--text-primary); margin-bottom: .4rem; }
+.base-usecase-desc  { font-size: .82rem; color: var(--text-secondary); line-height: 1.6; }
+
+// ── CAP link ──────────────────────────────────────────────────
+.base-cap-link { margin-top: 1.5rem; }
+
+.base-cap-arrow {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  flex-wrap: wrap;
+}
+
+.base-cap-badge {
+  padding: .3rem .8rem;
+  border-radius: var(--radius-sm);
+  font-size: .85rem;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--info) 14%, transparent);
+  color: var(--info);
+  border: 1px solid color-mix(in srgb, var(--info) 30%, transparent);
+
+  &--base {
+    background: color-mix(in srgb, #7c3aed 14%, transparent);
+    color: #7c3aed;
+    border-color: color-mix(in srgb, #7c3aed 30%, transparent);
+  }
+}
+
+.base-cap-connector { font-size: 1.4rem; color: var(--text-muted); }

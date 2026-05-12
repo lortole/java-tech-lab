@@ -72,7 +72,7 @@ export class BenchTabComponent implements OnInit, OnDestroy {
     this.loading = true; this.error = null; this.result = null;
     this.benchService.getBenchResult(this.taskCount).subscribe({
       next:  r => { this.result = r; this.loading = false; },
-      error: () => { this.error = 'Backend non disponible — lancez le Spring Boot sur :8080'; this.loading = false; }
+      error: () => { this.error = 'Backend non disponible — lancez le Spring Boot sur :8082'; this.loading = false; }
     });
   }
 

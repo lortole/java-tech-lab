@@ -1,1 +1,262 @@
+.pinning-guide {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 1rem;
+}
 
+.pinning-guide-card,
+.pinning-takeaway,
+.pinning-chart-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.15rem;
+
+  h3 {
+    color: var(--text);
+    font-size: 1rem;
+    margin-bottom: 0.65rem;
+  }
+
+  p {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    margin-bottom: 0.55rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  code {
+    background: rgba(70, 149, 235, 0.12);
+    color: var(--blue);
+    border-radius: 3px;
+    padding: 0.08rem 0.32rem;
+    font-size: 0.9em;
+  }
+}
+
+.pinning-visuals {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 1rem;
+}
+
+.pinning-chart-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+
+  h3 {
+    margin-bottom: 0;
+  }
+
+  span {
+    color: var(--text-dim);
+    font-size: 0.76rem;
+  }
+}
+
+.timeline-compare {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.timeline-row {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.timeline-label {
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.timeline-track {
+  display: grid;
+  grid-template-columns: 0.8fr 2.4fr 0.8fr;
+  gap: 0.35rem;
+  min-height: 2.45rem;
+}
+
+.timeline-row.lock .timeline-track {
+  grid-template-columns: 0.7fr 1fr 1.5fr 0.8fr;
+}
+
+.segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 0.45rem 0.35rem;
+  min-width: 0;
+  color: var(--text);
+  font-size: 0.74rem;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.segment.cpu {
+  background: rgba(70, 149, 235, 0.1);
+  border-color: rgba(70, 149, 235, 0.32);
+  color: var(--blue);
+}
+
+.segment.wait {
+  background: rgba(226, 75, 74, 0.12);
+  border-color: rgba(226, 75, 74, 0.38);
+  color: #f0a0a0;
+}
+
+.segment.parked {
+  background: rgba(186, 117, 23, 0.12);
+  border-color: rgba(186, 117, 23, 0.36);
+  color: #fac775;
+}
+
+.segment.free {
+  background: rgba(29, 158, 117, 0.12);
+  border-color: rgba(29, 158, 117, 0.36);
+  color: #8ed8bc;
+}
+
+.scheduler-flow {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.flow-node {
+  border-radius: 8px;
+  padding: 0.75rem 0.9rem;
+  text-align: center;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.flow-node.vt {
+  background: rgba(70, 149, 235, 0.1);
+  border: 1px solid rgba(70, 149, 235, 0.3);
+  color: var(--blue);
+}
+
+.flow-node.io {
+  background: rgba(186, 117, 23, 0.1);
+  border: 1px solid rgba(186, 117, 23, 0.3);
+  color: #fac775;
+}
+
+.flow-arrow {
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  text-align: center;
+
+  &::before,
+  &::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 0.45rem;
+    background: var(--border);
+    margin: 0.15rem auto;
+  }
+}
+
+.flow-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+}
+
+.flow-path {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-height: 7rem;
+  border-radius: 8px;
+  padding: 0.75rem;
+
+  strong {
+    color: var(--text);
+    font-size: 0.82rem;
+  }
+
+  span {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+
+  em {
+    margin-top: auto;
+    font-style: normal;
+    font-size: 0.74rem;
+    font-weight: 700;
+  }
+}
+
+.flow-path.bad {
+  background: rgba(226, 75, 74, 0.09);
+  border: 1px solid rgba(226, 75, 74, 0.32);
+
+  em {
+    color: #f0a0a0;
+  }
+}
+
+.flow-path.good {
+  background: rgba(29, 158, 117, 0.09);
+  border: 1px solid rgba(29, 158, 117, 0.32);
+
+  em {
+    color: #8ed8bc;
+  }
+}
+
+.pinning-map {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 0.45rem 0.75rem;
+  align-items: center;
+
+  span {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+  }
+
+  strong {
+    color: var(--text);
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+}
+
+.pinning-takeaway {
+  border-left: 3px solid var(--blue);
+  border-radius: 0 8px 8px 0;
+}
+
+@media (max-width: 760px) {
+  .pinning-guide,
+  .pinning-visuals {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline-row {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+
+  .flow-split {
+    grid-template-columns: 1fr;
+  }
+}

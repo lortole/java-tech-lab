@@ -17,7 +17,7 @@
 
 .home-hero {
   margin: -2.5rem -2.5rem 2.5rem;
-  background: linear-gradient(135deg, #0a0d1a 0%, #12102b 45%, #0d1b38 100%);
+  background: var(--bg-hero);
   padding: 4rem 3rem;
   position: relative;
   overflow: hidden;
@@ -145,7 +145,7 @@
 
 .modules-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
 }
 
@@ -179,6 +179,11 @@
     border-color: color-mix(in srgb, var(--accent-saga) 35%, var(--border));
     background: color-mix(in srgb, var(--accent-saga) 4%, var(--bg-card));
   }
+  &--base {
+    border-color: color-mix(in srgb, #a855f7 35%, var(--border));
+    background: color-mix(in srgb, #a855f7 4%, var(--bg-card));
+  }
+  &:nth-child(4) { animation-delay: .42s; }
 }
 
 .module-card-icon {
@@ -273,6 +278,11 @@
     background: color-mix(in srgb, var(--danger) 14%, transparent);
     color: var(--danger);
     border: 1px solid color-mix(in srgb, var(--danger) 30%, transparent);
+  }
+  &--expert {
+    background: color-mix(in srgb, #a855f7 14%, transparent);
+    color: #a855f7;
+    border: 1px solid color-mix(in srgb, #a855f7 30%, transparent);
   }
 }
 
@@ -395,11 +405,56 @@
 
 .footer-author { font-size: .8rem; color: var(--text-muted); }
 
+// ── Parcours recommande ───────────────────────────────────────
+
+.parcours {
+  display: flex;
+  align-items: flex-start;
+  gap: .75rem;
+  flex-wrap: wrap;
+}
+
+.parcours-arrow {
+  color: var(--accent-acid);
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  margin-top: 1.6rem;
+  align-self: flex-start;
+}
+
+.parcours-step {
+  flex: 1;
+  min-width: 150px;
+  padding: 1rem .875rem;
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  text-align: center;
+
+  &.junior  { border-color: color-mix(in srgb, var(--success) 50%, var(--border)); }
+  &.confirme{ border-color: color-mix(in srgb, var(--warning) 50%, var(--border)); }
+  &.senior  { border-color: color-mix(in srgb, var(--danger) 50%, var(--border)); }
+  &.expert  { border-color: #a855f7; }
+}
+
+.parcours-step-icon    { font-size: 1.8rem; line-height: 1; margin-bottom: .4rem; }
+.parcours-step-title   { font-size: 1rem; font-weight: 700; color: var(--text-primary); margin: .35rem 0 .2rem; }
+.parcours-step-subtitle{ font-size: .75rem; color: var(--text-secondary); margin-bottom: .4rem; font-weight: 500; }
+.parcours-step-desc    { font-size: .75rem; color: var(--text-muted); line-height: 1.5; }
+
+.badge-expert { background: #a855f7; color: #fff; border-radius: 999px; padding: .18rem .55rem; font-size: .68rem; font-weight: 700; }
+
 // ── Responsive ───────────────────────────────────────────────
+
+@media (max-width: 900px) {
+  .modules-grid { grid-template-columns: repeat(2, 1fr); }
+}
 
 @media (max-width: 720px) {
   .modules-grid { grid-template-columns: 1fr; }
   .kata-card    { flex-direction: column; gap: .75rem; }
+  .parcours     { flex-direction: column; }
+  .parcours-arrow { margin: 0 auto; transform: rotate(90deg); }
 }
 
 @media (max-width: 480px) {

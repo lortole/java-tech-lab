@@ -1,0 +1,208 @@
+<section class="module-base">
+
+  <!-- Section 1 — Intro + SVG -->
+  <div class="module-intro">
+    <h3 class="intro-title">BASE &mdash; La coh&eacute;rence &eacute;ventuelle</h3>
+    <p class="intro-desc">
+      <strong>B</strong>asically <strong>A</strong>vailable &middot;
+      <strong>S</strong>oft state &middot;
+      <strong>E</strong>ventually consistent
+    </p>
+    <p class="intro-desc">
+      Quand la coh&eacute;rence forte devient un luxe &mdash; BASE est le compromis adopt&eacute;
+      par Cassandra, Redis, DynamoDB et CouchDB pour privil&eacute;gier la disponibilit&eacute;
+      et la performance &agrave; grande &eacute;chelle.
+    </p>
+
+    <!-- Section 3 — SVG coherence eventuelle -->
+    <svg viewBox="0 0 700 220" width="100%" xmlns="http://www.w3.org/2000/svg">
+      <text x="195" y="22" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" style="fill:var(--text-primary,#1a202c)">T0 (ecriture)</text>
+      <text x="385" y="22" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" style="fill:var(--text-primary,#1a202c)">T1 (+1.2s)</text>
+      <text x="575" y="22" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" style="fill:var(--text-primary,#1a202c)">T2 (+2.8s)</text>
+      <text x="38" y="75" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" style="fill:var(--text-primary,#1a202c)">Node A</text>
+      <text x="38" y="131" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" style="fill:var(--text-primary,#1a202c)">Node B</text>
+      <text x="38" y="187" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" style="fill:var(--text-primary,#1a202c)">Node C</text>
+      <!-- T0 -->
+      <rect x="135" y="56" width="120" height="36" rx="4" fill="#3b82f6"/>
+      <text x="195" y="79" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">v2 [ecrit]</text>
+      <rect x="135" y="112" width="120" height="36" rx="4" fill="#ef4444"/>
+      <text x="195" y="135" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">v1</text>
+      <rect x="135" y="168" width="120" height="36" rx="4" fill="#ef4444"/>
+      <text x="195" y="191" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">v1</text>
+      <!-- Arrows T0 -> T1 -->
+      <line x1="255" y1="74"  x2="313" y2="74"  stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <polygon points="311,69 323,74 311,79"   fill="#3b82f6"/>
+      <line x1="255" y1="130" x2="313" y2="130" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <polygon points="311,125 323,130 311,135" fill="#94a3b8"/>
+      <line x1="255" y1="186" x2="313" y2="186" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <polygon points="311,181 323,186 311,191" fill="#94a3b8"/>
+      <!-- T1 -->
+      <rect x="325" y="56"  width="120" height="36" rx="4" fill="#22c55e"/>
+      <text x="385" y="79"  text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">v2 [ok]</text>
+      <rect x="325" y="112" width="120" height="36" rx="4" fill="#3b82f6"/>
+      <text x="385" y="135" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">v2 [propage]</text>
+      <rect x="325" y="168" width="120" height="36" rx="4" fill="#ef4444"/>
+      <text x="385" y="191" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#fff">v1 [obsolete]</text>
+      <!-- Arrows T1 -> T2 -->
+      <line x1="445" y1="74"  x2="503" y2="74"  stroke="#22c55e" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <polygon points="501,69 513,74 501,79"   fill="#22c55e"/>
+      <line x1="445" y1="130" x2="503" y2="130" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <polygon points="501,125 513,130 501,135" fill="#22c55e"/>
+      <line x1="445" y1="186" x2="503" y2="186" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <polygon points="501,181 513,186 501,191" fill="#3b82f6"/>
+      <!-- T2 (convergence) -->
+      <rect x="515" y="56"  width="120" height="36" rx="4" fill="#22c55e"/>
+      <text x="575" y="79"  text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">v2 [ok]</text>
+      <rect x="515" y="112" width="120" height="36" rx="4" fill="#22c55e"/>
+      <text x="575" y="135" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">v2 [ok]</text>
+      <rect x="515" y="168" width="120" height="36" rx="4" fill="#22c55e"/>
+      <text x="575" y="191" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">v2 [ok]</text>
+      <rect x="515" y="206" width="120" height="14" rx="3" fill="#22c55e" opacity="0.15"/>
+      <text x="575" y="217" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#22c55e">Convergence</text>
+    </svg>
+  </div>
+
+  <!-- Module header -->
+  <div class="module-header">
+    <h2>BASE &mdash; La coh&eacute;rence &eacute;ventuelle</h2>
+    <p class="module-desc">
+      Basically Available, Soft state, Eventually consistent.
+      Le mod&egrave;le de coh&eacute;rence adopt&eacute; par les bases NoSQL distribu&eacute;es.
+    </p>
+    <a class="doc-link" href="#" target="_blank">
+      Guide kata BASE &#x2192;
+    </a>
+  </div>
+
+  <!-- Section 2 — ACID vs BASE -->
+  <div class="card" style="margin-bottom:1.5rem">
+    <h3>ACID vs BASE</h3>
+    <table class="base-compare-table">
+      <thead>
+        <tr><th>Propri&eacute;t&eacute;</th><th>ACID</th><th>BASE</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Disponibilit&eacute;</td>
+          <td>Peut bloquer (verrous)</td>
+          <td class="base-plus">Toujours disponible</td>
+        </tr>
+        <tr>
+          <td>Coh&eacute;rence</td>
+          <td>Forte et imm&eacute;diate</td>
+          <td class="base-plus">Eventuelle (eventually)</td>
+        </tr>
+        <tr>
+          <td>Etat</td>
+          <td>Toujours valide</td>
+          <td>Temporairement inconsistant</td>
+        </tr>
+        <tr>
+          <td>Transactions</td>
+          <td>Tout ou rien</td>
+          <td>Best-effort</td>
+        </tr>
+        <tr>
+          <td>Exemples</td>
+          <td>PostgreSQL, MySQL</td>
+          <td>Cassandra, DynamoDB, Redis</td>
+        </tr>
+        <tr>
+          <td>Cas d'usage</td>
+          <td>Paiements, comptabilit&eacute;</td>
+          <td>R&eacute;seaux sociaux, IoT, cache</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Section 4 — Simulation coherence eventuelle -->
+  <div class="base-sim card">
+    <h3>Simulation : coh&eacute;rence &eacute;ventuelle</h3>
+    <p class="action-hint">
+      Cliquez "Ecrire v2 sur Node A". Node B se synchronise apr&egrave;s 1.2s,
+      Node C apr&egrave;s 2.8s. Le syst&egrave;me est temporairement inconsistant.
+    </p>
+    <div class="base-nodes">
+      <div class="base-node"
+           [class.synced]="nodes().a.status === 'synced'"
+           [class.stale]="nodes().a.status === 'stale'">
+        <div class="base-node-label">Node A (primaire)</div>
+        <div class="base-node-value">{{ nodeLabel(nodes().a) }}</div>
+      </div>
+      <div class="base-node"
+           [class.synced]="nodes().b.status === 'synced'"
+           [class.stale]="nodes().b.status === 'stale'">
+        <div class="base-node-label">Node B (+1.2s)</div>
+        <div class="base-node-value">{{ nodeLabel(nodes().b) }}</div>
+      </div>
+      <div class="base-node"
+           [class.synced]="nodes().c.status === 'synced'"
+           [class.stale]="nodes().c.status === 'stale'">
+        <div class="base-node-label">Node C (+2.8s)</div>
+        <div class="base-node-value">{{ nodeLabel(nodes().c) }}</div>
+      </div>
+    </div>
+    @if (converged()) {
+      <div class="convergence-label">
+        Convergence atteinte &mdash; tous les noeuds sont &agrave; jour
+      </div>
+    }
+    <div class="form-actions">
+      <button class="btn btn--primary" (click)="write()" [disabled]="writing()">
+        Ecrire "v2" sur Node A
+      </button>
+      <button class="btn btn--ghost" (click)="reset()">Reset</button>
+    </div>
+  </div>
+
+  <!-- Section 5 — Quand choisir BASE ? -->
+  <div class="card" style="margin-bottom:1.5rem">
+    <h3>Quand choisir BASE ?</h3>
+    <div class="base-usecases">
+
+      <div class="base-usecase-card">
+        <div class="base-usecase-title">R&eacute;seaux sociaux</div>
+        <p class="base-usecase-desc">
+          Compteur de likes, fil d'actualit&eacute;. Quelques secondes de d&eacute;calage
+          sont acceptables &mdash; la disponibilit&eacute; et la performance priment.
+        </p>
+      </div>
+
+      <div class="base-usecase-card">
+        <div class="base-usecase-title">IoT &amp; m&eacute;triques</div>
+        <p class="base-usecase-desc">
+          Millions de capteurs, pas besoin de coh&eacute;rence imm&eacute;diate.
+          Le throughput et la disponibilit&eacute; &agrave; grande &eacute;chelle priment.
+        </p>
+      </div>
+
+      <div class="base-usecase-card">
+        <div class="base-usecase-title">Cache distribu&eacute;</div>
+        <p class="base-usecase-desc">
+          Redis, sessions utilisateurs. L'invalidation &eacute;ventuelle est
+          acceptable pour les gains de performance.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Section 6 — Lien avec CAP -->
+  <div class="base-cap-link card">
+    <h3>Lien avec le th&eacute;or&egrave;me CAP</h3>
+    <p style="margin-bottom:.6rem;color:var(--text-secondary);font-size:.9rem">
+      BASE est la cons&eacute;quence directe du choix <strong>AP</strong> dans le th&eacute;or&egrave;me CAP.
+    </p>
+    <p style="margin-bottom:.75rem;color:var(--text-secondary);font-size:.9rem">
+      Si tu choisis Disponibilit&eacute; + Tol&eacute;rance aux partitions &rarr;
+      tu renonces &agrave; la coh&eacute;rence forte &rarr; tu acceptes BASE.
+    </p>
+    <div class="base-cap-arrow">
+      <span class="base-cap-badge">CAP (AP)</span>
+      <span class="base-cap-connector">&#x2192;</span>
+      <span class="base-cap-badge base-cap-badge--base">BASE</span>
+    </div>
+  </div>
+
+</section>

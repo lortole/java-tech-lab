@@ -28,17 +28,21 @@ export class AcidComponent implements OnInit {
   private api = environment.apiUrl;
 
   accounts = signal<Account[]>([]);
-  history = signal<HistoryEntry[]>([]);
+  history  = signal<HistoryEntry[]>([]);
   lastResult = signal<TransferResult | null>(null);
-  loading = signal(false);
-  error = signal<string | null>(null);
+  loading  = signal(false);
+  error    = signal<string | null>(null);
 
   form = { fromId: '', toId: '', amount: '', forceFailAfterDebit: false };
 
-  ngOnInit() {
-    this.loadAccounts();
-    this.loadHistory();
-  }
+  // ── Local simulation ─────────────────────────────────────
+  simBalanceA = signal(1000);
+  simBalanceB = signal(500);
+  simSteps    = signal<string[]>([]);
+  simRunning  = signal(false);
+  simStatus   = signal<'idle' | 'success' | 'rollback'>('idle');
+
+  ngOnInit() { this.loadAccounts(); this.loadHistory(); }
 
   loadAccounts() {
     this.http.get<Account[]>(`${this.api}/api/acid/accounts`)
@@ -55,11 +59,10 @@ export class AcidComponent implements OnInit {
     this.loading.set(true);
     this.lastResult.set(null);
     this.error.set(null);
-
     this.http.post<TransferResult>(`${this.api}/api/acid/transfer`, {
       fromAccountId: +this.form.fromId,
-      toAccountId: +this.form.toId,
-      amount: +this.form.amount,
+      toAccountId:   +this.form.toId,
+      amount:        +this.form.amount,
       forceFailAfterDebit: this.form.forceFailAfterDebit
     }).subscribe({
       next: r => {
@@ -68,12 +71,62 @@ export class AcidComponent implements OnInit {
         this.loadHistory();
         this.loading.set(false);
       },
-      error: () => { this.error.set('Erreur réseau'); this.loading.set(false); }
+      error: () => { this.error.set('Erreur reseau'); this.loading.set(false); }
     });
   }
 
   reset() {
     this.http.post(`${this.api}/api/acid/reset`, {})
       .subscribe(() => { this.loadAccounts(); this.loadHistory(); this.lastResult.set(null); });
+  }
+
+  simulateTransfer() {
+    this.resetSim();
+    this.simRunning.set(true);
+    setTimeout(() => {
+      this.simSteps.update(s => [...s, 'BEGIN TRANSACTION']);
+      setTimeout(() => {
+        this.simBalanceA.set(900);
+        this.simSteps.update(s => [...s, 'Debit A : 1000 -> 900']);
+        setTimeout(() => {
+          this.simBalanceB.set(600);
+          this.simSteps.update(s => [...s, 'Credit B : 500 -> 600']);
+          setTimeout(() => {
+            this.simSteps.update(s => [...s, 'COMMIT -- transaction validee']);
+            this.simStatus.set('success');
+            this.simRunning.set(false);
+          }, 800);
+        }, 800);
+      }, 800);
+    }, 400);
+  }
+
+  simulateFail() {
+    this.resetSim();
+    this.simRunning.set(true);
+    setTimeout(() => {
+      this.simSteps.update(s => [...s, 'BEGIN TRANSACTION']);
+      setTimeout(() => {
+        this.simBalanceA.set(900);
+        this.simSteps.update(s => [...s, 'Debit A : 1000 -> 900 (temporaire)']);
+        setTimeout(() => {
+          this.simSteps.update(s => [...s, 'PANNE -- exception lancee !']);
+          setTimeout(() => {
+            this.simBalanceA.set(1000);
+            this.simSteps.update(s => [...s, 'ROLLBACK -- etat initial restaure']);
+            this.simStatus.set('rollback');
+            this.simRunning.set(false);
+          }, 800);
+        }, 800);
+      }, 800);
+    }, 400);
+  }
+
+  resetSim() {
+    this.simBalanceA.set(1000);
+    this.simBalanceB.set(500);
+    this.simSteps.set([]);
+    this.simStatus.set('idle');
+    this.simRunning.set(false);
   }
 }

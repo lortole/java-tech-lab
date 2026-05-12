@@ -4,6 +4,102 @@
   gap: 1rem;
 }
 
+.bench-primer {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr 1fr;
+  gap: 0.85rem;
+}
+
+.bench-primer-card,
+.bench-timeline-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-card);
+  padding: 1rem 1.15rem;
+
+  h3 {
+    color: var(--text);
+    font-size: 1rem;
+    margin-bottom: 0.55rem;
+  }
+
+  p {
+    color: var(--text-muted);
+    font-size: 0.86rem;
+    line-height: 1.55;
+  }
+}
+
+.bench-chip-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem;
+
+  span {
+    border: 1px solid rgba(70, 149, 235, 0.25);
+    border-radius: 6px;
+    background: rgba(70, 149, 235, 0.08);
+    color: var(--blue);
+    padding: 0.45rem 0.5rem;
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+}
+
+.bench-timeline {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.bench-timeline-row {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: center;
+
+  strong {
+    color: var(--text);
+    font-size: 0.82rem;
+  }
+}
+
+.bench-track {
+  display: grid;
+  gap: 0.35rem;
+  min-height: 2.35rem;
+
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    padding: 0.45rem 0.35rem;
+    font-size: 0.74rem;
+    text-align: center;
+  }
+}
+
+.bench-track.platform {
+  grid-template-columns: 0.7fr 2.4fr 0.7fr;
+
+  span {
+    background: rgba(226, 75, 74, 0.1);
+    border: 1px solid rgba(226, 75, 74, 0.3);
+    color: #f0a0a0;
+  }
+}
+
+.bench-track.virtual {
+  grid-template-columns: 0.7fr 1fr 1.5fr 0.8fr;
+
+  span {
+    background: rgba(29, 158, 117, 0.1);
+    border: 1px solid rgba(29, 158, 117, 0.3);
+    color: #8ed8bc;
+  }
+}
+
 .io-panel {
   border: 1px solid var(--border-soft);
   border-radius: 8px;
@@ -132,8 +228,14 @@
 }
 
 @media (max-width: 760px) {
+  .bench-primer,
   .io-analogy {
     grid-template-columns: 1fr;
+  }
+
+  .bench-timeline-row {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
   }
 
   .io-caption {

@@ -1,9 +1,9 @@
 <div class="home-page">
 
-  <!-- Section 1 — Hero -->
+  <!-- Section 1 - Hero -->
   <section class="home-hero">
     <div class="hero-inner">
-      <div class="hero-badge">&#x1F9EA; Kata p&eacute;dagogique</div>
+      <div class="hero-badge">Kata p&eacute;dagogique</div>
       <h1 class="hero-title">Transaction Lab</h1>
       <p class="hero-subtitle">
         Explorez les patterns de transactions distribu&eacute;s en conditions r&eacute;elles
@@ -18,7 +18,7 @@
     </div>
   </section>
 
-  <!-- Section 2 — Pourquoi ce lab ? -->
+  <!-- Section 2 - Pourquoi ce lab ? -->
   <section class="why-section">
     <h2 class="section-title">Pourquoi ce lab&nbsp;?</h2>
     <div class="why-card">
@@ -36,13 +36,12 @@
     </div>
   </section>
 
-  <!-- Section 3 — Les 3 modules -->
+  <!-- Section 3 - Les 4 modules -->
   <section class="modules-section">
-    <h2 class="section-title">3 modules &agrave; explorer</h2>
+    <h2 class="section-title">4 modules &agrave; explorer</h2>
     <div class="modules-grid">
 
       <div class="module-card module-card--acid">
-        <span class="module-card-icon">&#x1F4B3;</span>
         <div class="module-card-body">
           <div class="module-card-header">
             <h3 class="module-card-title">ACID</h3>
@@ -68,7 +67,6 @@
       </div>
 
       <div class="module-card module-card--cap">
-        <span class="module-card-icon">&#x1F5A7;</span>
         <div class="module-card-body">
           <div class="module-card-header">
             <h3 class="module-card-title">CAP</h3>
@@ -94,7 +92,6 @@
       </div>
 
       <div class="module-card module-card--saga">
-        <span class="module-card-icon">&#x1F4E8;</span>
         <div class="module-card-body">
           <div class="module-card-header">
             <h3 class="module-card-title">SAGA</h3>
@@ -119,59 +116,81 @@
         </div>
       </div>
 
+
+      <div class="module-card module-card--base">
+        <div class="module-card-body">
+          <div class="module-card-header">
+            <h3 class="module-card-title">BASE</h3>
+            <span class="level-badge level-badge--expert">Expert</span>
+          </div>
+          <p class="module-card-desc">
+            D&eacute;couvrez la coh&eacute;rence &eacute;ventuelle.<br>
+            Basically Available, Soft state, Eventually consistent.
+          </p>
+          <div class="module-card-meta">
+            <p class="module-card-prereq">
+              <strong>Pr&eacute;requis&nbsp;:</strong> CAP, Cassandra, Redis
+            </p>
+            <p class="module-card-outcome">
+              <strong>Apr&egrave;s&nbsp;:</strong> Comprendre pourquoi Cassandra sacrifie la coh&eacute;rence pour la disponibilit&eacute;
+            </p>
+          </div>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="module-card-link">
+            Guide kata BASE &#x2192;
+          </a>
+        </div>
+      </div>
+
     </div>
   </section>
 
-  <!-- Section 4 — Parcours recommandé -->
+  <!-- Section 4 - Parcours recommande -->
   <section class="roadmap-section">
     <h2 class="section-title">Parcours recommand&eacute;</h2>
     <div class="roadmap-card">
-      <div class="roadmap-timeline">
+      <div class="parcours">
 
-        <div class="roadmap-step roadmap-step--start">
-          <div class="roadmap-dot">J</div>
-          <span class="roadmap-label">Junior</span>
+        <div class="parcours-step junior">
+          <span class="level-badge level-badge--junior">Junior</span>
+          <div class="parcours-step-title">ACID</div>
+          <div class="parcours-step-subtitle">Atomicit&eacute; &amp; Rollback</div>
+          <p class="parcours-step-desc">Comprenez les fondamentaux des transactions relationnelles</p>
         </div>
 
-        <div class="roadmap-connector"></div>
+        <div class="parcours-arrow">&#x2192;</div>
 
-        <div class="roadmap-step roadmap-step--acid">
-          <div class="roadmap-dot">1</div>
-          <span class="roadmap-label">ACID</span>
-          <span class="roadmap-sublabel">Atomicit&eacute;</span>
+        <div class="parcours-step confirme">
+          <span class="level-badge level-badge--confirmed">Confirm&eacute;</span>
+          <div class="parcours-step-title">CAP</div>
+          <div class="parcours-step-subtitle">Partition &amp; Coh&eacute;rence</div>
+          <p class="parcours-step-desc">Simulez le th&eacute;or&egrave;me de Brewer sur un cluster distribu&eacute;</p>
         </div>
 
-        <div class="roadmap-connector"></div>
+        <div class="parcours-arrow">&#x2192;</div>
 
-        <div class="roadmap-step roadmap-step--cap">
-          <div class="roadmap-dot">2</div>
-          <span class="roadmap-label">CAP</span>
-          <span class="roadmap-sublabel">Partition</span>
+        <div class="parcours-step senior">
+          <span class="level-badge level-badge--senior">Senior</span>
+          <div class="parcours-step-title">SAGA</div>
+          <div class="parcours-step-subtitle">Compensation distribu&eacute;e</div>
+          <p class="parcours-step-desc">Orchestrez des transactions multi-services avec Kafka</p>
         </div>
 
-        <div class="roadmap-connector"></div>
+        <div class="parcours-arrow">&#x2192;</div>
 
-        <div class="roadmap-step roadmap-step--saga">
-          <div class="roadmap-dot">3</div>
-          <span class="roadmap-label">SAGA</span>
-          <span class="roadmap-sublabel">Compensation</span>
-        </div>
-
-        <div class="roadmap-connector"></div>
-
-        <div class="roadmap-step roadmap-step--end">
-          <div class="roadmap-dot">E</div>
-          <span class="roadmap-label">Expert</span>
+        <div class="parcours-step expert">
+          <span class="level-badge level-badge--expert">Expert</span>
+          <div class="parcours-step-title">BASE</div>
+          <div class="parcours-step-subtitle">Coh&eacute;rence &eacute;ventuelle</div>
+          <p class="parcours-step-desc">Ma&icirc;trisez les compromis CAP/BASE des syst&egrave;mes distribu&eacute;s</p>
         </div>
 
       </div>
     </div>
   </section>
 
-  <!-- Section 5 — Objectif pédagogique -->
+  <!-- Section 5 - Objectif pedagogique -->
   <section class="kata-section">
     <div class="kata-card">
-      <span class="kata-icon">&#x1F393;</span>
       <div class="kata-content">
         <h2 class="kata-title">Objectif p&eacute;dagogique</h2>
         <p class="kata-text">
@@ -192,7 +211,7 @@
       target="_blank"
       rel="noopener noreferrer"
       class="footer-github">
-      &#x1F517; GitHub &mdash; lortole/java-tech-lab
+      GitHub &mdash; lortole/java-tech-lab
     </a>
     <span class="footer-author">Par Lo&iuml;c ORTOL&Eacute; &middot; Klanik</span>
   </footer>

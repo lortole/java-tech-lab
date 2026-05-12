@@ -2,6 +2,9 @@
 # Transaction Lab — Configuration Spring Boot
 # ─────────────────────────────────────────────────────────
 
+server:
+  port: ${PORT:8081}
+
 spring:
   application:
     name: transaction-lab

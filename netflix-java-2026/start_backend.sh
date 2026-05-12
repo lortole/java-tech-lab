@@ -7,7 +7,7 @@ echo ""
 echo "Netflix Java 2026 - Backend"
 echo "================================"
 echo "Java : $(java -version 2>&1 | head -1)"
-echo "URL  : http://localhost:8080"
+echo "URL  : http://localhost:8083"
 echo "================================"
 echo ""
 

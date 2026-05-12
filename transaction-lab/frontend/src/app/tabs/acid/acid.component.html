@@ -1,40 +1,56 @@
 <section class="module-acid">
 
   <div class="module-intro">
-    <h3 class="intro-title">ACID &mdash; Transactions relationnelles</h3>
     <div class="intro-concepts">
       <p class="concept-item"><strong>A</strong> &mdash; <strong>Atomicit&eacute;</strong>&nbsp;: tout ou rien. Si une &eacute;tape &eacute;choue, toutes les &eacute;critures sont annul&eacute;es.</p>
       <p class="concept-item"><strong>C</strong> &mdash; <strong>Coh&eacute;rence</strong>&nbsp;: la base reste dans un &eacute;tat valide avant et apr&egrave;s chaque transaction.</p>
       <p class="concept-item"><strong>I</strong> &mdash; <strong>Isolation</strong>&nbsp;: les transactions concurrentes ne se voient pas mutuellement avant le commit.</p>
       <p class="concept-item"><strong>D</strong> &mdash; <strong>Durabilit&eacute;</strong>&nbsp;: apr&egrave;s un commit, les donn&eacute;es survivent aux pannes syst&egrave;me.</p>
     </div>
-    <div class="mermaid">
-sequenceDiagram
-    participant C as Client
-    participant T as Spring
-    participant DB as Database
-    C->>T: virement(100&euro;)
-    T->>DB: BEGIN
-    T->>DB: d&eacute;bit compte A
-    alt panne simul&eacute;e
-        T->>DB: ROLLBACK
-        DB-->>C: &eacute;tat restaur&eacute;
-    else succ&egrave;s
-        T->>DB: cr&eacute;dit compte B
-        T->>DB: COMMIT
-        DB-->>C: OK
-    end
-    </div>
+    <svg viewBox="0 0 700 180" width="100%" xmlns="http://www.w3.org/2000/svg">
+      <text x="5" y="14" font-family="sans-serif" font-size="9" fill="#3b82f6">Happy path</text>
+      <rect x="5" y="20" width="80" height="32" rx="4" fill="#3b82f6"/>
+      <text x="45" y="41" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#fff">BEGIN</text>
+      <line x1="85" y1="36" x2="128" y2="36" stroke="#3b82f6" stroke-width="2"/>
+      <polygon points="126,31 138,36 126,41" fill="#3b82f6"/>
+      <rect x="138" y="20" width="105" height="32" rx="4" fill="#3b82f6"/>
+      <text x="190" y="41" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#fff">Debit A</text>
+      <line x1="243" y1="36" x2="286" y2="36" stroke="#3b82f6" stroke-width="2"/>
+      <polygon points="284,31 296,36 284,41" fill="#3b82f6"/>
+      <rect x="296" y="20" width="105" height="32" rx="4" fill="#3b82f6"/>
+      <text x="348" y="41" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#fff">Credit B</text>
+      <line x1="401" y1="36" x2="444" y2="36" stroke="#3b82f6" stroke-width="2"/>
+      <polygon points="442,31 454,36 442,41" fill="#22c55e"/>
+      <rect x="454" y="20" width="115" height="32" rx="4" fill="#22c55e"/>
+      <text x="511" y="37" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#fff">COMMIT OK</text>
+      <line x1="0" y1="72" x2="700" y2="72" stroke="#4a5568" stroke-width="1" stroke-dasharray="4,4"/>
+      <text x="5" y="86" font-family="sans-serif" font-size="9" fill="#ef4444">Panne path</text>
+      <rect x="5" y="92" width="80" height="32" rx="4" fill="#94a3b8"/>
+      <text x="45" y="113" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#fff">BEGIN</text>
+      <line x1="85" y1="108" x2="128" y2="108" stroke="#ef4444" stroke-width="2"/>
+      <polygon points="126,103 138,108 126,113" fill="#ef4444"/>
+      <rect x="138" y="92" width="105" height="32" rx="4" fill="#94a3b8"/>
+      <text x="190" y="113" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#fff">Debit A</text>
+      <line x1="243" y1="108" x2="286" y2="108" stroke="#ef4444" stroke-width="2"/>
+      <polygon points="284,103 296,108 284,113" fill="#ef4444"/>
+      <rect x="296" y="92" width="105" height="32" rx="4" fill="#ef4444"/>
+      <text x="348" y="113" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#fff">PANNE !</text>
+      <line x1="401" y1="108" x2="444" y2="108" stroke="#ef4444" stroke-width="2"/>
+      <polygon points="442,103 454,108 442,113" fill="#dc2626"/>
+      <rect x="454" y="92" width="115" height="32" rx="4" fill="#dc2626"/>
+      <text x="511" y="109" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#fff">ROLLBACK</text>
+      <text x="511" y="122" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#fff">etat restaure</text>
+    </svg>
   </div>
 
   <div class="module-header">
-    <h2>🔵 ACID — Transactions relationnelles</h2>
+    <h2>ACID &mdash; Transactions relationnelles</h2>
     <p class="module-desc">
-      Observez l'<strong>Atomicité</strong> en action : un virement interrompu à mi-chemin
+      Observez l'<strong>Atomicit&eacute;</strong> en action : un virement interrompu &agrave; mi-chemin
       ne laisse aucune trace. Spring annule automatiquement l'ensemble de la transaction.
     </p>
     <a class="doc-link" href="https://github.com/lortole/java-tech-lab/blob/main/transaction-lab/docs/kata-acid.md" target="_blank">
-      📖 Guide kata ACID →
+      Guide kata ACID &#x2192;
     </a>
   </div>
 
@@ -43,7 +59,7 @@ sequenceDiagram
     @for (account of accounts(); track account.id) {
       <div class="account-card" [class.highlighted]="lastResult() && (lastResult()!.fromOwner === account.owner || lastResult()!.toOwner === account.owner)">
         <div class="account-owner">{{ account.owner }}</div>
-        <div class="account-balance">{{ account.balance | number:'1.2-2' }} €</div>
+        <div class="account-balance">{{ account.balance | number:'1.2-2' }} &euro;</div>
         <div class="account-id">Compte #{{ account.id }}</div>
       </div>
     }
@@ -72,7 +88,7 @@ sequenceDiagram
         </select>
       </label>
 
-      <label>Montant (€)
+      <label>Montant (&euro;)
         <input type="number" [(ngModel)]="form.amount" min="1" placeholder="100" />
       </label>
     </div>
@@ -80,42 +96,44 @@ sequenceDiagram
     <div class="form-row form-row--checkbox">
       <label class="checkbox-label">
         <input type="checkbox" [(ngModel)]="form.forceFailAfterDebit" />
-        <span>💥 Simuler une panne <em>après</em> le débit — démonstration rollback</span>
+        <span>Simuler une panne <em>apr&egrave;s</em> le d&eacute;bit &mdash; d&eacute;monstration rollback</span>
       </label>
     </div>
 
     @if (form.forceFailAfterDebit) {
       <div class="alert alert--warning">
-        ⚠️ Le compte source sera débité puis une exception sera levée.
-        Spring va annuler <strong>tout</strong> — le solde reviendra à son état initial.
+        Le compte source sera d&eacute;bit&eacute; puis une exception sera lev&eacute;e.
+        Spring va annuler <strong>tout</strong> &mdash; le solde reviendra &agrave; son &eacute;tat initial.
       </div>
     }
 
     <div class="form-actions">
       <button class="btn btn--primary" (click)="transfer()" [disabled]="loading()">
-        {{ loading() ? 'En cours…' : 'Virer →' }}
+        @if (loading()) { En cours... }
+        @else { Virer &#x2192; }
       </button>
-      <button class="btn btn--ghost" (click)="reset()">↺ Réinitialiser les soldes</button>
+      <button class="btn btn--ghost" (click)="reset()">&#x21BA; R&eacute;initialiser les soldes</button>
     </div>
   </div>
 
-  <!-- Résultat -->
+  <!-- Resultat -->
   @if (lastResult(); as r) {
     <div class="result-card card" [class.result-success]="r.success" [class.result-rollback]="!r.success">
       <div class="result-title">
-        {{ r.success ? '✅ Transaction COMMITTED' : '🔄 Transaction ROLLED BACK' }}
+        @if (r.success) { Transaction COMMITTED }
+        @else { Transaction ROLLED BACK }
       </div>
       <div class="result-message">{{ r.message }}</div>
       @if (r.fromOwner) {
         <div class="result-balances">
-          <span>{{ r.fromOwner }} : <strong>{{ r.fromBalance | number:'1.2-2' }}€</strong></span>
-          <span>{{ r.toOwner }} : <strong>{{ r.toBalance | number:'1.2-2' }}€</strong></span>
+          <span>{{ r.fromOwner }} : <strong>{{ r.fromBalance | number:'1.2-2' }}&euro;</strong></span>
+          <span>{{ r.toOwner }} : <strong>{{ r.toBalance | number:'1.2-2' }}&euro;</strong></span>
         </div>
       }
       @if (!r.success) {
         <div class="result-explain">
-          Les soldes sont <strong>identiques à l'état initial</strong> — c'est l'Atomicité.
-          Ni le débit ni le crédit n'ont persisté.
+          Les soldes sont <strong>identiques &agrave; l'&eacute;tat initial</strong> &mdash; c'est l'Atomicit&eacute;.
+          Ni le d&eacute;bit ni le cr&eacute;dit n'ont persist&eacute;.
         </div>
       }
     </div>
@@ -134,7 +152,7 @@ sequenceDiagram
             <tr [class.row-rollback]="t.status === 'ROLLED_BACK'">
               <td>{{ t.from }}</td>
               <td>{{ t.to }}</td>
-              <td>{{ t.amount | number:'1.2-2' }}€</td>
+              <td>{{ t.amount | number:'1.2-2' }}&euro;</td>
               <td><span class="badge" [class]="'badge--' + t.status.toLowerCase()">{{ t.status }}</span></td>
             </tr>
           }
@@ -142,5 +160,96 @@ sequenceDiagram
       </table>
     </div>
   }
+
+
+  <!-- Niveaux d'isolation -->
+  <div class="card" style="margin-top:1.5rem">
+    <h3>Niveaux d'isolation SQL</h3>
+    <table class="isolation-table">
+      <thead>
+        <tr>
+          <th>Niveau</th>
+          <th>Dirty Read</th>
+          <th>Non-Repeatable Read</th>
+          <th>Phantom Read</th>
+          <th>Cas d'usage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>READ_UNCOMMITTED</td>
+          <td class="iso-yes">Oui</td><td class="iso-yes">Oui</td><td class="iso-yes">Oui</td>
+          <td>Logs, analytics temps r&eacute;el</td>
+        </tr>
+        <tr>
+          <td>READ_COMMITTED</td>
+          <td class="iso-no">Non</td><td class="iso-yes">Oui</td><td class="iso-yes">Oui</td>
+          <td>D&eacute;faut PostgreSQL / Oracle</td>
+        </tr>
+        <tr>
+          <td>REPEATABLE_READ</td>
+          <td class="iso-no">Non</td><td class="iso-no">Non</td><td class="iso-yes">Oui</td>
+          <td>D&eacute;faut MySQL InnoDB</td>
+        </tr>
+        <tr>
+          <td>SERIALIZABLE</td>
+          <td class="iso-no">Non</td><td class="iso-no">Non</td><td class="iso-no">Non</td>
+          <td>Transactions financi&egrave;res critiques</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Simulation locale ACID -->
+  <div class="acid-sim card">
+    <h3>Simulation : virement bancaire</h3>
+    <div class="sim-accounts">
+      <div class="sim-account">
+        <div class="sim-account-label">Compte A</div>
+        <div class="sim-account-balance" [class.sim-modified]="simBalanceA() !== 1000">
+          {{ simBalanceA() }} EUR
+        </div>
+      </div>
+      <div class="sim-arrow">&#x2192; 100 EUR &#x2192;</div>
+      <div class="sim-account">
+        <div class="sim-account-label">Compte B</div>
+        <div class="sim-account-balance" [class.sim-modified]="simBalanceB() !== 500">
+          {{ simBalanceB() }} EUR
+        </div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn--primary" (click)="simulateTransfer()" [disabled]="simRunning()">
+        Simuler virement (100 EUR)
+      </button>
+      <button class="btn btn--danger" (click)="simulateFail()" [disabled]="simRunning()">
+        Simuler panne
+      </button>
+      <button class="btn btn--ghost" (click)="resetSim()">
+        R&eacute;initialiser
+      </button>
+    </div>
+    @if (simSteps().length > 0) {
+      <div class="sim-log">
+        @for (step of simSteps(); track $index) {
+          <div class="sim-step"
+               [class.sim-step--rollback]="step.startsWith('PANNE') || step.startsWith('ROLLBACK')"
+               [class.sim-step--commit]="step.startsWith('COMMIT')">
+            &gt; {{ step }}
+          </div>
+        }
+      </div>
+    }
+    @if (simStatus() === 'success') {
+      <div class="alert alert--success" style="margin-top:.75rem">
+        Transaction valid&eacute;e &mdash; A&nbsp;=&nbsp;900&nbsp;EUR, B&nbsp;=&nbsp;600&nbsp;EUR.
+      </div>
+    }
+    @if (simStatus() === 'rollback') {
+      <div class="alert alert--warning" style="margin-top:.75rem">
+        ROLLBACK effectu&eacute; &mdash; A&nbsp;=&nbsp;1000&nbsp;EUR, B&nbsp;=&nbsp;500&nbsp;EUR (inchang&eacute;s).
+      </div>
+    }
+  </div>
 
 </section>

@@ -1,10 +1,10 @@
 :root,
 [data-theme="light"] {
-  --bg-primary:    #F2F4F7;
-  --bg-secondary:  #FFFFFF;
-  --bg-card:       #FFFFFF;
-  --border:        #E2E8F0;
-  --text-primary:  #1A202C;
+  --bg-primary:    #F0F2F5;
+  --bg-secondary:  #E4E8EF;
+  --bg-card:       #EAEDF2;
+  --border:        #CDD3DE;
+  --text-primary:  #1A1F2E;
   --text-secondary:#4A5568;
   --text-muted:    #718096;
 
@@ -21,6 +21,7 @@
   --shadow-md:     0 4px 12px rgba(0,0,0,.10);
   --radius:        10px;
   --radius-sm:     6px;
+  --bg-hero:       #1e293b;
 }
 
 [data-theme="dark"] {
@@ -43,4 +44,5 @@
 
   --shadow-sm:     0 1px 3px rgba(0,0,0,.3);
   --shadow-md:     0 4px 12px rgba(0,0,0,.4);
+  --bg-hero:       #0f172a;
 }

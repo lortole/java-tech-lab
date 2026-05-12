@@ -4,14 +4,15 @@ import { HomeComponent } from './tabs/home/home.component';
 import { AcidComponent } from './tabs/acid/acid.component';
 import { CapComponent } from './tabs/cap/cap.component';
 import { SagaComponent } from './tabs/saga/saga.component';
+import { BaseComponent } from './tabs/base/base.component';
 import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
 
-type Tab = 'home' | 'acid' | 'cap' | 'saga';
+type Tab = 'home' | 'acid' | 'cap' | 'saga' | 'base';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, HomeComponent, AcidComponent, CapComponent, SagaComponent, ThemeToggleComponent],
+  imports: [CommonModule, HomeComponent, AcidComponent, CapComponent, SagaComponent, BaseComponent, ThemeToggleComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -22,6 +23,7 @@ export class AppComponent {
     { id: 'acid', label: '\u{1F535} ACID',   color: 'tab-acid' },
     { id: 'cap',  label: '\u{1F7E1} CAP',    color: 'tab-cap'  },
     { id: 'saga', label: '\u{1F534} SAGA',   color: 'tab-saga' },
+    { id: 'base', label: '\u{1F7E3} BASE',   color: 'tab-base' },
   ];
   setTab(tab: Tab) { this.activeTab.set(tab); }
 }

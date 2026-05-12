@@ -9,51 +9,54 @@
       donc le vrai choix se fait entre <strong>CP</strong> (r&eacute;ponse coh&eacute;rente ou erreur)
       et <strong>AP</strong> (toujours disponible, potentiellement obsol&egrave;te).
     </p>
-    <div class="mermaid">
-graph TD
-    C[Coh&eacute;rence]
-    A[Disponibilit&eacute;]
-    P[Partitions]
-    C-->CP[CP : Redis - HBase]
-    P-->CP
-    A-->AP[AP : Cassandra - CouchDB]
-    P-->AP
-    C-->CA[CA : impossible en distribu&eacute;]
-    A-->CA
-    style CA fill:#ef4444,color:#fff
-    style CP fill:#3b82f6,color:#fff
-    style AP fill:#10b981,color:#fff
-    </div>
+    <svg viewBox="0 0 500 360" width="100%" style="max-width:500px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+      <line x1="250" y1="50" x2="60" y2="310" stroke="#4a5568" stroke-width="2"/>
+      <line x1="250" y1="50" x2="440" y2="310" stroke="#4a5568" stroke-width="2"/>
+      <line x1="60" y1="310" x2="440" y2="310" stroke="#4a5568" stroke-width="2"/>
+      <text x="250" y="36" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" style="fill:var(--text-primary,#1a202c)">Coherence (C)</text>
+      <text x="4" y="326" text-anchor="start" font-family="sans-serif" font-size="13" font-weight="700" style="fill:var(--text-primary,#1a202c)">Disponibilite (A)</text>
+      <text x="496" y="326" text-anchor="end" font-family="sans-serif" font-size="13" font-weight="700" style="fill:var(--text-primary,#1a202c)">Partitions (P)</text>
+      <text x="250" y="215" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" style="fill:var(--text-muted,#718096)">Choisissez 2</text>
+      <rect x="310" y="155" width="120" height="48" rx="5" fill="#3b82f6"/>
+      <text x="370" y="174" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">CP</text>
+      <text x="370" y="189" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#fff">Redis, HBase</text>
+      <rect x="70" y="155" width="148" height="48" rx="5" fill="#ef4444"/>
+      <text x="144" y="174" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">CA</text>
+      <text x="144" y="189" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#fff">Impossible en distribue</text>
+      <rect x="163" y="282" width="174" height="48" rx="5" fill="#10b981"/>
+      <text x="250" y="301" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">AP</text>
+      <text x="250" y="316" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#fff">Cassandra, DynamoDB</text>
+    </svg>
   </div>
 
   <div class="module-header">
-    <h2>🟡 CAP — Le triangle impossible</h2>
+    <h2>CAP &mdash; Le triangle impossible</h2>
     <p class="module-desc">
-      Simulez une <strong>partition réseau</strong> entre deux nœuds.
-      Choisissez entre <strong>CP</strong> (cohérence — le nœud B refuse) et
-      <strong>AP</strong> (disponibilité — le nœud B répond avec une valeur obsolète).
+      Simulez une <strong>partition r&eacute;seau</strong> entre deux n&oelig;uds.
+      Choisissez entre <strong>CP</strong> (coh&eacute;rence &mdash; le n&oelig;ud B refuse) et
+      <strong>AP</strong> (disponibilit&eacute; &mdash; le n&oelig;ud B r&eacute;pond avec une valeur obsol&egrave;te).
     </p>
     <a class="doc-link" href="https://github.com/lortole/java-tech-lab/blob/main/transaction-lab/docs/kata-cap.md" target="_blank">
-      📖 Guide kata CAP →
+      Guide kata CAP &#x2192;
     </a>
   </div>
 
   @if (state(); as s) {
 
-    <!-- Contrôles -->
+    <!-- Controles -->
     <div class="cap-controls card">
       <div class="controls-row">
 
         <div class="control-group">
-          <span class="control-label">Partition réseau</span>
+          <span class="control-label">Partition r&eacute;seau</span>
           <div class="toggle-group">
             <button class="btn" [class.btn--danger]="!s.partitionActive" [class.btn--ghost]="s.partitionActive"
                     (click)="togglePartition(true)" [disabled]="s.partitionActive">
-              ✂️ Couper
+              Couper
             </button>
             <button class="btn" [class.btn--success]="s.partitionActive" [class.btn--ghost]="!s.partitionActive"
                     (click)="togglePartition(false)" [disabled]="!s.partitionActive">
-              🔗 Rétablir
+              R&eacute;tablir
             </button>
           </div>
         </div>
@@ -63,16 +66,16 @@ graph TD
           <div class="toggle-group">
             <button class="btn" [class.btn--blue]="s.modeCp" [class.btn--ghost]="!s.modeCp"
                     (click)="setMode(true)">
-              🔵 CP
+              CP
             </button>
             <button class="btn" [class.btn--green]="!s.modeCp" [class.btn--ghost]="s.modeCp"
                     (click)="setMode(false)">
-              🟢 AP
+              AP
             </button>
           </div>
         </div>
 
-        <button class="btn btn--ghost" (click)="reset()">↺ Reset</button>
+        <button class="btn btn--ghost" (click)="reset()">&#x21BA; Reset</button>
       </div>
 
       <!-- Explication dynamique -->
@@ -82,12 +85,12 @@ graph TD
       </div>
     </div>
 
-    <!-- Visualisation des nœuds -->
+    <!-- Visualisation des noeuds -->
     <div class="nodes-visual">
 
       <div class="node-card" [class.node-available]="s.nodeA.available">
         <div class="node-header">
-          <span class="node-id">Nœud A</span>
+          <span class="node-id">N&oelig;ud A</span>
           <span class="node-role">Leader</span>
         </div>
         <div class="node-data">
@@ -99,18 +102,21 @@ graph TD
           }
         </div>
         <div class="node-version">v{{ s.nodeA.version }}</div>
-        <div class="node-status">✅ Disponible</div>
+        <div class="node-status">Disponible</div>
       </div>
 
-      <!-- Lien réseau animé -->
+      <!-- Lien reseau anime -->
       <div class="network-link" [class.partitioned]="s.partitionActive">
         <div class="link-line"></div>
-        <div class="link-label">{{ s.partitionActive ? '✂️ Partition' : '🔗 Réseau OK' }}</div>
+        <div class="link-label">
+          @if (s.partitionActive) { Partition }
+          @else { R&eacute;seau OK }
+        </div>
       </div>
 
       <div class="node-card" [class.node-available]="s.nodeB.available" [class.node-unavailable]="!s.nodeB.available">
         <div class="node-header">
-          <span class="node-id">Nœud B</span>
+          <span class="node-id">N&oelig;ud B</span>
           <span class="node-role">Follower</span>
         </div>
         <div class="node-data">
@@ -129,20 +135,20 @@ graph TD
     <!-- Actions -->
     <div class="cap-actions card">
       <div class="action-group">
-        <h3>1. Écrire sur Nœud A</h3>
+        <h3>1. &Eacute;crire sur N&oelig;ud A</h3>
         <div class="write-row">
-          <input type="text" [(ngModel)]="writeValue" placeholder="nouvelle valeur…" />
+          <input type="text" [(ngModel)]="writeValue" placeholder="nouvelle valeur..." />
           <button class="btn btn--primary" (click)="write()" [disabled]="loading() || !writeValue.trim()">
-            Écrire →
+            &Eacute;crire &#x2192;
           </button>
         </div>
         <p class="action-hint">
-          Si la partition est active, B ne recevra pas cette mise à jour.
+          Si la partition est active, B ne recevra pas cette mise &agrave; jour.
         </p>
       </div>
 
       <div class="action-group">
-        <h3>2. Lire depuis Nœud B</h3>
+        <h3>2. Lire depuis N&oelig;ud B</h3>
         <button class="btn btn--secondary" (click)="readB()">Lire depuis B</button>
         @if (readResult(); as r) {
           <div class="read-result" [class.read-unavailable]="!r.available" [class.read-stale]="r.available && s.partitionActive">
@@ -156,13 +162,104 @@ graph TD
         }
         <p class="action-hint">
           Mode CP + partition → <code>503 Service Unavailable</code><br>
-          Mode AP + partition → répond avec la valeur de B (potentiellement v{{ s.nodeB.version }} vs v{{ s.nodeA.version }})
+          Mode AP + partition &#x2192; r&eacute;pond avec la valeur de B (potentiellement v{{ s.nodeB.version }} vs v{{ s.nodeA.version }})
         </p>
       </div>
     </div>
 
   } @else {
-    <div class="loading-state">Connexion au backend…</div>
+    <div class="loading-state">Connexion au backend...</div>
   }
+
+  <!-- Tableau CP vs AP -->
+  <div class="card" style="margin-top:1.5rem">
+    <h3>Syst&egrave;mes CP vs AP</h3>
+    <table class="cap-table">
+      <thead>
+        <tr>
+          <th>Syst&egrave;me</th>
+          <th>Choix</th>
+          <th>Comportement lors d'une partition</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Redis</td>
+          <td><span class="cap-badge cap-badge--cp">CP</span></td>
+          <td>Refuse les &eacute;critures, coh&eacute;rence garantie</td>
+        </tr>
+        <tr>
+          <td>Cassandra</td>
+          <td><span class="cap-badge cap-badge--ap">AP</span></td>
+          <td>R&eacute;pond avec valeur potentiellement obsol&egrave;te</td>
+        </tr>
+        <tr>
+          <td>ZooKeeper</td>
+          <td><span class="cap-badge cap-badge--cp">CP</span></td>
+          <td>Leader election, pas de split-brain</td>
+        </tr>
+        <tr>
+          <td>CouchDB</td>
+          <td><span class="cap-badge cap-badge--ap">AP</span></td>
+          <td>Sync &eacute;ventuelle, toujours disponible</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Simulation locale partition r&eacute;seau -->
+  <div class="cap-sim card">
+    <h3>Simulation locale : partition r&eacute;seau</h3>
+    <div class="controls-row" style="margin-bottom:.75rem">
+      <div class="control-group">
+        <span class="control-label">Partition</span>
+        <button class="btn"
+                [class.btn--danger]="!simPartition()"
+                [class.btn--success]="simPartition()"
+                (click)="toggleSimPartition()">
+          @if (simPartition()) { R&eacute;tablir } @else { Couper }
+        </button>
+      </div>
+      <div class="control-group">
+        <span class="control-label">Mode</span>
+        <div class="toggle-group">
+          <button class="btn" [class.btn--blue]="simModeCp()" [class.btn--ghost]="!simModeCp()" (click)="toggleSimMode(true)">CP</button>
+          <button class="btn" [class.btn--green]="!simModeCp()" [class.btn--ghost]="simModeCp()" (click)="toggleSimMode(false)">AP</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sim-nodes">
+      <div class="sim-node sim-node--primary">
+        <div class="sim-node-label">Noeud A (primaire)</div>
+        <div class="sim-node-value">{{ simNodeAVal() }}</div>
+      </div>
+      <div class="network-link" [class.partitioned]="simPartition()" style="width:60px;flex-shrink:0">
+        <div class="link-line"></div>
+        <div class="link-label" style="font-size:.7rem">
+          @if (simPartition()) { Partition } @else { OK }
+        </div>
+      </div>
+      <div class="sim-node"
+           [class.sim-node--refused]="simPartition() && simModeCp()"
+           [class.sim-node--stale]="simPartition() && !simModeCp()">
+        <div class="sim-node-label">Noeud B (secondaire)</div>
+        <div class="sim-node-value">{{ simNodeBVal() }}</div>
+        @if (simNodeBStatus()) {
+          <div class="sim-node-status">{{ simNodeBStatus() }}</div>
+        }
+      </div>
+    </div>
+
+    <div class="sim-write-row">
+      <input type="text" [(ngModel)]="simWriteInput" placeholder="Nouvelle valeur..." />
+      <button class="btn btn--primary" (click)="writeSimNodeA()" [disabled]="!simWriteInput.trim()">
+        Ecrire sur A
+      </button>
+      <button class="btn btn--secondary" (click)="readSimNodeB()">
+        Lire B
+      </button>
+    </div>
+  </div>
 
 </section>

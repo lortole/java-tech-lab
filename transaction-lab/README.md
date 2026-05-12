@@ -26,7 +26,7 @@ L'objectif n'est pas de lire — c'est de **casser des choses** et de **les rép
 
 ```
 transaction-lab/
-├── backend/          ← Spring Boot 3.3 · Java 21 · port 8080
+├── backend/          ← Spring Boot 3.3 · Java 21 · port 8081
 │   └── src/main/java/com/klanik/transactionlab/
 │       ├── acid/     ← @Transactional · rollback · isolation levels
 │       ├── cap/      ← CP vs AP · cohérence éventuelle · simulation nœuds
@@ -72,8 +72,8 @@ cd backend
 ./mvnw spring-boot:run
 ```
 
-API disponible sur `http://localhost:8080`
-Swagger UI : `http://localhost:8080/swagger-ui.html`
+API disponible sur `http://localhost:8081`
+Swagger UI : `http://localhost:8081/swagger-ui.html`
 
 ### 3 · Frontend
 

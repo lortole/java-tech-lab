@@ -92,6 +92,75 @@
 }
 .link-label { font-size: .7rem; text-align: center; color: var(--text-muted); }
 
+// ── CP/AP table ───────────────────────────────────────────────
+.cap-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .84rem;
+  margin-top: .75rem;
+
+  th, td { padding: .45rem .75rem; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--text-muted); font-weight: 600; background: var(--bg-secondary); }
+}
+
+.cap-badge {
+  display: inline-block;
+  padding: .15rem .5rem;
+  border-radius: 999px;
+  font-size: .75rem;
+  font-weight: 700;
+
+  &--cp { background: color-mix(in srgb, var(--info) 15%, transparent); color: var(--info); }
+  &--ap { background: color-mix(in srgb, var(--success) 15%, transparent); color: var(--success); }
+}
+
+// ── Local simulation ──────────────────────────────────────────
+.cap-sim { margin-top: 1.5rem; }
+
+.sim-nodes {
+  display: flex;
+  gap: 1rem;
+  align-items: stretch;
+  margin: .75rem 0;
+  flex-wrap: wrap;
+}
+
+.sim-node {
+  flex: 1;
+  min-width: 140px;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border);
+  transition: border-color .2s;
+
+  &--primary  { border-color: var(--accent-acid); }
+  &--refused  { border-color: var(--danger); }
+  &--stale    { border-color: var(--warning); }
+}
+
+.sim-node-label  { font-size: .72rem; color: var(--text-muted); margin-bottom: .25rem; }
+.sim-node-value  { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: .35rem; }
+.sim-node-status { font-size: .78rem; color: var(--text-secondary); }
+
+.sim-write-row {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+
+  input {
+    flex: 1;
+    min-width: 140px;
+    padding: .5rem .75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: .9rem;
+    &:focus { outline: none; border-color: var(--accent-acid); }
+  }
+}
+
 .cap-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;

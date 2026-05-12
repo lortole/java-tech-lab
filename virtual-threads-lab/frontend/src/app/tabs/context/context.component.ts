@@ -24,6 +24,7 @@ export interface Scenario {
   standalone: true,
   imports: [],
   templateUrl: './context.component.html',
+  styleUrls: ['./context.component.scss'],
 })
 export class ContextTabComponent implements AfterViewInit, OnDestroy {
 

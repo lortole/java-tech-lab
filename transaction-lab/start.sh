@@ -55,13 +55,13 @@ cd ..
 
 log "Attente que le backend soit prêt..."
 RETRIES=30
-while ! curl -sf http://localhost:8080/actuator/health &>/dev/null; do
+while ! curl -sf http://localhost:8081/actuator/health &>/dev/null; do
     RETRIES=$((RETRIES - 1))
     [[ $RETRIES -eq 0 ]] && error "Le backend n'a pas démarré"
     sleep 3
 done
-ok "Backend prêt — http://localhost:8080"
-ok "Swagger UI — http://localhost:8080/swagger-ui.html"
+ok "Backend prêt — http://localhost:8081"
+ok "Swagger UI — http://localhost:8081/swagger-ui.html"
 
 # ── Frontend ───────────────────────────────────────────────────
 if [[ "${1:-}" != "--no-frontend" ]] && command -v node &>/dev/null; then
@@ -79,8 +79,8 @@ echo -e "${GREEN}╔════════════════════
 echo -e "${GREEN}║        Transaction Lab — Prêt ! 🚀           ║${NC}"
 echo -e "${GREEN}╠══════════════════════════════════════════════╣${NC}"
 echo -e "${GREEN}║${NC}  App       : http://localhost:4200            ${GREEN}║${NC}"
-echo -e "${GREEN}║${NC}  API       : http://localhost:8080            ${GREEN}║${NC}"
-echo -e "${GREEN}║${NC}  Swagger   : http://localhost:8080/swagger-ui ${GREEN}║${NC}"
+echo -e "${GREEN}║${NC}  API       : http://localhost:8081            ${GREEN}║${NC}"
+echo -e "${GREEN}║${NC}  Swagger   : http://localhost:8081/swagger-ui ${GREEN}║${NC}"
 echo -e "${GREEN}║${NC}  Kafka UI  : http://localhost:8090            ${GREEN}║${NC}"
 echo -e "${GREEN}╚══════════════════════════════════════════════╝${NC}"
 echo ""
