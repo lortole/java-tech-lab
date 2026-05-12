@@ -1,0 +1,15 @@
+@import 'styles/variables';
+@import 'styles/incidents';
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: $font-body;
+  background: $color-bg;
+  color: $color-text;
+  min-height: 100vh;
+}

@@ -1,0 +1,239 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #30363d;
+  --text: #e6edf3;
+  --text-secondary: #8b949e;
+  --font-mono: 'Space Mono', 'Courier New', monospace;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.5;
+}
+
+.site-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ---- Header ---- */
+.site-header {
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+}
+
+.header-logo {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+
+.header-logo-accent {
+  color: #7ee787;
+}
+
+.github-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.github-link:hover {
+  color: var(--text);
+  border-color: var(--text-secondary);
+}
+
+/* ---- Main ---- */
+.site-main {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem;
+  width: 100%;
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.12em;
+  margin-bottom: 1.5rem;
+}
+
+/* ---- Grid ---- */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+}
+
+/* ---- Project Card ---- */
+.project-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.2s;
+  position: relative;
+}
+
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent, transparent);
+  border-radius: 8px 8px 0 0;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.project-card:hover {
+  border-color: var(--accent, var(--border));
+}
+
+.project-card:hover::before {
+  opacity: 1;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.card-stack {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.card-status {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: #3fb950;
+  background: rgba(63, 185, 80, 0.08);
+  border: 1px solid rgba(63, 185, 80, 0.25);
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  letter-spacing: 0.03em;
+}
+
+.card-title {
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--accent, var(--text));
+  margin-bottom: 0.7rem;
+  line-height: 1.25;
+}
+
+.card-description {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin-bottom: 1.25rem;
+}
+
+.card-highlights {
+  list-style: none;
+  margin-bottom: 1.5rem;
+  flex: 1;
+}
+
+.card-highlights li {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  padding: 0.22rem 0 0.22rem 1.1rem;
+  position: relative;
+}
+
+.card-highlights li::before {
+  content: '>';
+  position: absolute;
+  left: 0;
+  color: var(--accent, var(--text-secondary));
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.card-link {
+  display: block;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--accent, var(--border));
+  color: var(--accent, var(--text));
+  border-radius: 6px;
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  transition: background 0.15s, color 0.15s;
+  text-align: center;
+}
+
+.card-link:hover {
+  background: var(--accent, var(--border));
+  color: #0d1117;
+}
+
+/* ---- Footer ---- */
+.site-footer {
+  padding: 1.25rem 2rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 640px) {
+  .site-header {
+    padding: 1rem;
+  }
+
+  .site-main {
+    padding: 1.75rem 1rem;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+}

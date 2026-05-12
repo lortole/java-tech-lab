@@ -1,0 +1,265 @@
+/* ---- Layout ---- */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-header {
+  background: $color-surface;
+  border-bottom: 1px solid $color-border;
+  padding: 0.9rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header-logo {
+  font-family: $font-mono;
+  font-size: 1rem;
+  font-weight: 700;
+  color: $color-accent;
+}
+
+.header-subtitle {
+  color: $color-text-secondary;
+  font-size: 0.875rem;
+}
+
+.app-body {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ---- Sidebar ---- */
+.sidebar {
+  width: 280px;
+  min-width: 280px;
+  background: $color-surface;
+  border-right: 1px solid $color-border;
+  padding: 1rem 0;
+  overflow-y: auto;
+}
+
+.sidebar-title {
+  font-family: $font-mono;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: $color-text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0 1rem 0.75rem;
+  border-bottom: 1px solid $color-border;
+  margin-bottom: 0.5rem;
+}
+
+.incident-list {
+  list-style: none;
+}
+
+.incident-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: background 0.12s, border-color 0.12s;
+
+  &:hover {
+    background: $color-surface-secondary;
+  }
+
+  &.active {
+    background: $color-accent-light;
+    border-left-color: $color-accent;
+  }
+}
+
+.incident-code {
+  font-family: $font-mono;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: $color-accent;
+}
+
+.incident-nav-title {
+  font-size: 0.8rem;
+  color: $color-text;
+  line-height: 1.35;
+}
+
+/* ---- Severity badges ---- */
+.severity-badge {
+  display: inline-block;
+  font-family: $font-mono;
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.1rem 0.45rem;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+  align-self: flex-start;
+}
+
+.severity-low {
+  background: $severity-low-bg;
+  color: $severity-low-text;
+}
+
+.severity-medium {
+  background: $severity-medium-bg;
+  color: $severity-medium-text;
+}
+
+.severity-high {
+  background: $severity-high-bg;
+  color: $severity-high-text;
+}
+
+.severity-critical {
+  background: $severity-critical-bg;
+  color: $severity-critical-text;
+}
+
+/* ---- Main content ---- */
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  background: $color-bg;
+}
+
+/* ---- Incident card ---- */
+.incident-card {
+  max-width: 760px;
+}
+
+.card-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid $color-border;
+}
+
+.card-header-top {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.incident-code-large {
+  font-family: $font-mono;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: $color-text-secondary;
+  background: $color-surface-secondary;
+  padding: 0.2rem 0.5rem;
+  border-radius: $radius;
+  border: 1px solid $color-border;
+}
+
+.incident-title-large {
+  font-family: $font-mono;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: $color-text;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+.stack-tag {
+  font-family: $font-mono;
+  font-size: 0.75rem;
+  color: $color-text-secondary;
+  background: $color-surface-secondary;
+  border: 1px solid $color-border;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+}
+
+/* ---- Sections ---- */
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.incident-section {
+  h2 {
+    font-family: $font-mono;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: $color-text-secondary;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 0.925rem;
+    line-height: 1.75;
+    color: $color-text;
+    background: $color-surface;
+    padding: 1rem 1.25rem;
+    border-radius: $radius;
+    border: 1px solid $color-border;
+    border-left: 3px solid $color-border;
+  }
+
+  &.lesson p {
+    border-left-color: $color-accent;
+    background: $color-accent-light;
+  }
+}
+
+/* ---- Footer ---- */
+.app-footer {
+  padding: 1rem 2rem;
+  border-top: 1px solid $color-border;
+  text-align: center;
+  color: $color-text-secondary;
+  font-family: $font-mono;
+  font-size: 0.75rem;
+  background: $color-surface;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .app-body {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-width: 0;
+    border-right: none;
+    border-bottom: 1px solid $color-border;
+    max-height: 220px;
+  }
+
+  .incident-item {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .main-content {
+    padding: 1.25rem 1rem;
+  }
+
+  .incident-title-large {
+    font-size: 1.1rem;
+  }
+}

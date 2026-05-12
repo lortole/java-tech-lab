@@ -1,0 +1,23 @@
+<div class="app-layout">
+  <header class="app-header">
+    <div class="header-content">
+      <span class="header-logo">[incidents-lab]</span>
+      <span class="header-subtitle">Post-mortems &amp; retours d'experience developpement</span>
+    </div>
+  </header>
+
+  <div class="app-body">
+    <app-sidebar
+      [incidents]="incidents"
+      [selectedId]="selectedId"
+      (selectIncident)="onSelect($event)">
+    </app-sidebar>
+    <main class="main-content">
+      <app-incident-card [incident]="selectedIncident"></app-incident-card>
+    </main>
+  </div>
+
+  <footer class="app-footer">
+    Loic ORTOLE &middot; Klanik &middot; 2026
+  </footer>
+</div>

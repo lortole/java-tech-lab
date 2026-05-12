@@ -1,0 +1,34 @@
+@if (incident) {
+  <article class="incident-card">
+    <div class="card-header">
+      <div class="card-header-top">
+        <span class="incident-code-large">{{ incident.code }}</span>
+        <span [class]="severityClass(incident.severity)">{{ incident.severity }}</span>
+      </div>
+      <h1 class="incident-title-large">{{ incident.title }}</h1>
+      <span class="stack-tag">{{ incident.stack }}</span>
+    </div>
+
+    <div class="card-body">
+      <section class="incident-section">
+        <h2>Contexte</h2>
+        <p>{{ incident.context }}</p>
+      </section>
+
+      <section class="incident-section">
+        <h2>Cause racine</h2>
+        <p>{{ incident.rootCause }}</p>
+      </section>
+
+      <section class="incident-section">
+        <h2>Solution</h2>
+        <p>{{ incident.solution }}</p>
+      </section>
+
+      <section class="incident-section lesson">
+        <h2>Lecon retenue</h2>
+        <p>{{ incident.lesson }}</p>
+      </section>
+    </div>
+  </article>
+}

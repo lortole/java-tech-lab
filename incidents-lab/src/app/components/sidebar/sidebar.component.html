@@ -1,0 +1,15 @@
+<nav class="sidebar">
+  <div class="sidebar-title">// incidents</div>
+  <ul class="incident-list">
+    @for (incident of incidents; track incident.id) {
+      <li
+        class="incident-item"
+        [class.active]="incident.id === selectedId"
+        (click)="select(incident.id)">
+        <span class="incident-code">{{ incident.code }}</span>
+        <span class="incident-nav-title">{{ incident.title }}</span>
+        <span [class]="severityClass(incident.severity)">{{ incident.severity }}</span>
+      </li>
+    }
+  </ul>
+</nav>
